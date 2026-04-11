@@ -9,7 +9,7 @@ export default function DividerBlock({ active = true, size = 'zero' }: DividerBl
 
   return (
     <div className={`w-full ${padding}`}>
-      <hr className="border-t border-border" />
+      <hr className="border-t border-primary border-2" />
     </div>
   )
 }
