@@ -116,7 +116,7 @@ export default function FormBlock({
   return (
     <section
       id={anchor || `form-${componentIndex}`}
-      className="form-block w-full flex justify-center px-5 py-16 lg:py-24 bg-primary text-primary-foreground"
+      className="form-block w-full flex justify-center px-5 py-16 lg:py-24 bg-foreground"
     >
       <div className="container flex flex-col justify-center">
         <motion.div
@@ -131,16 +131,16 @@ export default function FormBlock({
           }}
         >
           {content ? (
-            <div className="content">
+            <div className="content text-background">
               <SimpleText content={content} />
             </div>
           ) : null}
 
-          <div className="bg-background text-foreground shadow-lg p-6 mt-8">
+          <div className="bg-background text-foreground shadow-lg p-6 mt-8 rounded-lg">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex flex-row items-center justify-between border p-4">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Send Anonymously?</Label>
+                  <Label className="text-base rounded-md">Send Anonymously?</Label>
                   <p className="text-sm text-muted-foreground">
                     Send your message without revealing your identity
                   </p>

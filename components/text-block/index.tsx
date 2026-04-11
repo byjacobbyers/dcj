@@ -37,7 +37,7 @@ export default function TextBlock({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
-        <div className="content">
+        <div className="content text-pretty">
           <NormalText content={content} />
         </div>
       </motion.div>

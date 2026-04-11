@@ -57,6 +57,16 @@
   --shadow-2xl: 3px 3px 2px 0px hsl(88 22% 35% / 0.38);
   --tracking-normal: 0em;
   --spacing: 0.35rem;
+
+  /* Vertical rhythm for `.content` (matches ohmni-2026) */
+  --space-1: 0.5625rem;
+  --space-2: 1.125rem;
+  --space-3: 1.6875rem;
+  --space-4: 2.25rem;
+  --space-6: 3.375rem;
+  --space-8: 4.5rem;
+  --space-10: 5.625rem;
+  --space-12: 6.75rem;
 }
 
 .dark {
@@ -237,8 +247,9 @@
 }
 
 @layer base {
+  /* No `text-foreground` here — inherit from parent so e.g. `main` with `text-background` works */
   .content {
-    @apply text-body text-foreground flex flex-col;
+    @apply text-body flex flex-col;
   }
  
   .content > * + * {
@@ -248,6 +259,18 @@
   .content > p + p,
   .content > h3 + p,
   .content > h4 + p {
+    margin-top: var(--space-2);
+  }
+
+  /* List after a title line — same tight rhythm as p + p (avoid double “heading gap”) */
+  .content > p + ul,
+  .content > p + ol,
+  .content > p.lead + ul,
+  .content > p.lead + ol,
+  .content > h3 + ul,
+  .content > h3 + ol,
+  .content > h4 + ul,
+  .content > h4 + ol {
     margin-top: var(--space-2);
   }
 
@@ -313,7 +336,7 @@
   }
 
   .content strong {
-    @apply font-semibold;
+    @apply font-bold;
   }
 
   .content small {
