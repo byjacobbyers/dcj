@@ -1,0 +1,389 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #3265fd;
+  --primary-foreground: #fafbfa;
+  --secondary: #e5e7eb;
+  --secondary-foreground: #171717;
+  --muted: #e5e7eb;
+  --muted-foreground: #737373;
+  --accent: #e5e7eb;
+  --accent-foreground: #171717;
+  --destructive: #e7000b;
+  --destructive-foreground: #ffffff;
+  --border: #dadee4;
+  --input: #dadee4;
+  --ring: #1447e6;
+  --chart-1: #f54900;
+  --chart-2: #009689;
+  --chart-3: #104e64;
+  --chart-4: #ffb900;
+  --chart-5: #fe9a00;
+  --sidebar: #fafafa;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #1447e6;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #e5e7eb;
+  --sidebar-accent-foreground: #171717;
+  --sidebar-border: #dadee4;
+  --sidebar-ring: #1447e6;
+  --font-sans: Inter, ui-sans-serif, sans-serif, system-ui;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --radius: 0rem;
+  --shadow-x: 0;
+  --shadow-y: 1px;
+  --shadow-blur: 3px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.1;
+  --shadow-color: #000000;
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  --tracking-normal: 0em;
+  --spacing: 0.35rem;
+
+  --space-1: 0.5625rem;
+  --space-2: 1.125rem;
+  --space-3: 1.6875rem;
+  --space-4: 2.25rem;
+  --space-6: 3.375rem;
+  --space-8: 4.5rem;
+  --space-10: 5.625rem;
+  --space-12: 6.75rem;
+}
+
+.dark {
+  --background: #121117;
+  --foreground: #fafbfa;
+  --card: #171e2b;
+  --card-foreground: #fafbfa;
+  --popover: #212b3e;
+  --popover-foreground: #fafbfa;
+  --primary: #3566ff;
+  --primary-foreground: #fafbfa;
+  --secondary: #373c53;
+  --secondary-foreground: #fafbfa;
+  --muted: #1c2639;
+  --muted-foreground: #bdbdbd;
+  --accent: #010204;
+  --accent-foreground: #fafbfa;
+  --destructive: #ff3333;
+  --destructive-foreground: #fafbfa;
+  --border: #3e4858;
+  --input: #3e4858;
+  --ring: #3566ff;
+  --chart-1: #3566ff;
+  --chart-2: #5781ff;
+  --chart-3: #3566ff;
+  --chart-4: #1a53ff;
+  --chart-5: #063ce0;
+  --sidebar: #212b3e;
+  --sidebar-foreground: #fafbfa;
+  --sidebar-primary: #3566ff;
+  --sidebar-primary-foreground: #141c30;
+  --sidebar-accent: #374153;
+  --sidebar-accent-foreground: #d1d5db;
+  --sidebar-border: #3e4858;
+  --sidebar-ring: #3566ff;
+  --font-sans: Inter, ui-sans-serif, sans-serif, system-ui;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --radius: 0rem;
+  --shadow-x: 0;
+  --shadow-y: 1px;
+  --shadow-blur: 3px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.1;
+  --shadow-color: #000000;
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}
+
+@theme {
+  /* Type scale (backing text-display, text-h1, text-body, etc.) */
+  --text-display: 6rem;
+  --text-display--line-height: 1.06;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 700;
+
+  --text-h1: 4rem;
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 3.25rem;
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 700;
+
+  --text-h3: 2.25rem;
+  --text-h3--line-height: 1.18;
+  --text-h3--letter-spacing: -0.015em;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 2rem;
+  --text-h4--line-height: 1.2;
+  --text-h4--letter-spacing: -0.015em;
+  --text-h4--font-weight: 700;
+
+  --text-body-lg: 2rem;
+  --text-body-lg--line-height: 1.5;
+  --text-body-lg--font-weight: 400;
+
+  --text-body: 1.5rem;
+  --text-body--line-height: 1.6;
+  --text-body--font-weight: 400;
+
+  --text-small: 1rem;
+  --text-small--line-height: 1.6;
+  --text-small--font-weight: 400;
+}
+
+/* Reduced heading sizes for mobile (below md breakpoint) */
+@media (max-width: 767px) {
+  :root {
+    --text-display: 3.5rem;
+    --text-h1: 3rem;
+    --text-h2: 2.5rem;
+    --text-h3: 2rem;
+    --text-h4: 1.75rem;
+    --text-body-lg: 1.75rem;
+  }
+}
+
+/* iPad portrait: display 5rem (768px–1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --text-display: 5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  .content {
+    @apply text-body text-foreground flex flex-col;
+  }
+ 
+  .content > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .content > p + p,
+  .content > h3 + p,
+  .content > h4 + p {
+    margin-top: var(--space-2);
+  }
+
+  .content > h1 + *,
+  .content > h2 + *,
+  .content > .display + * {
+    margin-top: var(--space-4);
+  }
+
+  .content > * + h1,
+  .content > * + h2,
+  .content > * + .display {
+    margin-top: var(--space-8);
+  }
+
+  .content > * + h3 {
+    margin-top: var(--space-6);
+  }
+
+  /* Small text (labels, kickers) above headings — no extra margin when directly adjacent */
+  .content > small + h1,
+  .content > small + h2,
+  .content > small + h3,
+  .content > small + .display,
+  .content > p.text-sm + h1,
+  .content > p.text-sm + h2,
+  .content > p.text-sm + h3,
+  .content > p.text-sm + .display {
+    margin-top: 0;
+  }
+
+  .content > li + li {
+    margin-top: var(--space-1);
+  }
+
+  .content .display {
+    @apply text-display;
+  }
+
+  .content h1 {
+    @apply text-h1;
+  }
+
+  .content h2 {
+    @apply text-h2;
+  }
+
+  .content h3 {
+    @apply text-h3;
+  }
+
+  .content p {
+    @apply text-body;
+  }
+
+  /* Deck / intro under a display headline (portable text can mirror this class) */
+  .content p.lead {
+    @apply text-body-lg max-w-2xl;
+  }
+
+  .content strong {
+    @apply font-semibold;
+  }
+
+  .content small {
+    @apply text-small;
+  }
+
+  .content code {
+    @apply text-body font-mono;
+  }
+
+  /* Highlight decorator from portable text — primary color from theme */
+  .content mark {
+    @apply text-primary bg-transparent;
+  }
+
+  .content a {
+    @apply text-body text-primary underline underline-offset-4;
+  }
+
+  .content ul {
+    @apply text-body list-disc pl-6;
+  }
+
+  .content ol {
+    @apply text-body list-decimal pl-6;
+  }
+
+  .content li {
+    @apply text-body;
+  }
+
+  .content blockquote {
+    @apply border-l-4 border-primary pl-4 italic opacity-90;
+  }
+
+  .content hr {
+    @apply border-border;
+  }
+
+  .content.compact > * + * {
+    margin-top: var(--space-2);
+  }
+}
+
+/* Banner block pattern overlay - uses theme colors */
+.futuristic-pattern {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--chart-4) 95%, transparent),
+    color-mix(in srgb, var(--primary) 95%, transparent),
+    color-mix(in srgb, var(--chart-3) 95%, transparent)
+  );
+  filter: url(#advanced-texture);
+  pointer-events: none;
+}
+
+.futuristic-pattern .texture-filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.futuristic-pattern .ripple-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Optional: add radial gradient or animation for ripple effect */
+}
