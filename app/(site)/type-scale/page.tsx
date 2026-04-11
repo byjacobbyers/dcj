@@ -87,7 +87,7 @@ export default function TypeScalePage() {
                   <span className="font-mono">{`text-${key}`}</span>
                 </div>
                 <div
-                  className="font-sans"
+                  className="font-serif"
                   style={{
                     fontSize: config.fontSize,
                     lineHeight: config.lineHeight,

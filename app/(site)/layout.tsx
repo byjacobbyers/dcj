@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Script from "next/script"
 import { GoogleTagManager } from "@next/third-parties/google"
-import { sans, mono, serif } from "./fonts"
+import { heading, mono, serif } from "./fonts"
 import { cn } from "@/lib/utils"
 import "./globals.css"
 import Template from "./template"
@@ -35,7 +35,15 @@ export default async function SiteLayout({
   ])
 
   return (
-    <div className={cn(sans.variable, mono.variable, serif.variable, "min-h-screen antialiased bg-background text-foreground font-sans", isEnabled && "body-preview-mode")}>
+    <div
+      className={cn(
+        heading.variable,
+        serif.variable,
+        mono.variable,
+        'min-h-screen antialiased bg-background text-foreground font-serif',
+        isEnabled && 'body-preview-mode',
+      )}
+    >
       <svg aria-hidden className="absolute w-0 h-0 overflow-hidden">
         <defs>
           <filter id="advanced-texture">

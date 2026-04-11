@@ -1,15 +1,29 @@
-import { Inter } from "next/font/google";
+import { JetBrains_Mono, Merriweather, Source_Serif_4 } from 'next/font/google'
 
-// `globals.css` defines the font stacks via CSS variables (e.g. `--font-sans: Inter, ...`).
-// Here we load Inter so the `--font-sans` variable points to the actual webfont.
-export const sans = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-sans",
-  weight: ["300", "400", "500", "600", "700"],
-});
+/**
+ * next/font injects CSS variables on the element that applies `.variable` classes.
+ * `globals.css` :root lists human-readable fallbacks; these loaders supply real files + metrics.
+ *
+ * - Merriweather → headings (h1–h6, .display) via `font-heading` / `--font-heading`
+ * - Source Serif 4 → body copy via `font-serif` / `--font-serif` (site layout uses `font-serif`)
+ * - JetBrains Mono → code / mono via `font-mono` / `--font-mono`
+ */
+export const heading = Merriweather({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-heading',
+  weight: ['300', '400', '700', '900'],
+})
 
-// For serif/mono, `globals.css` uses system stacks (`ui-serif`, `ui-monospace`).
-// Avoid overriding them here so the styling stays consistent with `globals.css`.
-export const serif = { variable: "" } as const;
-export const mono = { variable: "" } as const;
+export const serif = Source_Serif_4({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-serif',
+  weight: ['200', '300', '400', '500', '600', '700', '800', '900'],
+})
+
+export const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+})
