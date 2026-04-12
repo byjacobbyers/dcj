@@ -1,4 +1,5 @@
 import { EmailTemplate } from '@/components/email-template'
+import { render } from '@react-email/render'
 import { Resend } from 'resend'
 import * as React from 'react'
 
@@ -110,6 +111,15 @@ export async function POST(request: Request) {
       `noreply@${siteUrlHost()}`
     const replyTo = isAnonymous ? replyToDefault : email
 
+    const html = await render(
+      React.createElement(EmailTemplate, {
+        name: isAnonymous ? undefined : name,
+        email: isAnonymous ? undefined : email,
+        message: message.trim(),
+        isAnonymous,
+      })
+    )
+
     const resend = new Resend(process.env.RESEND_API_KEY)
     const { data, error } = await resend.emails.send({
       from: fromEmail,
@@ -118,12 +128,7 @@ export async function POST(request: Request) {
       subject: isAnonymous
         ? 'Denver Contact Jam - Anonymous Contact Form Submission'
         : `Denver Contact Jam - Contact Form Submission from ${name}`,
-      react: EmailTemplate({
-        name: isAnonymous ? undefined : name,
-        email: isAnonymous ? undefined : email,
-        message: message.trim(),
-        isAnonymous,
-      }) as React.ReactElement,
+      html,
     })
 
     if (error) {
