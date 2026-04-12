@@ -2,39 +2,71 @@ import { EmailTemplate } from '@/components/email-template'
 import { Resend } from 'resend'
 import * as React from 'react'
 
+import { sanityFetch } from '@/sanity/lib/live'
+import { SiteQuery } from '@/sanity/queries/documents/site-query'
+
+function parseRecipientEnv(): string[] {
+  const raw = process.env.CONTACT_FORM_RECIPIENT_EMAIL
+  if (!raw?.trim()) return []
+  return raw.split(',').map((e) => e.trim()).filter(Boolean)
+}
+
+function siteUrlHost(): string {
+  const u = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.denvercontactjam.com'
+  return u.replace(/^https?:\/\//, '').replace(/\/$/, '') || 'denvercontactjam.com'
+}
+
+type SiteForSend = {
+  title?: string | null
+  email?: string | null
+  organizationJsonLd?: { email?: string | null } | null
+} | null
+
+function inboxFromSite(site: SiteForSend): string {
+  const a = site?.email?.trim()
+  const b = site?.organizationJsonLd?.email?.trim()
+  return a || b || ''
+}
+
 export async function POST(request: Request) {
   try {
     if (!process.env.RESEND_API_KEY) {
       console.error('[API Send] Missing RESEND_API_KEY')
       return Response.json(
-        { error: 'Server configuration error' },
+        { error: 'Server configuration error', code: 'MISSING_RESEND_API_KEY' },
         { status: 500 }
       )
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY)
-    const body = await request.json()
-    const { name, email, message, isAnonymous, website } = body
+    let body: Record<string, unknown>
+    try {
+      body = (await request.json()) as Record<string, unknown>
+    } catch {
+      return Response.json({ error: 'Invalid request body' }, { status: 400 })
+    }
 
-    if (website && website.trim().length > 0) {
+    const name = typeof body.name === 'string' ? body.name : ''
+    const email = typeof body.email === 'string' ? body.email : ''
+    const message = typeof body.message === 'string' ? body.message : ''
+    const isAnonymous = Boolean(body.isAnonymous)
+    const website = typeof body.website === 'string' ? body.website : ''
+
+    if (website.trim().length > 0) {
       return Response.json({ success: true })
     }
 
-    if (!message || message.trim().length === 0) {
-      return Response.json(
-        { error: 'Message is required' },
-        { status: 400 }
-      )
+    if (!message.trim()) {
+      return Response.json({ error: 'Message is required' }, { status: 400 })
     }
 
     if (!isAnonymous) {
-      if (!name || name.trim().length === 0) {
+      if (!name.trim()) {
         return Response.json(
           { error: 'Name is required when not sending anonymously' },
           { status: 400 }
         )
       }
-      if (!email || email.trim().length === 0) {
+      if (!email.trim()) {
         return Response.json(
           { error: 'Email is required when not sending anonymously' },
           { status: 400 }
@@ -49,24 +81,36 @@ export async function POST(request: Request) {
       }
     }
 
-    const recipientEmail =
-      process.env.CONTACT_FORM_RECIPIENT_EMAIL?.split(',').map((e) => e.trim()) ??
-      []
-    const fromEmail =
-      process.env.CONTACT_FORM_FROM_EMAIL ??
-      'Denver Contact Jam <no-reply@example.com>'
-    const replyToDefault =
-      process.env.CONTACT_FORM_REPLY_TO ?? 'no-reply@example.com'
-    const replyTo = isAnonymous ? replyToDefault : email
+    const { data: site } = await sanityFetch({ query: SiteQuery, params: {} })
+    const sanityInbox = inboxFromSite(site as SiteForSend)
+
+    let recipientEmail = parseRecipientEnv()
+    if (recipientEmail.length === 0 && sanityInbox) {
+      recipientEmail = [sanityInbox]
+    }
 
     if (recipientEmail.length === 0) {
-      console.error('[API Send] CONTACT_FORM_RECIPIENT_EMAIL not set')
+      console.error('[API Send] No recipient: set CONTACT_FORM_RECIPIENT_EMAIL or Site email in Sanity')
       return Response.json(
-        { error: 'Server configuration error' },
+        { error: 'Server configuration error', code: 'MISSING_CONTACT_RECIPIENT' },
         { status: 500 }
       )
     }
 
+    const siteTitle = (site as SiteForSend)?.title?.trim() || 'Denver Contact Jam'
+    const fromEnv = process.env.CONTACT_FORM_FROM_EMAIL?.trim()
+    const sanityFrom = inboxFromSite(site as SiteForSend)
+    const fromEmail =
+      fromEnv ||
+      (sanityFrom ? `${siteTitle} <${sanityFrom}>` : `Denver Contact Jam <noreply@${siteUrlHost()}>`)
+
+    const replyToDefault =
+      process.env.CONTACT_FORM_REPLY_TO?.trim() ||
+      sanityInbox ||
+      `noreply@${siteUrlHost()}`
+    const replyTo = isAnonymous ? replyToDefault : email
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: recipientEmail,
@@ -84,8 +128,19 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error('Resend error:', error)
+      const detail =
+        typeof error === 'object' &&
+        error !== null &&
+        'message' in error &&
+        typeof (error as { message: unknown }).message === 'string'
+          ? (error as { message: string }).message
+          : undefined
       return Response.json(
-        { error: 'Failed to send email' },
+        {
+          error: 'Failed to send email',
+          code: 'RESEND_REJECTED',
+          ...(detail ? { detail } : {}),
+        },
         { status: 500 }
       )
     }
@@ -94,7 +149,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('API error:', error)
     return Response.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', code: 'UNHANDLED' },
       { status: 500 }
     )
   }
