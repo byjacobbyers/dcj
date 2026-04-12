@@ -34,7 +34,11 @@ export function generateMetadata(
   fallbackDescription?: string,
   options?: { url?: string; titleSuffix?: string }
 ): Metadata {
-  const title = pageSeo?.metaTitle || globalSeo?.metaTitle || fallbackTitle || defaultTitle
+  // Prefer page-specific metaTitle, then document title (e.g. page.title), then site-wide default.
+  // Putting globalSeo after fallbackTitle avoids inner pages inheriting the homepage metaTitle
+  // (e.g. "Denver Contact Jam :: Denver Contact Jam" instead of "Guidelines :: Denver Contact Jam").
+  const title =
+    pageSeo?.metaTitle || fallbackTitle || globalSeo?.metaTitle || defaultTitle
   const description = pageSeo?.metaDesc || globalSeo?.metaDesc || fallbackDescription || defaultDescription
   const noIndex = pageSeo?.noIndex ?? false
   const ogImage = pageSeo?.shareGraphic?.asset?.url
