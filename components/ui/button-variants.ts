@@ -5,7 +5,7 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-primary-foreground shadow',
+        default: 'bg-primary text-primary-foreground shadow hover:bg-primary/90',
         destructive:
           'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
@@ -15,7 +15,7 @@ export const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:text-foreground hover:cursor-pointer hover:!scale-100',
         huge:
-          'text-primary-foreground shadow whitespace-normal text-center !h-auto min-h-0 !px-8 !py-4 !text-h4',
+          'bg-primary text-primary-foreground shadow whitespace-normal text-center !h-auto min-h-0 !px-8 !py-4 !text-h4 hover:bg-primary/90',
       },
       size: {
         default: 'h-9 px-4 py-2',
