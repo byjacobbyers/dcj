@@ -29,10 +29,33 @@ function inboxFromSite(site: SiteForSend): string {
   return a || b || ''
 }
 
+async function postToGoogleSheet(body: {
+  name: string
+  email: string
+  message: string
+  isAnonymous: boolean
+}): Promise<void> {
+  const sheetUrl = process.env.GOOGLE_SHEET_URL?.trim()
+  if (!sheetUrl) {
+    console.warn('[API Contact] GOOGLE_SHEET_URL not set; skipping sheet append')
+    return
+  }
+  try {
+    await fetch(sheetUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+  } catch (err) {
+    console.error('[API Contact] Google Sheet append fetch failed:', err)
+  }
+}
+
 export async function POST(request: Request) {
   try {
     if (!process.env.RESEND_API_KEY) {
-      console.error('[API Send] Missing RESEND_API_KEY')
+      console.error('[API Contact] Missing RESEND_API_KEY')
       return Response.json(
         { error: 'Server configuration error', code: 'MISSING_RESEND_API_KEY' },
         { status: 500 }
@@ -91,7 +114,7 @@ export async function POST(request: Request) {
     }
 
     if (recipientEmail.length === 0) {
-      console.error('[API Send] No recipient: set CONTACT_FORM_RECIPIENT_EMAIL or Site email in Sanity')
+      console.error('[API Contact] No recipient: set CONTACT_FORM_RECIPIENT_EMAIL or Site email in Sanity')
       return Response.json(
         { error: 'Server configuration error', code: 'MISSING_CONTACT_RECIPIENT' },
         { status: 500 }
@@ -149,6 +172,13 @@ export async function POST(request: Request) {
         { status: 500 }
       )
     }
+
+    await postToGoogleSheet({
+      name,
+      email,
+      message: message.trim(),
+      isAnonymous,
+    })
 
     return Response.json({ success: true, data })
   } catch (error) {
