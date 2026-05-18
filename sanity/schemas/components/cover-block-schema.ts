@@ -1,6 +1,9 @@
 import { defineType, defineField } from 'sanity'
 import { ImageIcon } from '@sanity/icons'
 import ContentPositionInput from '../inputs/content-position-input'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
+import { sectionContentLayoutField } from '../fields/section-content-layout-field'
 
 export default defineType({
   title: 'Cover Block',
@@ -20,6 +23,7 @@ export default defineType({
       type: 'string',
       description: 'Section anchor for deep linking (no hash)',
     }),
+    sectionPaddingField({ initialValue: 'default' }),
     defineField({
       title: 'Background Type',
       name: 'backgroundType',
@@ -46,20 +50,11 @@ export default defineType({
       description: 'Optional. Falls back to desktop image if empty.',
       hidden: ({ parent }) => parent?.backgroundType === 'color',
     }),
-    defineField({
-      title: 'Background Color',
-      name: 'backgroundColor',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Black', value: 'black' },
-          { title: 'White', value: 'white' },
-          { title: 'Primary', value: 'primary' },
-        ],
-        layout: 'dropdown',
-      },
-      initialValue: 'black',
+    sectionContentLayoutField(),
+    sectionBackgroundColorField({
       hidden: ({ parent }) => parent?.backgroundType === 'image',
+      description:
+        'Solid fill when Background Type is Color. Primary and Secondary match the same semantic surfaces as the rest of the site. Transparent shows the page behind (no fill).',
     }),
     defineField({
       title: 'Height',
@@ -79,13 +74,14 @@ export default defineType({
       title: 'Overlay Color',
       name: 'overlayColor',
       type: 'string',
-      description: 'Color overlay on the background image',
+      description:
+        'Tint over the background image. None removes the overlay. Black is a neutral dark scrim (opacity applies). Primary/Secondary use theme tokens.',
       options: {
         list: [
           { title: 'None', value: 'none' },
           { title: 'Black', value: 'black' },
-          { title: 'White', value: 'white' },
           { title: 'Primary', value: 'primary' },
+          { title: 'Secondary', value: 'secondary' },
         ],
         layout: 'dropdown',
       },

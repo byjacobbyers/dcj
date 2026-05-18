@@ -1,5 +1,7 @@
 import { defineType, defineField } from 'sanity'
 import { BlockContentIcon } from '@sanity/icons'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionContentLayoutField } from '../fields/section-content-layout-field'
 
 export default defineType({
   title: 'Text Block',
@@ -14,18 +16,21 @@ export default defineType({
       initialValue: true,
     }),
     defineField({ title: 'Anchor', name: 'anchor', type: 'string' }),
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionContentLayoutField(),
     defineField({
       title: 'Background Color',
       name: 'backgroundColor',
       type: 'string',
+      initialValue: 'transparent',
       options: {
         list: [
+          { title: 'Transparent', value: 'transparent' },
           { title: 'Primary', value: 'primary' },
           { title: 'Secondary', value: 'secondary' },
           { title: 'Texture', value: 'texture' },
         ],
       },
-      initialValue: 'primary',
     }),
     defineField({
       title: 'Content Alignment',

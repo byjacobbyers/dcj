@@ -4,6 +4,8 @@ import type { MouseEvent, ReactNode } from 'react'
 import { buildRouteProps } from '@/lib/route-resolver'
 import type { BaseRouteType } from '@/types/objects/route-type'
 import SanityImage from '@/components/sanity-image'
+import ButtonPair from '@/components/portable-text/button-pair'
+import type { ButtonPairType } from '@/types/objects/button-pair-type'
 import { useCtaLocation } from '@/context'
 import {
   Tooltip,
@@ -83,6 +85,9 @@ export const portableTextComponents = {
     ),
   },
   types: {
+    buttonPair: ({ value }: { value?: ButtonPairType }) => (
+      <ButtonPair value={value} />
+    ),
     defaultImage: ({
       value,
     }: {

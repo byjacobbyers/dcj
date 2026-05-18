@@ -8,11 +8,15 @@ import MenuButton from '@/components/header/menu-button'
 import MobileNav from '@/components/navigation/mobile'
 import type { HeaderProps } from '@/types/components/header-type'
 import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+const SCROLL_BG_THRESHOLD = 15
 
 export default function Header({ navigation }: HeaderProps) {
   const [isOpen, toggleDropdown] = useCycle(false, true)
   const headerRef = useRef<HTMLElement>(null)
   const [dimensions, setDimensions] = useState({ height: 64 })
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const measure = () => {
@@ -36,6 +40,15 @@ export default function Header({ navigation }: HeaderProps) {
     }
   }, [isOpen])
 
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > SCROLL_BG_THRESHOLD)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   const closeMenu = () => {
     toggleDropdown()
   }
@@ -44,19 +57,22 @@ export default function Header({ navigation }: HeaderProps) {
     <>
       <header
         ref={headerRef}
-        className="sticky top-0 z-50 w-full bg-background px-5 border-b-2 border-primary"
+        className={cn(
+          'sticky top-0 z-50 w-full p-5 transition-colors duration-200',
+          scrolled && 'bg-background',
+        )}
       >
-        <div className="relative z-10 flex h-16 items-center justify-between">
+        <div className="relative z-10 flex items-center justify-between">
           <Link
             href="/"
             className="inline-flex items-center gap-2 self-center"
           >
             <div className="flex items-end gap-2 leading-none">
               <h1
-                className="text-2xl font-bold leading-none p-0 lg:text-5xl"
+                className="text-2xl font-heading xl:text-5xl 2xl:text-7xl"
                 title="Denver Contact Jam"
               >
-                Denver Contact Jam
+                DENVER CONTACT JAM
               </h1>
             </div>
           </Link>
@@ -82,7 +98,7 @@ export default function Header({ navigation }: HeaderProps) {
       </header>
 
       <motion.div
-        initial={'closed'}
+        initial="closed"
         animate={isOpen ? 'open' : 'closed'}
         transition={{ duration: 1, ease: [0.83, 0, 0.17, 1] }}
         variants={{
@@ -95,10 +111,9 @@ export default function Header({ navigation }: HeaderProps) {
             opacity: 1,
           },
         }}
-        style={{
-          paddingTop: dimensions.height,
-        }}
-        className='fixed left-0 top-0 z-40 flex h-screen w-screen flex-col items-center overflow-scroll bg-background px-5 text-center xl:hidden'
+        style={{ top: dimensions.height }}
+        className={`fixed inset-x-0 bottom-0 z-40 flex w-full flex-col items-center overflow-y-auto overscroll-contain bg-background px-5 text-center xl:hidden ${!isOpen ? 'pointer-events-none' : ''}`}
+        aria-hidden={!isOpen}
       >
         {navigation && <MobileNav data={navigation} closeMenu={closeMenu} />}
       </motion.div>

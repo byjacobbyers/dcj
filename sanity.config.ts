@@ -12,11 +12,12 @@ import { presentationTool } from 'sanity/presentation'
 import { muxInput } from 'sanity-plugin-mux-input'
 import { media } from 'sanity-plugin-media'
 
+import { getPublicSiteUrl } from './lib/site-url'
 import { apiVersion, dataset, projectId } from './sanity/env'
 import { schema } from './sanity/schemas'
 import { structure } from './sanity/structure'
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+const baseUrl = getPublicSiteUrl()
 
 export default defineConfig({
   name: 'default',
@@ -32,7 +33,8 @@ export default defineConfig({
     muxInput(),
     presentationTool({
       previewUrl: {
-        origin: process.env.SANITY_STUDIO_PREVIEW_ORIGIN || baseUrl,
+        origin:
+          process.env.SANITY_STUDIO_PREVIEW_ORIGIN?.replace(/\/+$/, '') || baseUrl,
         preview: '/',
         draftMode: { enable: '/api/draft-mode/enable' },
       },

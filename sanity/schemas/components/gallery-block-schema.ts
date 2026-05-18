@@ -1,6 +1,8 @@
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 import ImagesPerRowInput from '../inputs/images-per-row-input'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
 
 const galleryBlock = defineType({
   title: 'Gallery Block',
@@ -21,6 +23,8 @@ const galleryBlock = defineType({
       type: 'string',
       description: 'The anchor for the section. No hash symbols. Optional.',
     }),
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionBackgroundColorField(),
     defineField({
       title: 'Images',
       name: 'images',

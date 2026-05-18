@@ -6,22 +6,30 @@ import MuxPlayer from '@mux/mux-player-react'
 import SimpleText from '@/components/simple-text'
 import { Button } from '@/components/ui/button'
 import Route from '@/components/route'
-
+import { normalizeCoverOverlay } from '@/lib/cover-overlay'
+import { cleanStega } from '@/lib/stega'
+import {
+  normalizeSectionBackground,
+  sectionSemanticSurfaceClasses,
+  sectionSurfaceAttrs,
+} from '@/lib/section-background'
+import { sectionPaddingToClass } from '@/lib/section-padding'
+import { cn } from '@/lib/utils'
 import type { CoverVideoProps } from '@/types/components/cover-video-type'
+import { normalizeSectionContentLayout } from '@/lib/section-content-layout'
+import { Card } from '@/components/ui/card'
 
+/** Mux `aspect_ratio` is typically `16:9` or `1920:1080`; also tolerates `/` and `x` delimiters (and stega). */
 function aspectRatioToCss(ratio?: string | null): string | undefined {
-  if (!ratio || typeof ratio !== 'string') return undefined
-  const parts = ratio.split(':').map((s) => parseFloat(s.trim()))
-  if (
-    parts.length !== 2 ||
-    !Number.isFinite(parts[0]) ||
-    !Number.isFinite(parts[1]) ||
-    parts[0] <= 0 ||
-    parts[1] <= 0
-  ) {
-    return undefined
-  }
-  return `${parts[0]} / ${parts[1]}`
+  if (ratio == null || typeof ratio !== 'string') return undefined
+  const normalized = cleanStega(ratio).replace(/\s+/g, '')
+  if (!normalized) return undefined
+  const match = normalized.match(/^([\d.]+)[:xX/]([\d.]+)$/)
+  if (!match) return undefined
+  const w = parseFloat(match[1])
+  const h = parseFloat(match[2])
+  if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) return undefined
+  return `${w} / ${h}`
 }
 
 const DEFAULT_AUTO_ASPECT = '16 / 9'
@@ -29,17 +37,19 @@ const DEFAULT_AUTO_ASPECT = '16 / 9'
 export default function CoverVideo({
   active = true,
   componentIndex = 0,
+  sectionPadding,
   anchor,
+  contentLayout,
+  backgroundColor,
   videoProvider = 'mux',
   muxUrl,
   muxUrlMobile,
   vimeoUrl,
   vimeoUrlMobile,
   height = 'half',
-  overlayColor = 'none',
+  overlayColor: overlayColorRaw = 'none',
   overlayOpacity = 50,
   contentPosition = 'center',
-  contentHalfWidth = false,
   content,
   cta,
   autoplay = true,
@@ -48,6 +58,22 @@ export default function CoverVideo({
   controls = false,
 }: CoverVideoProps) {
   const [isMobile, setIsMobile] = useState(false)
+  const bg = normalizeSectionBackground(backgroundColor)
+  const overlayColor = normalizeCoverOverlay(overlayColorRaw as string | undefined)
+  const layout = normalizeSectionContentLayout(contentLayout)
+
+  const videoProviderValue =
+    cleanStega(typeof videoProvider === 'string' ? videoProvider : 'mux') === 'vimeo'
+      ? 'vimeo'
+      : 'mux'
+  const heightValue: 'auto' | 'full' | 'half' = (() => {
+    const h = cleanStega(typeof height === 'string' ? height : 'half')
+    if (h === 'full') return 'full'
+    if (h === 'auto') return 'auto'
+    return 'half'
+  })()
+  const contentPositionValue =
+    cleanStega(typeof contentPosition === 'string' ? contentPosition : 'center') || 'center'
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -58,31 +84,33 @@ export default function CoverVideo({
 
   if (!active) return null
 
-  const isAutoHeight = height === 'auto'
+  const isAutoHeight = heightValue === 'auto'
   const heightClass =
-    height === 'full'
-      ? 'min-h-screen'
-      : height === 'half'
+    heightValue === 'full'
+      ? 'min-h-[75vh]'
+      : heightValue === 'half'
         ? 'min-h-[50vh]'
         : isAutoHeight
           ? ''
           : 'min-h-[50vh]'
 
   const overlayColorValue =
-    overlayColor === 'black'
-      ? 'var(--foreground)'
-      : overlayColor === 'primary'
-        ? 'var(--primary)'
-        : overlayColor === 'white'
-          ? 'var(--background)'
+    overlayColor === 'primary'
+      ? 'var(--primary)'
+      : overlayColor === 'secondary'
+        ? 'var(--secondary)'
+        : overlayColor === 'black'
+          ? '#000000'
           : undefined
 
   const contentTextClass =
-    overlayColor === 'black'
-      ? 'text-background'
-      : overlayColor === 'primary'
-        ? 'text-primary-foreground'
-        : 'text-foreground'
+    overlayColor === 'primary'
+      ? 'text-primary-foreground'
+      : overlayColor === 'secondary'
+        ? 'text-secondary-foreground'
+        : overlayColor === 'black'
+          ? 'text-white'
+          : 'text-foreground'
 
   const buttonVariant = overlayColor === 'primary' ? 'secondary' : 'default'
 
@@ -97,17 +125,18 @@ export default function CoverVideo({
     'bottom-center': 'items-end justify-center text-center',
     'bottom-right': 'items-end justify-end text-right',
   }
-  const positionClass = positionClasses[contentPosition] || 'items-center justify-center text-center'
+  const positionClass =
+    positionClasses[contentPositionValue] || 'items-center justify-center text-center'
 
   const muxPlaybackId =
-    videoProvider === 'mux'
+    videoProviderValue === 'mux'
       ? isMobile && muxUrlMobile?.asset?.playbackId
         ? muxUrlMobile.asset.playbackId
         : muxUrl?.asset?.playbackId
       : null
 
   const vimeoUrlValue =
-    videoProvider === 'vimeo'
+    videoProviderValue === 'vimeo'
       ? isMobile && vimeoUrlMobile
         ? vimeoUrlMobile
         : vimeoUrl ?? null
@@ -117,13 +146,14 @@ export default function CoverVideo({
 
   let sectionAspectStyle: CSSProperties | undefined
   if (isAutoHeight) {
-    if (videoProvider === 'mux' && muxPlaybackId) {
+    if (videoProviderValue === 'mux' && muxPlaybackId) {
       const asset =
         isMobile && muxUrlMobile?.asset?.playbackId ? muxUrlMobile.asset : muxUrl?.asset
       sectionAspectStyle = {
         aspectRatio: aspectRatioToCss(asset?.data?.aspect_ratio) ?? DEFAULT_AUTO_ASPECT,
       }
     } else {
+      // Vimeo (no aspect_ratio in query) or edge cases — typical widescreen default
       sectionAspectStyle = { aspectRatio: DEFAULT_AUTO_ASPECT }
     }
   }
@@ -136,11 +166,21 @@ export default function CoverVideo({
   return (
     <section
       id={anchor || `cover-video-${componentIndex}`}
-      className={`cover-video w-full relative px-5 py-24 ${heightClass} flex ${positionClass} overflow-hidden`}
+      data-background-color={bg}
+      {...sectionSurfaceAttrs(bg)}
+      className={cn(
+        'cover-video w-full relative px-5',
+        sectionSemanticSurfaceClasses(bg),
+        sectionPaddingToClass(sectionPadding, 'default'),
+        heightClass,
+        'flex',
+        positionClass,
+        'overflow-hidden'
+      )}
       style={sectionAspectStyle}
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {videoProvider === 'mux' && muxPlaybackId ? (
+        {videoProviderValue === 'mux' && muxPlaybackId ? (
           <MuxPlayer
             playbackId={muxPlaybackId}
             streamType="on-demand"
@@ -149,7 +189,7 @@ export default function CoverVideo({
             muted={muted}
             className={`h-full w-full object-cover ${controls ? '' : '[&::part(controls)]:hidden'}`}
           />
-        ) : videoProvider === 'vimeo' && vimeoUrlValue ? (
+        ) : videoProviderValue === 'vimeo' && vimeoUrlValue ? (
           (() => {
             const videoId = getVimeoId(vimeoUrlValue)
             if (!videoId) return null
@@ -192,22 +232,41 @@ export default function CoverVideo({
       )}
 
       <div className="relative z-20 w-full container mx-auto">
-        <div className={`transition-all duration-300 ${contentHalfWidth ? 'md:max-w-[50%]' : ''}`}>
-          {content && Array.isArray(content) && content.length > 0 ? (
-            <div className={`content ${contentTextClass}`}>
-              <SimpleText content={content} />
-            </div>
-          ) : null}
-          {cta?.active && cta?.route ? (
-            <div className="mt-6">
-              <Button asChild variant={buttonVariant}>
-                <Route data={cta.route as Parameters<typeof Route>[0]['data']}>
-                  {(cta.route as { title?: string }).title || 'Learn More'}
-                </Route>
-              </Button>
-            </div>
-          ) : null}
-        </div>
+        {layout === 'card' ? (
+          <Card className="w-full">
+            {content && Array.isArray(content) && content.length > 0 ? (
+              <div className={`content ${contentTextClass}`}>
+                <SimpleText content={content} />
+              </div>
+            ) : null}
+            {cta?.active && cta?.route ? (
+              <div className="mt-6">
+                <Button asChild variant={buttonVariant}>
+                  <Route data={cta.route as Parameters<typeof Route>[0]['data']}>
+                    {(cta.route as { title?: string }).title || 'Learn More'}
+                  </Route>
+                </Button>
+              </div>
+            ) : null}
+          </Card>
+        ) : (
+          <>
+            {content && Array.isArray(content) && content.length > 0 ? (
+              <div className={`content ${contentTextClass}`}>
+                <SimpleText content={content} />
+              </div>
+            ) : null}
+            {cta?.active && cta?.route ? (
+              <div className="mt-6">
+                <Button asChild variant={buttonVariant}>
+                  <Route data={cta.route as Parameters<typeof Route>[0]['data']}>
+                    {(cta.route as { title?: string }).title || 'Learn More'}
+                  </Route>
+                </Button>
+              </div>
+            ) : null}
+          </>
+        )}
       </div>
     </section>
   )

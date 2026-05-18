@@ -1,5 +1,8 @@
 import { defineType, defineField } from 'sanity'
 import { ImageIcon } from '@sanity/icons'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
+import { sectionContentLayoutField } from '../fields/section-content-layout-field'
 
 const maxWidthOptions = [
   { title: 'Small (24rem)', value: 'max-w-sm' },
@@ -28,6 +31,9 @@ export default defineType({
       initialValue: true,
     }),
     defineField({ title: 'Anchor', name: 'anchor', type: 'string' }),
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionContentLayoutField(),
+    sectionBackgroundColorField(),
     defineField({ title: 'Image', name: 'image', type: 'defaultImage' }),
     defineField({
       title: 'Image (Mobile)',

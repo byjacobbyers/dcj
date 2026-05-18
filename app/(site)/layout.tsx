@@ -1,21 +1,24 @@
 import type { Metadata } from "next"
 import Script from "next/script"
 import { GoogleTagManager } from "@next/third-parties/google"
-import { heading, mono, serif } from "./fonts"
+import { heading, mono, sans } from "./fonts"
 import { cn } from "@/lib/utils"
 import "./globals.css"
 import Template from "./template"
 import { sanityFetch, SanityLive } from "@/sanity/lib/live"
 import { SiteQuery } from "@/sanity/queries/documents/site-query"
+import { AnnouncementQuery } from "@/sanity/queries/documents/announcement-query"
 import { headerQuery, footerQuery } from "@/sanity/queries/components/page-nav-query"
 import { PreviewBar } from "@/components/preview-bar"
 import { VisualEditing } from "next-sanity/visual-editing"
 import { draftMode } from "next/headers"
+import AnnouncementBar from "@/components/announcement"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import SmoothScrollProvider from "@/components/smooth-scroll-provider"
+import SmoothScrollProvider from "@/components/providers/smooth-scroll-provider"
 import { Providers } from "@/components/providers"
 import OrganizationJsonLd from "@/components/organization-jsonld"
+import type { AnnouncementType } from "@/types/documents/announcement-type"
 
 export const revalidate = 60
 
@@ -28,19 +31,45 @@ export default async function SiteLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const { isEnabled } = await draftMode()
-  const [{ data: site }, { data: headerNav }, { data: footerNav }] = await Promise.all([
-    sanityFetch({ query: SiteQuery }),
-    sanityFetch({ query: headerQuery }),
-    sanityFetch({ query: footerQuery }),
-  ])
+
+  const now = new Date()
+  const todayLocal = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`
+
+  const { site, headerNav, footerNav } = await (async () => {
+    try {
+      const [siteRes, headerRes, footerRes] = await Promise.all([
+        sanityFetch({ query: SiteQuery }),
+        sanityFetch({ query: headerQuery }),
+        sanityFetch({ query: footerQuery }),
+      ])
+      return {
+        site: siteRes.data,
+        headerNav: headerRes.data,
+        footerNav: footerRes.data,
+      }
+    } catch {
+      return { site: null, headerNav: null, footerNav: null }
+    }
+  })()
+
+  let announcement: AnnouncementType | null = null
+  try {
+    const announcementRes = await sanityFetch({
+      query: AnnouncementQuery,
+      params: { today: todayLocal },
+    })
+    announcement = announcementRes.data
+  } catch {
+    announcement = null
+  }
 
   return (
     <div
       className={cn(
         heading.variable,
-        serif.variable,
+        sans.variable,
         mono.variable,
-        'min-h-screen antialiased bg-background text-foreground font-serif',
+        'flex min-h-screen flex-col antialiased bg-background text-foreground font-sans',
         isEnabled && 'body-preview-mode',
       )}
     >
@@ -99,13 +128,22 @@ export default async function SiteLayout({
         {site && <OrganizationJsonLd site={site} />}
         {isEnabled && <PreviewBar />}
         <SmoothScrollProvider>
-          <Header navigation={headerNav} />
-          <Template>
-            {children}
-            <SanityLive />
-            {isEnabled && <VisualEditing zIndex={999999} />}
-          </Template>
-          <Footer navigation={footerNav} />
+          <div className="flex flex-col gap-2 z-40">
+            <AnnouncementBar announcement={announcement} />
+          </div>
+          <div className="sticky top-0 z-50 flex shrink-0 flex-col">
+            <Header navigation={headerNav} />
+          </div>
+          <div className="flex min-h-0 flex-1 flex-col">
+            <Template>
+              {children}
+              <SanityLive />
+              {isEnabled && <VisualEditing zIndex={999999} />}
+            </Template>
+          </div>
+          <div className="z-50 flex shrink-0 flex-col">
+            <Footer navigation={footerNav} />
+          </div>
         </SmoothScrollProvider>
       </Providers>
     </div>

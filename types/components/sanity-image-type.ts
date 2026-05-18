@@ -12,4 +12,6 @@ export type SanityImageProps = {
   sizes?: string
   priority?: boolean
   quality?: number
+  /** Shown when the asset is missing or the image fails to load. */
+  placeholder?: 'grey' | 'wireframe'
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export default function Template({
   children,
@@ -14,7 +15,7 @@ export default function Template({
       initial={{ y: 0, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ ease: "easeInOut", duration: 0.75 }}
-      className={className}
+      className={cn('flex min-h-0 min-w-0 flex-1 flex-col', className)}
     >
       {children}
     </motion.div>

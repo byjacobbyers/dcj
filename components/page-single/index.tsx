@@ -1,13 +1,35 @@
-import { SanityDocument } from "next-sanity"
-import Sections from "@/components/sections"
+import PageBackdrop from '@/components/page-backdrop'
+import Sections from '@/components/sections'
+import { cn } from '@/lib/utils'
+import type { PageSingleProps } from '@/types/components/page-single-type'
 
-export default function Page({ page }: { page: SanityDocument }) {
+export default function Page({ page }: PageSingleProps) {
   if (!page) return null
   const { sections = [], backgroundColor = 'primary' } = page
-  const bgClass = backgroundColor === 'secondary' ? 'bg-foreground text-background' : ''
+  const isSilk = backgroundColor === 'silk'
+  const surfaceProps =
+    backgroundColor === 'primary' || backgroundColor === 'secondary'
+      ? { 'data-surface': backgroundColor as 'primary' | 'secondary' }
+      : {}
+
   return (
-    <main className={`flex min-h-screen flex-col items-center ${bgClass}`}>
-      <Sections body={sections} />
-    </main>
+    <div
+      className={cn(
+        'relative flex w-full min-h-0 flex-1 flex-col items-center text-foreground',
+        !isSilk && 'bg-background',
+      )}
+    >
+      {isSilk ? <PageBackdrop /> : null}
+      <main
+        data-background-color={backgroundColor}
+        {...surfaceProps}
+        className={cn(
+          'relative z-10 flex w-full flex-1 flex-col items-center justify-center',
+          isSilk ? 'bg-transparent' : 'bg-background',
+        )}
+      >
+        <Sections body={sections} />
+      </main>
+    </div>
   )
 }

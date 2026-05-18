@@ -17,6 +17,7 @@ import DividerBlock from '@/components/divider-block'
 import SplitScrollBlock from '@/components/split-scroll-block'
 import ProblemBlock from '@/components/problem-block'
 import { CtaLocationProvider } from '@/context'
+import type { SectionsProps } from '@/types/components/sections-type'
 
 const blockMap: Record<string, React.FC<Record<string, unknown>>> = {
   heroBlock: HeroBlock as React.FC<Record<string, unknown>>,
@@ -26,8 +27,6 @@ const blockMap: Record<string, React.FC<Record<string, unknown>>> = {
   textBlock: TextBlock as React.FC<Record<string, unknown>>,
   imageBlock: ImageBlock as React.FC<Record<string, unknown>>,
   faqBlock: FaqBlock as React.FC<Record<string, unknown>>,
-  splitScrollBlock: SplitScrollBlock as React.FC<Record<string, unknown>>,
-  problemBlock: ProblemBlock as React.FC<Record<string, unknown>>,
   embedBlock: EmbedBlock as React.FC<Record<string, unknown>>,
   formBlock: FormBlock as React.FC<Record<string, unknown>>,
   columnBlock: ColumnBlock as React.FC<Record<string, unknown>>,
@@ -35,13 +34,11 @@ const blockMap: Record<string, React.FC<Record<string, unknown>>> = {
   videoBlock: VideoBlock as React.FC<Record<string, unknown>>,
   spacerBlock: SpacerBlock as React.FC<Record<string, unknown>>,
   dividerBlock: DividerBlock as React.FC<Record<string, unknown>>,
+  splitScrollBlock: SplitScrollBlock as React.FC<Record<string, unknown>>,
+  problemBlock: ProblemBlock as React.FC<Record<string, unknown>>,
 }
 
-export default function Sections({
-  body,
-}: {
-  body?: Array<{ _type?: string; _key?: string } & Record<string, unknown>>
-}) {
+export default function Sections({ body }: SectionsProps) {
   if (!body?.length) return null
 
   return (

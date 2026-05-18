@@ -1,4 +1,7 @@
-export type FormBlockFields = {
+import type { SectionBackgroundColor } from '@/lib/section-background'
+import type { SectionPaddingValue } from '@/lib/section-padding'
+
+export type FormBlockFormData = {
   name: string
   email: string
   message: string
@@ -9,6 +12,8 @@ export type FormBlockFields = {
 export type FormBlockProps = {
   active?: boolean
   componentIndex?: number
+  sectionPadding?: SectionPaddingValue | null
   anchor?: string
+  backgroundColor?: SectionBackgroundColor
   content?: unknown
 }

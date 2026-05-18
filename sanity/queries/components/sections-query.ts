@@ -9,8 +9,18 @@ const linkWithRouteMarkDef = `_type == 'linkWithRoute' => select(
   route { ${routeQuery} }
 )`
 
+const portableTextObjectExtras = `
+  _type == 'buttonPair' => {
+    _key,
+    _type,
+    left { ${routeQuery} },
+    right { ${routeQuery} }
+  },
+`
+
 const portableTextWithLinks = `content[] {
   ...,
+  ${portableTextObjectExtras}
   markDefs[] {
     ...,
     ${linkWithRouteMarkDef}
@@ -67,11 +77,13 @@ export const sectionsQuery = groq`
     },
     _type == 'ctaBlock' => {
       ...,
+      alignment,
       cta { ..., route { ${routeQuery} } },
       ${portableTextWithLinks}
     },
     _type == 'textBlock' => {
       ...,
+      contentAlignment,
       ${portableTextWithLinks}
     },
     _type == 'embedBlock' => {
@@ -94,6 +106,21 @@ export const sectionsQuery = groq`
     },
     _type == 'columnBlock' => {
       ...,
+      header[] {
+        ...,
+        markDefs[] {
+          ...,
+          ${linkWithRouteMarkDef}
+        }
+      },
+      footer[] {
+        ...,
+        markDefs[] {
+          ...,
+          ${linkWithRouteMarkDef}
+        }
+      },
+      cta { ..., route { ${routeQuery} } },
       columns[] {
         ...,
         content[] {

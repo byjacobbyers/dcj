@@ -2,7 +2,6 @@
 
 import { PortableText } from '@portabletext/react'
 import { portableTextComponents } from '@/lib/portable-text-components'
-
 import type { SimpleTextProps } from '@/types/components/simple-text-type'
 
 export default function SimpleText({ content }: SimpleTextProps) {

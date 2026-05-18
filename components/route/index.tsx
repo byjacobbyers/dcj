@@ -3,7 +3,7 @@
 import { forwardRef } from 'react'
 import Link from 'next/link'
 import { buildRouteProps } from '@/lib/route-resolver'
-import { type MouseEvent } from 'react'
+import type { MouseEvent } from 'react'
 import { cn } from '@/lib/utils'
 import { useCtaLocation } from '@/context'
 import {
@@ -11,9 +11,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import type { RouteLinkWithOptionalTooltipProps, RouteProps } from '@/types/components/route-link-type'
+import type {
+  RouteLinkWithOptionalTooltipProps,
+  RouteProps,
+} from '@/types/components/route-link-type'
 
-function RouteLinkWithOptionalTooltip({ tooltipText, children }: RouteLinkWithOptionalTooltipProps) {
+function RouteLinkWithOptionalTooltip({
+  tooltipText,
+  children,
+}: RouteLinkWithOptionalTooltipProps) {
   if (!tooltipText) return children
   return (
     <Tooltip>

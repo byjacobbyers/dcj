@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { DocumentIcon } from '@sanity/icons'
+import ComponentsIndexNoticeInput from '../inputs/components-index-notice-input'
 
 export default defineType({
   name: 'page',
@@ -11,6 +12,17 @@ export default defineType({
     { title: 'SEO & Settings', name: 'seo' },
   ],
   fields: [
+    defineField({
+      name: 'componentsIndexNotice',
+      title: 'Components reference',
+      type: 'string',
+      group: 'page',
+      hidden: ({ document }) =>
+        (document?.slug as { current?: string } | undefined)?.current !== 'components',
+      components: {
+        input: ComponentsIndexNoticeInput,
+      },
+    }),
     defineField({
       title: 'Title',
       name: 'title',
@@ -31,8 +43,11 @@ export default defineType({
       name: 'backgroundColor',
       type: 'string',
       group: 'page',
+      description:
+        'Primary and Secondary use solid theme surfaces. Silk adds an animated fabric-style backdrop behind page sections.',
       options: {
         list: [
+          { title: 'Silk', value: 'silk' },
           { title: 'Primary', value: 'primary' },
           { title: 'Secondary', value: 'secondary' },
         ],

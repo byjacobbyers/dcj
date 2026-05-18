@@ -1,5 +1,8 @@
 import { defineType, defineField } from 'sanity'
 import { PresentationIcon } from '@sanity/icons'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
+import { sectionContentLayoutField } from '../fields/section-content-layout-field'
 
 export default defineType({
   title: 'CTA Block',
@@ -14,17 +17,11 @@ export default defineType({
       initialValue: true,
     }),
     defineField({ title: 'Anchor', name: 'anchor', type: 'string' }),
-    defineField({
-      title: 'Background Color',
-      name: 'backgroundColor',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Primary', value: 'primary' },
-          { title: 'Secondary', value: 'secondary' },
-        ],
-      },
-      initialValue: 'primary',
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionContentLayoutField(),
+    sectionBackgroundColorField({
+      description:
+        'Section surface. Transparent shows the page behind this block. Primary and Secondary use the site palette. The CTA button style adjusts for contrast on primary and secondary surfaces.',
     }),
     defineField({
       title: 'Alignment',

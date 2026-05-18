@@ -4,6 +4,7 @@ import {
   eventsSitemapQuery,
   pagesSitemapQuery,
 } from '@/sanity/queries/documents/sitemap-queries'
+import { getPublicSiteUrl } from '@/lib/site-url'
 
 /** Aligns with [slug]/page.tsx generateStaticParams — not separate indexable routes. */
 const EXCLUDED_PAGE_SLUGS = new Set(['home', 'quiz', 'resources'])
@@ -12,22 +13,22 @@ function normalizeBaseUrl(url: string): string {
   return url.endsWith('/') ? url.slice(0, -1) : url
 }
 
-/** See robots.ts — set NEXT_PUBLIC_SITE_URL in production. */
-const baseUrl = normalizeBaseUrl(
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : process.env.NEXT_PUBLIC_SITE_URL || 'https://denvercontactjam.com'
-)
+/** See robots.ts — `getPublicSiteUrl` in prod uses NEXT_PUBLIC_SITE_URL. */
+const baseUrl = normalizeBaseUrl(getPublicSiteUrl())
 
 async function generateSitemap(): Promise<MetadataRoute.Sitemap> {
-  const [pageRows, eventRows] = await Promise.all([
-    client.fetch<
-      Array<{ slug: string; _updatedAt?: string }>
-    >(pagesSitemapQuery),
-    client.fetch<
-      Array<{ slug: string; _updatedAt?: string }>
-    >(eventsSitemapQuery),
-  ])
+  let pageRows: Array<{ slug: string; _updatedAt?: string }> = []
+  let eventRows: Array<{ slug: string; _updatedAt?: string }> = []
+  try {
+    const results = await Promise.all([
+      client.fetch<Array<{ slug: string; _updatedAt?: string }>>(pagesSitemapQuery),
+      client.fetch<Array<{ slug: string; _updatedAt?: string }>>(eventsSitemapQuery),
+    ])
+    pageRows = results[0] || []
+    eventRows = results[1] || []
+  } catch {
+    // Invalid or unreachable Sanity (e.g. CI) — emit home only
+  }
 
   const sitemap: MetadataRoute.Sitemap = []
 

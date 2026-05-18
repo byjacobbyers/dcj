@@ -2,12 +2,13 @@ import Route from '@/components/route'
 import { CookieSettingsTrigger } from '@/components/cookie-consent-banner/cookie-settings-trigger'
 
 import type { FooterProps } from '@/types/components/footer-type'
+import Link from 'next/link'
 
 export default function Footer({ navigation }: FooterProps) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t-4 border-primary bg-background px-4 py-6">
+    <footer className="px-4 py-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <small className="text-sm">
@@ -23,6 +24,13 @@ export default function Footer({ navigation }: FooterProps) {
           ))}
         </nav>
         <CookieSettingsTrigger />
+        <Link 
+          href="https://www.jacobbyers.me/" 
+          target="_blank"
+          className="text-sm hover:opacity-90 transition-opacity"
+        >
+          Website by Jacob Byers
+        </Link>
       </div>
     </footer>
   )

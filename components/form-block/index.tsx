@@ -1,36 +1,44 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useState } from 'react'
 import SimpleText from '@/components/simple-text'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { trackEvent } from '@/lib/gtm'
-
-import type { FormBlockFields, FormBlockProps } from '@/types/components/form-block-type'
+import {
+  normalizeSectionBackground,
+  formSectionSurfaceClasses,
+  sectionSurfaceAttrs,
+} from '@/lib/section-background'
+import { sectionPaddingToClass } from '@/lib/section-padding'
+import { cn } from '@/lib/utils'
+import type { FormBlockFormData, FormBlockProps } from '@/types/components/form-block-type'
 
 export default function FormBlock({
   active = true,
   componentIndex = 0,
+  sectionPadding,
   anchor,
+  backgroundColor,
   content,
 }: FormBlockProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [formData, setFormData] = useState<FormBlockFields>({
+  const [formData, setFormData] = useState<FormBlockFormData>({
     name: '',
     email: '',
     message: '',
     isAnonymous: false,
     website: '',
   })
-  const [errors, setErrors] = useState<Partial<FormBlockFields>>({})
+  const [errors, setErrors] = useState<Partial<FormBlockFormData>>({})
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<FormBlockFields> = {}
+    const newErrors: Partial<FormBlockFormData> = {}
 
     if (!formData.isAnonymous) {
       if (!formData.name.trim()) newErrors.name = 'Name is required'
@@ -64,7 +72,7 @@ export default function FormBlock({
         return
       }
 
-      const response = await fetch('/api/contact', {
+      const response = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +112,7 @@ export default function FormBlock({
     }
   }
 
-  const handleInputChange = (field: keyof FormBlockFields, value: string | boolean) => {
+  const handleInputChange = (field: keyof FormBlockFormData, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }))
@@ -113,32 +121,31 @@ export default function FormBlock({
 
   if (!active) return null
 
+  const bg = normalizeSectionBackground(backgroundColor)
+
   return (
     <section
       id={anchor || `form-${componentIndex}`}
-      className="form-block w-full flex justify-center px-5 py-16 lg:py-24 bg-foreground text-background"
+      data-background-color={bg}
+      {...sectionSurfaceAttrs(bg)}
+      className={cn(
+        'form-block w-full flex justify-center px-5',
+        formSectionSurfaceClasses(bg),
+        sectionPaddingToClass(sectionPadding, 'default')
+      )}
     >
       <div className="container flex flex-col justify-center">
-        <motion.div
-          className="w-full max-w-2xl mx-auto"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            delay: componentIndex !== 0 ? 0.5 : 0,
-            type: 'spring',
-            duration: 1.5,
-          }}
-        >
+        <div className="w-full max-w-2xl mx-auto">
           {content ? (
             <div className="content">
               <SimpleText content={content} />
             </div>
           ) : null}
 
-          <div className="bg-background text-foreground shadow-lg p-6 mt-8">
+          <Card className="mt-8 shadow-lg">
+            <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="flex flex-row items-center justify-between border p-4">
+              <div className="flex flex-row items-center justify-between border-b border-x p-4">
                 <div className="space-y-0.5">
                   <Label className="text-base">Send Anonymously?</Label>
                   <p className="text-sm text-muted-foreground">
@@ -220,31 +227,24 @@ export default function FormBlock({
               </Button>
 
               {submitStatus === 'success' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-green-50 border border-green-200 rounded-md"
-                >
+                <div className="p-4 bg-green-50 border border-green-200 rounded-md">
                   <p className="text-green-800 text-sm">
                     Thank you! Your message has been sent successfully.
                   </p>
-                </motion.div>
+                </div>
               )}
 
               {submitStatus === 'error' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-red-50 border border-red-200 rounded-md"
-                >
+                <div className="p-4 bg-red-50 border border-red-200 rounded-md">
                   <p className="text-red-800 text-sm">
                     Sorry, there was an error sending your message. Please try again.
                   </p>
-                </motion.div>
+                </div>
               )}
             </form>
-          </div>
-        </motion.div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </section>
   )

@@ -1,11 +1,11 @@
 import { defineType, defineField } from 'sanity'
-import { BlockElementIcon } from '@sanity/icons'
+import { RemoveIcon } from '@sanity/icons'
 
 export default defineType({
   title: 'Divider Block',
   name: 'dividerBlock',
   type: 'object',
-  icon: BlockElementIcon,
+  icon: RemoveIcon,
   fields: [
     defineField({ title: 'Active?', name: 'active', type: 'boolean', initialValue: true }),
     defineField({ title: 'Anchor', name: 'anchor', type: 'string' }),

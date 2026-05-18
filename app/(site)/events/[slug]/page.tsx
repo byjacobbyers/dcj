@@ -40,7 +40,11 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
       global?.seo,
       event?.title,
       'Join us for this event.',
-      { url: `/events/${resolved.slug}`, titleSuffix: ' :: Denver Contact Jam' }
+      {
+        url: `/events/${resolved.slug}`,
+        titleSuffix: ' :: Denver Contact Jam',
+        ogDocument: { slug: resolved.slug, type: 'event' },
+      }
     )
   } catch {
     return generateSeoMetadata(undefined, undefined, undefined, 'Event at Denver Contact Jam.')

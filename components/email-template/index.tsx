@@ -1,13 +1,12 @@
-import * as React from 'react'
-
 import type { EmailTemplateProps } from '@/types/components/email-template-type'
 
-export const EmailTemplate: React.FC<EmailTemplateProps> = ({
+export function EmailTemplate({
   name,
   email,
   message,
   isAnonymous,
-}) => (
+}: EmailTemplateProps) {
+  return (
   <div
     style={{
       fontFamily: 'Arial, sans-serif',
@@ -97,8 +96,9 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
         color: '#666',
       }}
     >
-      <p>This message was sent from the Denver Contact Jam website contact form.</p>
+      <p>This message was sent from the Sami website contact form.</p>
       <p>Timestamp: {new Date().toLocaleString()}</p>
     </div>
   </div>
-)
+  )
+}

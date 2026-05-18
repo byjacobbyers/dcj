@@ -1,11 +1,11 @@
 import { defineType, defineField } from 'sanity'
-import { BlockElementIcon } from '@sanity/icons'
+import { InsertBelowIcon } from '@sanity/icons'
 
 export default defineType({
   title: 'Spacer Block',
   name: 'spacerBlock',
   type: 'object',
-  icon: BlockElementIcon,
+  icon: InsertBelowIcon,
   fields: [
     defineField({ title: 'Active?', name: 'active', type: 'boolean', initialValue: true }),
     defineField({ title: 'Anchor', name: 'anchor', type: 'string' }),

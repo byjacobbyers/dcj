@@ -1,11 +1,12 @@
 import { Metadata } from 'next'
 import { urlFor } from '@/sanity/lib/image'
+import { getPublicSiteUrl } from '@/lib/site-url'
 
 function normalizeBaseUrl(url: string): string {
   return url.endsWith('/') ? url.slice(0, -1) : url
 }
 
-const baseUrl = normalizeBaseUrl(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+const baseUrl = normalizeBaseUrl(getPublicSiteUrl())
 
 export function buildUrl(path?: string): string {
   if (!path) return baseUrl
@@ -18,7 +19,7 @@ const defaultTitle = 'Denver Contact Jam'
 const defaultDescription = 'Denver Contact Jam'
 const defaultOgImage = `${baseUrl}/opengraph-image.png`
 
-type SeoType = {
+export type SeoType = {
   metaTitle?: string
   metaDesc?: string
   noIndex?: boolean
@@ -27,25 +28,35 @@ type SeoType = {
   }
 }
 
+export type OgDocumentRef = { slug: string; type: 'page' | 'event' }
+
+export function buildGeneratedOgImageUrl(ref: OgDocumentRef): string {
+  const qs = new URLSearchParams({ slug: ref.slug, type: ref.type })
+  return buildUrl(`/api/og?${qs.toString()}`)
+}
+
+function resolveOgImageUrl(pageSeo?: SeoType, ogDocument?: OgDocumentRef): string {
+  if (pageSeo?.shareGraphic?.asset?.url) {
+    return urlFor(pageSeo.shareGraphic.asset as Parameters<typeof urlFor>[0]).width(1200).height(630).url()
+  }
+  if (ogDocument) {
+    return buildGeneratedOgImageUrl(ogDocument)
+  }
+  return defaultOgImage
+}
+
 export function generateMetadata(
   pageSeo?: SeoType,
   globalSeo?: SeoType,
   fallbackTitle?: string,
   fallbackDescription?: string,
-  options?: { url?: string; titleSuffix?: string }
+  options?: { url?: string; titleSuffix?: string; ogDocument?: OgDocumentRef }
 ): Metadata {
-  // Prefer page-specific metaTitle, then document title (e.g. page.title), then site-wide default.
-  // Putting globalSeo after fallbackTitle avoids inner pages inheriting the homepage metaTitle
-  // (e.g. "Denver Contact Jam :: Denver Contact Jam" instead of "Guidelines :: Denver Contact Jam").
   const title =
     pageSeo?.metaTitle || fallbackTitle || globalSeo?.metaTitle || defaultTitle
   const description = pageSeo?.metaDesc || globalSeo?.metaDesc || fallbackDescription || defaultDescription
   const noIndex = pageSeo?.noIndex ?? false
-  const ogImage = pageSeo?.shareGraphic?.asset?.url
-    ? urlFor(pageSeo.shareGraphic.asset as Parameters<typeof urlFor>[0]).width(1200).height(630).url()
-    : globalSeo?.shareGraphic?.asset?.url
-    ? urlFor(globalSeo.shareGraphic.asset as Parameters<typeof urlFor>[0]).width(1200).height(630).url()
-    : defaultOgImage
+  const ogImage = resolveOgImageUrl(pageSeo, options?.ogDocument)
   const pageUrl = options?.url ? buildUrl(options.url) : baseUrl
   const finalTitle = options?.titleSuffix ? `${title}${options.titleSuffix}` : title
 
@@ -60,7 +71,12 @@ export function generateMetadata(
       url: pageUrl,
       images: [{ url: ogImage, width: 1200, height: 630, alt: finalTitle }],
     },
-    twitter: { card: 'summary_large_image', title: finalTitle, description },
+    twitter: {
+      card: 'summary_large_image',
+      title: finalTitle,
+      description,
+      images: [ogImage],
+    },
   }
 }
 
@@ -109,7 +125,7 @@ export function generateEventJsonLd(data: {
   }
 }
 
-function extractTextFromPortableText(content: unknown): string {
+export function extractTextFromPortableText(content: unknown): string {
   if (typeof content === 'string') return content
   if (!content || !Array.isArray(content)) return ''
   return (content as Array<{ _type?: string; children?: Array<{ text?: string }> }>)

@@ -1,25 +1,24 @@
-import { JetBrains_Mono, Merriweather, Source_Serif_4 } from 'next/font/google'
+import { Inter, JetBrains_Mono, Major_Mono_Display } from 'next/font/google'
 
 /**
  * next/font injects CSS variables on the element that applies `.variable` classes.
  * `globals.css` :root lists human-readable fallbacks; these loaders supply real files + metrics.
  *
- * - Merriweather → headings (h1–h6, .display) via `font-heading` / `--font-heading`
- * - Source Serif 4 → body copy via `font-serif` / `--font-serif` (site layout uses `font-serif`)
+ * - Major Mono Display → headings (h1–h6, .display) via `font-heading` / `--font-heading`
+ * - Inter → body copy via `font-sans` / `--font-sans` (site layout uses `font-sans`)
  * - JetBrains Mono → code / mono via `font-mono` / `--font-mono`
  */
-export const heading = Merriweather({
+export const heading = Major_Mono_Display({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-heading',
-  weight: ['300', '400', '700', '900'],
+  weight: '400',
 })
 
-export const serif = Source_Serif_4({
+export const sans = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-serif',
-  weight: ['200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-sans',
 })
 
 export const mono = JetBrains_Mono({

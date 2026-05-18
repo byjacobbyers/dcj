@@ -1,5 +1,7 @@
 import { defineType, defineField } from 'sanity'
 import { ErrorOutlineIcon } from '@sanity/icons'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
 
 export default defineType({
   title: 'FAQ Block',
@@ -14,6 +16,8 @@ export default defineType({
       initialValue: true,
     }),
     defineField({ title: 'Anchor', name: 'anchor', type: 'string' }),
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionBackgroundColorField(),
     defineField({
       title: 'FAQs',
       name: 'faqs',

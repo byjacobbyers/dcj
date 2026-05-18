@@ -1,6 +1,6 @@
 /* Theme primary color for Studio (matches app/(site)/globals.css) */
 :root {
-  --primary: #3265fd;
+  --primary: #171717;
 }
 
 /* Portable Text link annotations: primary color in Sanity Studio */
@@ -8,5 +8,5 @@
 [data-slate-editor] [data-link],
 [class*="LinkAnnotation"] a,
 .pt-editor a[href] {
-  color: var(--primary, #b45309) !important;
+  color: var(--primary, #171717) !important;
 }

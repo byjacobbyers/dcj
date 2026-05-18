@@ -1,3 +1,7 @@
+import type { SectionBackgroundColor } from '@/lib/section-background'
+import type { SectionContentLayout } from '@/lib/section-content-layout'
+import type { SectionPaddingValue } from '@/lib/section-padding'
+
 export type CoverBlockImage = {
   asset?: {
     url?: string
@@ -16,19 +20,23 @@ export type CoverBlockImageMobile = {
   hotspot?: { x?: number; y?: number }
 } | null
 
+export type CoverBlockCta = { active?: boolean; route?: unknown } | null
+
 export type CoverBlockProps = {
   active?: boolean
   componentIndex?: number
+  sectionPadding?: SectionPaddingValue | null
   anchor?: string
+  contentLayout?: SectionContentLayout
   backgroundType?: 'image' | 'color'
   image?: CoverBlockImage
   imageMobile?: CoverBlockImageMobile
-  backgroundColor?: 'black' | 'white' | 'primary'
+  backgroundColor?: SectionBackgroundColor
   height?: 'auto' | 'full' | 'half'
-  overlayColor?: 'none' | 'black' | 'white' | 'primary'
+  overlayColor?: 'none' | 'black' | 'primary' | 'secondary'
   overlayOpacity?: number
   contentPosition?: string
   contentHalfWidth?: boolean
   content?: unknown
-  cta?: { active?: boolean; route?: unknown } | null
+  cta?: CoverBlockCta
 }

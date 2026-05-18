@@ -18,7 +18,7 @@ export const buttonVariants = cva(
           'bg-primary text-primary-foreground shadow whitespace-normal text-center !h-auto min-h-0 !px-8 !py-4 !text-h4 hover:bg-primary/90',
       },
       size: {
-        default: 'h-9 px-4 py-2',
+        default: 'px-4 py-2',
         sm: 'h-8 rounded-md px-3 text-xs',
         lg: 'h-10 rounded-md px-8',
         icon: 'h-9 w-9',

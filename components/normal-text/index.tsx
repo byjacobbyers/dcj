@@ -2,7 +2,6 @@
 
 import { PortableText } from '@portabletext/react'
 import { portableTextComponents } from '@/lib/portable-text-components'
-
 import type { NormalTextProps } from '@/types/components/normal-text-type'
 
 export default function NormalText({ content }: NormalTextProps) {

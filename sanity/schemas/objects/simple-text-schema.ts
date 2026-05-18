@@ -4,7 +4,7 @@ import { HighlightIcon, TextIcon } from '@sanity/icons'
 import { LargeBlockStyle } from './large-block-style'
 
 const HighlightDecorator = (props: { children?: React.ReactNode }) =>
-  React.createElement('span', { style: { color: 'var(--primary, #3265fd)' } }, props.children)
+  React.createElement('span', { style: { color: 'var(--primary, #171717)' } }, props.children)
 
 export default defineType({
   title: 'Text',

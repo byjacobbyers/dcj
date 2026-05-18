@@ -32,6 +32,7 @@ import route from './objects/route-schema'
 import linkWithRoute from './objects/link-annotation-schema'
 import simpleText from './objects/simple-text-schema'
 import normalText from './objects/normal-text-schema'
+import buttonPair from './objects/button-pair-schema'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -65,5 +66,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     linkWithRoute,
     simpleText,
     normalText,
+    buttonPair,
   ],
 }

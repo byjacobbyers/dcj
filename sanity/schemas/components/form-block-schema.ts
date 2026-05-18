@@ -1,5 +1,7 @@
 import { defineType, defineField } from 'sanity'
 import { CalendarIcon } from '@sanity/icons'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
 
 export default defineType({
   title: 'Form Block',
@@ -25,6 +27,8 @@ export default defineType({
           'Use only lowercase letters, numbers, and hyphens'
         ),
     }),
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionBackgroundColorField(),
     defineField({
       name: 'title',
       type: 'string',

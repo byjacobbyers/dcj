@@ -1,11 +1,14 @@
 import { defineType, defineField } from 'sanity'
-import { BlockElementIcon } from '@sanity/icons'
+import { RocketIcon } from '@sanity/icons'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
+import { sectionContentLayoutField } from '../fields/section-content-layout-field'
 
 export default defineType({
   title: 'Hero Block',
   name: 'heroBlock',
   type: 'object',
-  icon: BlockElementIcon,
+  icon: RocketIcon,
   fields: [
     defineField({
       title: 'Active?',
@@ -18,6 +21,9 @@ export default defineType({
       name: 'anchor',
       type: 'string',
     }),
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionContentLayoutField(),
+    sectionBackgroundColorField(),
     defineField({
       title: 'Layout',
       name: 'layout',

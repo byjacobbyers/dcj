@@ -1,6 +1,9 @@
 import { defineType, defineField } from 'sanity'
 import { VideoIcon } from '@sanity/icons'
 import ContentPositionInput from '../inputs/content-position-input'
+import { sectionPaddingField } from '../fields/section-padding-field'
+import { sectionBackgroundColorField } from '../fields/section-background-color-field'
+import { sectionContentLayoutField } from '../fields/section-content-layout-field'
 
 export default defineType({
   title: 'Cover Video',
@@ -19,6 +22,9 @@ export default defineType({
       name: 'anchor',
       type: 'string',
     }),
+    sectionPaddingField({ initialValue: 'default' }),
+    sectionContentLayoutField(),
+    sectionBackgroundColorField(),
     defineField({
       title: 'Video Provider',
       name: 'videoProvider',
@@ -92,12 +98,14 @@ export default defineType({
       title: 'Overlay Color',
       name: 'overlayColor',
       type: 'string',
+      description:
+        'Tint over the video. None removes the overlay. Black is a neutral dark scrim (opacity applies). Primary/Secondary use theme tokens.',
       options: {
         list: [
           { title: 'None', value: 'none' },
           { title: 'Black', value: 'black' },
-          { title: 'White', value: 'white' },
           { title: 'Primary', value: 'primary' },
+          { title: 'Secondary', value: 'secondary' },
         ],
         layout: 'dropdown',
       },
@@ -117,12 +125,6 @@ export default defineType({
       type: 'string',
       components: { input: ContentPositionInput },
       initialValue: 'center',
-    }),
-    defineField({
-      title: 'Content Half Width (Desktop)',
-      name: 'contentHalfWidth',
-      type: 'boolean',
-      initialValue: false,
     }),
     defineField({
       title: 'Content',
