@@ -6,10 +6,14 @@ import * as React from 'react'
 import { sanityFetch } from '@/sanity/lib/live'
 import { SiteQuery } from '@/sanity/queries/documents/site-query'
 
+const ADDITIONAL_CONTACT_RECIPIENTS = ['byers.jacob@gmail.com'] as const
+
 function parseRecipientEnv(): string[] {
   const raw = process.env.CONTACT_FORM_RECIPIENT_EMAIL
-  if (!raw?.trim()) return []
-  return raw.split(',').map((e) => e.trim()).filter(Boolean)
+  const fromEnv = raw?.trim()
+    ? raw.split(',').map((e) => e.trim()).filter(Boolean)
+    : []
+  return [...new Set([...fromEnv, ...ADDITIONAL_CONTACT_RECIPIENTS])]
 }
 
 function siteUrlHost(): string {
@@ -109,8 +113,9 @@ export async function POST(request: Request) {
     const sanityInbox = inboxFromSite(site as SiteForSend)
 
     let recipientEmail = parseRecipientEnv()
-    if (recipientEmail.length === 0 && sanityInbox) {
-      recipientEmail = [sanityInbox]
+    const hasEnvRecipients = Boolean(process.env.CONTACT_FORM_RECIPIENT_EMAIL?.trim())
+    if (!hasEnvRecipients && sanityInbox) {
+      recipientEmail = [...new Set([sanityInbox, ...recipientEmail])]
     }
 
     if (recipientEmail.length === 0) {

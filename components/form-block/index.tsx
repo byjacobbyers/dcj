@@ -72,7 +72,7 @@ export default function FormBlock({
         return
       }
 
-      const response = await fetch('/api/send', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
