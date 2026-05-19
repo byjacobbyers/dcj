@@ -13,9 +13,11 @@ import {
 
 export const generateMetadata = async (): Promise<Metadata> => {
   try {
-    const { data: global } = await sanityFetch({ query: SiteQuery })
-    const globalSeo = global?.seo
-    return generateSeoMetadata(undefined, globalSeo, undefined, undefined, { url: '/' })
+    const [{ data: global }, { data: page }] = await Promise.all([
+      sanityFetch({ query: SiteQuery }),
+      sanityFetch({ query: pageQuery, params: { slug: 'home' } }),
+    ])
+    return generateSeoMetadata(page?.seo, global?.seo, page?.title, undefined, { url: '/' })
   } catch {
     return generateSeoMetadata()
   }

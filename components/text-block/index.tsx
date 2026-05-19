@@ -37,7 +37,7 @@ export default function TextBlock({
     alignRaw === 'center' ? 'items-center' : alignRaw === 'right' ? 'items-end' : 'items-start'
 
   const body = (
-    <div className={cn('content text-balance', isTexture && 'relative z-10 text-foreground')}>
+    <div className={cn('content text-balance text-sm!', isTexture && 'relative z-10 text-foreground')}>
       <NormalText content={content} />
     </div>
   )

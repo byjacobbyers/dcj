@@ -35,13 +35,24 @@ export function buildGeneratedOgImageUrl(ref: OgDocumentRef): string {
   return buildUrl(`/api/og?${qs.toString()}`)
 }
 
-function resolveOgImageUrl(pageSeo?: SeoType, ogDocument?: OgDocumentRef): string {
-  if (pageSeo?.shareGraphic?.asset?.url) {
-    return urlFor(pageSeo.shareGraphic.asset as Parameters<typeof urlFor>[0]).width(1200).height(630).url()
-  }
-  if (ogDocument) {
-    return buildGeneratedOgImageUrl(ogDocument)
-  }
+function shareGraphicOgUrl(seo?: SeoType): string | undefined {
+  if (!seo?.shareGraphic?.asset?.url) return undefined
+  return urlFor(seo.shareGraphic.asset as Parameters<typeof urlFor>[0])
+    .width(1200)
+    .height(630)
+    .url()
+}
+
+function resolveOgImageUrl(
+  pageSeo?: SeoType,
+  globalSeo?: SeoType,
+  ogDocument?: OgDocumentRef
+): string {
+  const pageGraphic = shareGraphicOgUrl(pageSeo)
+  if (pageGraphic) return pageGraphic
+  if (ogDocument) return buildGeneratedOgImageUrl(ogDocument)
+  const siteGraphic = shareGraphicOgUrl(globalSeo)
+  if (siteGraphic) return siteGraphic
   return defaultOgImage
 }
 
@@ -56,7 +67,7 @@ export function generateMetadata(
     pageSeo?.metaTitle || fallbackTitle || globalSeo?.metaTitle || defaultTitle
   const description = pageSeo?.metaDesc || globalSeo?.metaDesc || fallbackDescription || defaultDescription
   const noIndex = pageSeo?.noIndex ?? false
-  const ogImage = resolveOgImageUrl(pageSeo, options?.ogDocument)
+  const ogImage = resolveOgImageUrl(pageSeo, globalSeo, options?.ogDocument)
   const pageUrl = options?.url ? buildUrl(options.url) : baseUrl
   const finalTitle = options?.titleSuffix ? `${title}${options.titleSuffix}` : title
 
