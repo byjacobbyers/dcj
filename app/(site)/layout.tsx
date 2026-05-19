@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Script from "next/script"
-import { GoogleTagManager } from "@next/third-parties/google"
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google"
+import { gaMeasurementId, gtmId } from "@/lib/analytics"
 import { heading, mono, sans } from "./fonts"
 import { cn } from "@/lib/utils"
 import "./globals.css"
@@ -85,45 +85,8 @@ export default async function SiteLayout({
           </filter>
         </defs>
       </svg>
-      {process.env.NEXT_PUBLIC_GTM_ID && (
-        <>
-          <Script
-            id="consent-default"
-            strategy="beforeInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  window.gtag = gtag;
-                  (function() {
-                    var consent = {
-                      'ad_storage': 'denied',
-                      'analytics_storage': 'denied',
-                      'functionality_storage': 'granted',
-                      'ad_user_data': 'denied',
-                      'ad_personalization': 'denied'
-                    };
-                    try {
-                      var stored = localStorage.getItem('cookieConsent');
-                      if (stored) {
-                        var parsed = JSON.parse(stored);
-                        consent = {
-                          'ad_storage': parsed.ad_storage ? 'granted' : 'denied',
-                          'analytics_storage': parsed.analytics_storage ? 'granted' : 'denied',
-                          'functionality_storage': parsed.functionality_storage !== false ? 'granted' : 'denied',
-                          'ad_user_data': parsed.ad_user_data ? 'granted' : 'denied',
-                          'ad_personalization': parsed.ad_personalization ? 'granted' : 'denied'
-                        };
-                      }
-                    } catch (e) {}
-                    gtag('consent', 'default', consent);
-                  })();
-                `,
-            }}
-          />
-          <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
-        </>
-      )}
+      {gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
+      {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
       <Providers>
         {site && <OrganizationJsonLd site={site} />}
         {isEnabled && <PreviewBar />}

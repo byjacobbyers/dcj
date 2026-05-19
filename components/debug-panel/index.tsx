@@ -20,7 +20,7 @@ export function DebugPanel() {
     getGtmAvailableSnapshot,
     () => false
   )
-  const { geolocation, cookieConsent, hasAcceptedCookies } = useApp()
+  const { geolocation } = useApp()
 
   if (process.env.NODE_ENV !== 'development') {
     return null
@@ -100,88 +100,6 @@ export function DebugPanel() {
             </div>
 
             <div>
-              <h3 className="font-bold text-sm text-gray-800 mb-2">
-                Cookie Consent
-              </h3>
-              <div className="space-y-1 text-xs font-mono">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Accepted:</span>
-                  <span
-                    className={
-                      hasAcceptedCookies ? 'text-green-600' : 'text-red-600'
-                    }
-                  >
-                    {hasAcceptedCookies ? 'Yes' : 'No'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Ad Storage:</span>
-                  <span
-                    className={
-                      cookieConsent.ad_storage
-                        ? 'text-green-600'
-                        : 'text-red-600'
-                    }
-                  >
-                    {cookieConsent.ad_storage ? 'Granted' : 'Denied'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Analytics:</span>
-                  <span
-                    className={
-                      cookieConsent.analytics_storage
-                        ? 'text-green-600'
-                        : 'text-red-600'
-                    }
-                  >
-                    {cookieConsent.analytics_storage
-                      ? 'Granted'
-                      : 'Denied'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Functionality:</span>
-                  <span
-                    className={
-                      cookieConsent.functionality_storage
-                        ? 'text-green-600'
-                        : 'text-red-600'
-                    }
-                  >
-                    {cookieConsent.functionality_storage
-                      ? 'Granted'
-                      : 'Denied'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Ad user data:</span>
-                  <span
-                    className={
-                      cookieConsent.ad_user_data
-                        ? 'text-green-600'
-                        : 'text-red-600'
-                    }
-                  >
-                    {cookieConsent.ad_user_data ? 'Granted' : 'Denied'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Ad personalization:</span>
-                  <span
-                    className={
-                      cookieConsent.ad_personalization
-                        ? 'text-green-600'
-                        : 'text-red-600'
-                    }
-                  >
-                    {cookieConsent.ad_personalization ? 'Granted' : 'Denied'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div>
               <h3 className="font-bold text-sm text-gray-800 mb-2">System</h3>
               <div className="space-y-1 text-xs font-mono">
                 <div className="flex justify-between">
@@ -206,11 +124,7 @@ export function DebugPanel() {
                 Raw Context Data
               </summary>
               <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-auto max-h-32">
-                {JSON.stringify(
-                  { geolocation, cookieConsent, hasAcceptedCookies },
-                  null,
-                  2
-                )}
+                {JSON.stringify({ geolocation }, null, 2)}
               </pre>
             </details>
           </div>

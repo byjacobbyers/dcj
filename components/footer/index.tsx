@@ -1,6 +1,4 @@
 import Route from '@/components/route'
-import { CookieSettingsTrigger } from '@/components/cookie-consent-banner/cookie-settings-trigger'
-
 import type { FooterProps } from '@/types/components/footer-type'
 import Link from 'next/link'
 
@@ -23,7 +21,6 @@ export default function Footer({ navigation }: FooterProps) {
             </Route>
           ))}
         </nav>
-        <CookieSettingsTrigger />
         {/* <Link 
           href="https://www.jacobbyers.me/" 
           target="_blank"
