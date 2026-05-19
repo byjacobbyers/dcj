@@ -17,7 +17,10 @@ export const generateMetadata = async (): Promise<Metadata> => {
       sanityFetch({ query: SiteQuery }),
       sanityFetch({ query: pageQuery, params: { slug: 'home' } }),
     ])
-    return generateSeoMetadata(page?.seo, global?.seo, page?.title, undefined, { url: '/' })
+    return generateSeoMetadata(page?.seo, global?.seo, undefined, undefined, {
+      url: '/',
+      siteTitle: global?.title,
+    })
   } catch {
     return generateSeoMetadata()
   }

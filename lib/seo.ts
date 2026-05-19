@@ -61,10 +61,19 @@ export function generateMetadata(
   globalSeo?: SeoType,
   fallbackTitle?: string,
   fallbackDescription?: string,
-  options?: { url?: string; titleSuffix?: string; ogDocument?: OgDocumentRef }
+  options?: {
+    url?: string
+    titleSuffix?: string
+    ogDocument?: OgDocumentRef
+    siteTitle?: string
+  }
 ): Metadata {
   const title =
-    pageSeo?.metaTitle || fallbackTitle || globalSeo?.metaTitle || defaultTitle
+    pageSeo?.metaTitle ||
+    globalSeo?.metaTitle ||
+    options?.siteTitle ||
+    fallbackTitle ||
+    defaultTitle
   const description = pageSeo?.metaDesc || globalSeo?.metaDesc || fallbackDescription || defaultDescription
   const noIndex = pageSeo?.noIndex ?? false
   const ogImage = resolveOgImageUrl(pageSeo, globalSeo, options?.ogDocument)
