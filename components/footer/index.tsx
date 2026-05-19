@@ -24,13 +24,13 @@ export default function Footer({ navigation }: FooterProps) {
           ))}
         </nav>
         <CookieSettingsTrigger />
-        <Link 
+        {/* <Link 
           href="https://www.jacobbyers.me/" 
           target="_blank"
           className="text-sm hover:opacity-90 transition-opacity"
         >
           Website by Jacob Byers
-        </Link>
+        </Link> */}
       </div>
     </footer>
   )
