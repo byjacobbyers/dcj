@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google"
-import { gaMeasurementId, gtmId } from "@/lib/analytics"
+import { GoogleTagManager } from "@next/third-parties/google"
+import { gtmId } from "@/lib/analytics"
 import { heading, mono, sans } from "./fonts"
 import { cn } from "@/lib/utils"
 import "./globals.css"
@@ -86,7 +86,6 @@ export default async function SiteLayout({
         </defs>
       </svg>
       {gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
-      {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
       <Providers>
         {site && <OrganizationJsonLd site={site} />}
         {isEnabled && <PreviewBar />}
