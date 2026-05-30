@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mux/mux-player-react": "^3.11.5",
+    "@neondatabase/serverless": "^1.1.0",
     "@next/third-parties": "16.2.3",
     "@portabletext/react": "^6.0.3",
     "@radix-ui/react-accordion": "^1.2.12",
