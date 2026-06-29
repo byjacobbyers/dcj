@@ -96,7 +96,7 @@ export function EmailTemplate({
         color: '#666',
       }}
     >
-      <p>This message was sent from the Sami website contact form.</p>
+      <p>This message was sent from the DCJ website contact form.</p>
       <p>Timestamp: {new Date().toLocaleString()}</p>
     </div>
   </div>

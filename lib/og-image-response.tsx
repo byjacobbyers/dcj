@@ -5,7 +5,7 @@ import { ogSurfaceColors, normalizeOgSurface } from '@/lib/og-palette'
 import { hasPortableHeading, renderSimpleTextForOg } from '@/lib/og-simple-text'
 import { cleanStega } from '@/lib/stega'
 
-const OG_FALLBACK_LABEL = 'Sami'
+const OG_FALLBACK_LABEL = 'Denver Contact Jam'
 
 export type OgRouteDoc = {
   title?: string
