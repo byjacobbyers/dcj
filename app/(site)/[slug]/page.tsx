@@ -3,6 +3,7 @@ import { QueryParams, SanityDocument } from "next-sanity"
 import { sanityFetch } from "@/sanity/lib/live"
 import { notFound } from "next/navigation"
 import { pagesQuery, pageQuery } from "@/sanity/queries/documents/page-query"
+import { EXCLUDED_PAGE_SLUGS } from "@/sanity/queries/documents/sitemap-queries"
 import { SiteQuery } from "@/sanity/queries/documents/site-query"
 import Page from "@/components/page-single"
 import Script from "next/script"
@@ -15,11 +16,10 @@ import {
 export async function generateStaticParams() {
   try {
     const { data: posts } = await sanityFetch({ query: pagesQuery })
-    const excludedSlugs = ['quiz', 'resources', 'home']
     return (posts || [])
       .filter((p: SanityDocument) => {
         const slug = p?.slug
-        return slug && typeof slug === 'string' && !excludedSlugs.includes(slug)
+        return slug && typeof slug === 'string' && !EXCLUDED_PAGE_SLUGS.includes(slug)
       })
       .map((p: SanityDocument) => ({ slug: p.slug }))
   } catch {

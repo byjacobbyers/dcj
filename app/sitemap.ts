@@ -1,59 +1,109 @@
 import { MetadataRoute } from 'next'
-import { client } from '@/sanity/lib/client'
+import { sanityFetch } from '@/sanity/lib/live'
 import {
+  EXCLUDED_PAGE_SLUGS,
   eventsSitemapQuery,
   pagesSitemapQuery,
 } from '@/sanity/queries/documents/sitemap-queries'
 import { getPublicSiteUrl } from '@/lib/site-url'
 
-/** Aligns with [slug]/page.tsx generateStaticParams — not separate indexable routes. */
-const EXCLUDED_PAGE_SLUGS = new Set(['home', 'quiz', 'resources'])
+/**
+ * Sitemap sits outside the (site) route group, so it does not inherit that
+ * segment's revalidate. Without this it only refreshes on deploy.
+ */
+export const revalidate = 3600
 
 function normalizeBaseUrl(url: string): string {
-  return url.endsWith('/') ? url.slice(0, -1) : url
+  return url.replace(/\/+$/, '')
 }
 
-/** See robots.ts — `getPublicSiteUrl` in prod uses NEXT_PUBLIC_SITE_URL. */
 const baseUrl = normalizeBaseUrl(getPublicSiteUrl())
 
-async function generateSitemap(): Promise<MetadataRoute.Sitemap> {
-  let pageRows: Array<{ slug: string; _updatedAt?: string }> = []
-  let eventRows: Array<{ slug: string; _updatedAt?: string }> = []
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/i
+
+function safeDate(value?: string | null): Date {
+  if (!value) return new Date()
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? new Date() : date
+}
+
+function normalizeSlug(slug: unknown): string | null {
+  if (typeof slug !== 'string') return null
+  const trimmed = slug.replace(/^\/+|\/+$/g, '')
+  return SLUG_RE.test(trimmed) ? trimmed : null
+}
+
+/** Studio leftovers like test-* should never be indexed. */
+function isJunkSlug(slug: string): boolean {
+  const lower = slug.toLowerCase()
+  return lower === 'test' || lower === 'test2' || lower.startsWith('test-')
+}
+
+type SitemapRow = {
+  slug?: string | null
+  _updatedAt?: string | null
+  noIndex?: boolean | null
+}
+
+async function fetchRows(query: string): Promise<SitemapRow[]> {
   try {
-    const results = await Promise.all([
-      client.fetch<Array<{ slug: string; _updatedAt?: string }>>(pagesSitemapQuery),
-      client.fetch<Array<{ slug: string; _updatedAt?: string }>>(eventsSitemapQuery),
-    ])
-    pageRows = results[0] || []
-    eventRows = results[1] || []
+    const { data } = await sanityFetch({
+      query,
+      stega: false,
+      perspective: 'published',
+    })
+    return Array.isArray(data) ? (data as SitemapRow[]) : []
   } catch {
-    // Invalid or unreachable Sanity (e.g. CI) — emit home only
+    // A thrown fetch used to 500 the whole /sitemap.xml — Google then stops reading it.
+    return []
   }
+}
+
+function pushUnique(
+  sitemap: MetadataRoute.Sitemap,
+  seen: Set<string>,
+  entry: MetadataRoute.Sitemap[number]
+) {
+  if (seen.has(entry.url)) return
+  seen.add(entry.url)
+  sitemap.push(entry)
+}
+
+async function generateSitemap(): Promise<MetadataRoute.Sitemap> {
+  const [pageRows, eventRows] = await Promise.all([
+    fetchRows(pagesSitemapQuery),
+    fetchRows(eventsSitemapQuery),
+  ])
 
   const sitemap: MetadataRoute.Sitemap = []
+  const seen = new Set<string>()
 
-  sitemap.push({
+  pushUnique(sitemap, seen, {
     url: `${baseUrl}/`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 1,
   })
 
-  for (const page of pageRows || []) {
-    if (!page?.slug || EXCLUDED_PAGE_SLUGS.has(page.slug)) continue
-    sitemap.push({
-      url: `${baseUrl}/${page.slug}`,
-      lastModified: page._updatedAt ? new Date(page._updatedAt) : new Date(),
+  for (const page of pageRows) {
+    const slug = normalizeSlug(page.slug)
+    if (!slug || EXCLUDED_PAGE_SLUGS.includes(slug) || isJunkSlug(slug) || page.noIndex) {
+      continue
+    }
+    pushUnique(sitemap, seen, {
+      url: `${baseUrl}/${slug}`,
+      lastModified: safeDate(page._updatedAt),
       changeFrequency: 'monthly',
       priority: 0.8,
     })
   }
 
-  for (const event of eventRows || []) {
-    if (!event?.slug) continue
-    sitemap.push({
-      url: `${baseUrl}/events/${event.slug}`,
-      lastModified: event._updatedAt ? new Date(event._updatedAt) : new Date(),
+  for (const event of eventRows) {
+    const slug = normalizeSlug(event.slug)
+    if (!slug || isJunkSlug(slug) || event.noIndex) continue
+    pushUnique(sitemap, seen, {
+      url: `${baseUrl}/events/${slug}`,
+      lastModified: safeDate(event._updatedAt),
       changeFrequency: 'weekly',
       priority: 0.7,
     })

@@ -1,18 +1,16 @@
 import { MetadataRoute } from 'next'
 
+import { getPublicSiteUrl } from '@/lib/site-url'
+
 function normalizeBaseUrl(url: string): string {
-  return url.endsWith('/') ? url.slice(0, -1) : url
+  return url.replace(/\/+$/, '')
 }
 
 /**
- * Production builds should set NEXT_PUBLIC_SITE_URL to the canonical site origin.
- * Fallback avoids localhost in non-dev builds when the env is missing.
+ * Uses {@link getPublicSiteUrl}: dev → local origin (not prod `NEXT_PUBLIC_SITE_URL`);
+ * production → canonical `NEXT_PUBLIC_SITE_URL`.
  */
-const baseUrl = normalizeBaseUrl(
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : process.env.NEXT_PUBLIC_SITE_URL || 'https://denvercontactjam.com'
-)
+const baseUrl = normalizeBaseUrl(getPublicSiteUrl())
 
 export default function robots(): MetadataRoute.Robots {
   return {
