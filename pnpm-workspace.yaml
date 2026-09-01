@@ -1,3 +1,9 @@
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+
+overrides:
+  # alpha.24 (pinned by @sanity/sdk-react) ships a `development` export of raw
+  # .ts sources that Turbopack can't load, 500ing /studio in dev. alpha.45 —
+  # the version sanity@6.12 itself uses — is dist-only.
+  "@sanity/workbench": 0.1.0-alpha.45

@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@sanity/workbench': 0.1.0-alpha.45
+
 importers:
 
   .:
@@ -3418,10 +3421,6 @@ packages:
   '@sanity/media-library-types@1.6.0':
     resolution: {integrity: sha512-1Nqw8GSUr7E8AFue9luyTOM4Ev0ZlJ35SHcQrHZ6T68G5llfXw99e3GkLXzk6qYFk9r9fJaBTSpW5IyO2mObZQ==}
 
-  '@sanity/message-protocol@0.23.0':
-    resolution: {integrity: sha512-UfQDuWRzbK4dRTfLURGCZo7ZlR0sK+2lwT2QMAfqsM5kMq5GR31lbX4LMcSw27h7rwUv8ZSf1hBEbluVpgRmlg==}
-    engines: {node: '>=20.0.0'}
-
   '@sanity/message-protocol@0.24.0':
     resolution: {integrity: sha512-F/MwFVc3fN8uVvCIGuTxHN5EVo148wLhjL7h/u6wbShWJGMKgcGx0n6MwfCPyi6ftpdvRXsPZVDgZ1GMeeBf2Q==}
     engines: {node: '>=20.0.0'}
@@ -3595,13 +3594,6 @@ packages:
   '@sanity/workbench-cli@2.3.0':
     resolution: {integrity: sha512-74D2Yj4hNKzi4IAnHEtl3YrUn03jhj5kp3L0fJfhmUE2IoIgzEhGW0C/hMGRCsESFRDwHszn5P2aiySqzTmSGw==}
     engines: {node: '>=22.12'}
-
-  '@sanity/workbench@0.1.0-alpha.24':
-    resolution: {integrity: sha512-235mR37+z8eg9OQqhUwgkQ4dZnveFHczUTgW2jk81qm1pP6vMlTdEAiKpz1Tq4zU9zRfg2xck51DP1VlkVzdWA==}
-    engines: {node: '>=20.19.1 <22 || >=22.12'}
-    peerDependencies:
-      '@sanity/sdk': ^2.9.0
-      xstate: ^5.31.0
 
   '@sanity/workbench@0.1.0-alpha.45':
     resolution: {integrity: sha512-rvRR0moauHmzXIVZzVhLdENDAsQcVvngmx9sOpAaZEx8gYjP5Z4ofj6dpWZ0ZVz2bVOFqJuFTgVtbU7IN0jKEw==}
@@ -7965,9 +7957,6 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.3.6:
-    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
-
   zod@4.5.4:
     resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
 
@@ -11796,10 +11785,6 @@ snapshots:
 
   '@sanity/media-library-types@1.6.0': {}
 
-  '@sanity/message-protocol@0.23.0':
-    dependencies:
-      '@sanity/comlink': 4.0.3
-
   '@sanity/message-protocol@0.24.0':
     dependencies:
       '@sanity/comlink': 4.0.3
@@ -11946,7 +11931,7 @@ snapshots:
       '@sanity/message-protocol': 0.24.0
       '@sanity/sdk': 3.0.0(@types/react@19.2.14)(immer@11.1.4)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6)
       '@sanity/types': 6.12.0(@types/react@19.2.14)(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))
-      '@sanity/workbench': 0.1.0-alpha.24(@sanity/sdk@3.0.0(@types/react@19.2.14)(immer@11.1.4)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6))(react@19.2.7)(xstate@5.32.6)
+      '@sanity/workbench': 0.1.0-alpha.45(@sanity/sdk@3.0.0(@types/react@19.2.14)(immer@11.1.4)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6))(react@19.2.7)(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6)
       groq: 3.88.1-typegen-experimental.0
       react: 19.2.7
       react-compiler-runtime: 1.0.0(react@19.2.7)
@@ -12223,19 +12208,6 @@ snapshots:
       - vitest
       - vue-tsc
       - yaml
-
-  '@sanity/workbench@0.1.0-alpha.24(@sanity/sdk@3.0.0(@types/react@19.2.14)(immer@11.1.4)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6))(react@19.2.7)(xstate@5.32.6)':
-    dependencies:
-      '@module-federation/runtime': 2.9.0
-      '@sanity/message-protocol': 0.23.0
-      '@sanity/sdk': 3.0.0(@types/react@19.2.14)(immer@11.1.4)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6)
-      '@sanity/telemetry': 1.1.0(react@19.2.7)
-      rxjs: 7.8.2
-      semver: 7.8.5
-      xstate: 5.32.6
-      zod: 4.3.6
-    transitivePeerDependencies:
-      - react
 
   '@sanity/workbench@0.1.0-alpha.45(@sanity/sdk@3.0.0(@types/react@19.2.14)(immer@11.1.4)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6))(react@19.2.7)(vitest@4.1.11(@types/node@20.19.39)(jsdom@29.1.1(@noble/hashes@2.0.1))(vite@8.2.2(@types/node@20.19.39)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)))(xstate@5.32.6)':
     dependencies:
@@ -17003,8 +16975,6 @@ snapshots:
       zod: 4.5.4
 
   zod@3.25.76: {}
-
-  zod@4.3.6: {}
 
   zod@4.5.4: {}
 
