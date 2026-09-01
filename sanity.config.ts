@@ -13,6 +13,10 @@ import { muxInput } from 'sanity-plugin-mux-input'
 import { media } from 'sanity-plugin-media'
 
 import { getPublicSiteUrl } from './lib/site-url'
+import {
+  browseSectionGalleryAction,
+  SECTION_DOC_TYPES,
+} from './sanity/actions/browse-section-gallery-action'
 import { apiVersion, dataset, projectId } from './sanity/env'
 import { schema } from './sanity/schemas'
 import { structure } from './sanity/structure'
@@ -79,6 +83,10 @@ export default defineConfig({
     visionTool({ defaultApiVersion: apiVersion }),
   ],
   document: {
+    actions: (prev, context) =>
+      SECTION_DOC_TYPES.has(context.schemaType)
+        ? [...prev, browseSectionGalleryAction]
+        : prev,
     newDocumentOptions: (prev, { creationContext }) => {
       if (creationContext.type === 'global') {
         return prev.filter((template) => template.templateId !== 'mux.videoAsset')
