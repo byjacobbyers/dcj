@@ -141,7 +141,12 @@
     margin-top: var(--space-4);
   }
 
-  .content > p + p,
+  /* Paragraph gap: over half a line of air so long-form doesn't read as a wall */
+  .content > p + p {
+    margin-top: var(--space-3);
+  }
+
+  /* A heading hugs its first paragraph — tighter than paragraph gaps on purpose */
   .content > h3 + p,
   .content > h4 + p {
     margin-top: var(--space-2);
@@ -187,8 +192,9 @@
     margin-top: 0;
   }
 
-  .content > li + li {
-    margin-top: var(--space-1);
+  /* Descendant selector on purpose: portable text nests li inside ul/ol */
+  .content li + li {
+    margin-top: var(--space-2);
   }
 
   .content .display {
