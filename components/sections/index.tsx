@@ -1,5 +1,3 @@
-'use client'
-
 import HeroBlock from '@/components/hero-block'
 import CoverBlock from '@/components/cover-block'
 import CoverVideo from '@/components/cover-video'
@@ -16,6 +14,8 @@ import SpacerBlock from '@/components/spacer-block'
 import DividerBlock from '@/components/divider-block'
 import SplitScrollBlock from '@/components/split-scroll-block'
 import ProblemBlock from '@/components/problem-block'
+import PostsBlockServer from '@/components/posts-block/server'
+import TeamMemberBlock from '@/components/team-member-block'
 import { CtaLocationProvider } from '@/context'
 import type { SectionsProps } from '@/types/components/sections-type'
 
@@ -36,6 +36,8 @@ const blockMap: Record<string, React.FC<Record<string, unknown>>> = {
   dividerBlock: DividerBlock as React.FC<Record<string, unknown>>,
   splitScrollBlock: SplitScrollBlock as React.FC<Record<string, unknown>>,
   problemBlock: ProblemBlock as React.FC<Record<string, unknown>>,
+  postsBlock: PostsBlockServer as unknown as React.FC<Record<string, unknown>>,
+  teamMemberBlock: TeamMemberBlock as React.FC<Record<string, unknown>>,
 }
 
 export default function Sections({ body }: SectionsProps) {

@@ -16,6 +16,8 @@ export default defineField({
     { type: 'faqBlock' },
     { type: 'splitScrollBlock' },
     { type: 'problemBlock' },
+    { type: 'postsBlock' },
+    { type: 'teamMemberBlock' },
     { type: 'columnBlock' },
     { type: 'formBlock' },
     { type: 'embedBlock' },

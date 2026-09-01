@@ -25,6 +25,14 @@ function getPathForDocument(body: WebhookPayload): string[] {
       paths.push('/')
       break
     }
+    case 'post': {
+      const postSlug = slug?.current
+      if (postSlug) paths.push(`/posts/${postSlug}`)
+      paths.push('/')
+      break
+    }
+    case 'team':
+    case 'postCategory':
     case 'navigation':
     case 'site':
       paths.push('/')

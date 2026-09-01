@@ -18,3 +18,9 @@ export const eventsSitemapQuery = defineQuery(`*[_type == "event" && defined(slu
   "noIndex": seo.noIndex == true,
   _updatedAt
 }`)
+
+export const postsSitemapQuery = defineQuery(`*[_type == "post" && defined(slug.current)] {
+  "slug": slug.current,
+  "noIndex": seo.noIndex == true,
+  _updatedAt
+}`)

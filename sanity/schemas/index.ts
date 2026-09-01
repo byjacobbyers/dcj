@@ -6,6 +6,9 @@ import announcement from './documents/announcement-schema'
 import event from './documents/event-schema'
 import navigation from './documents/navigation-schema'
 import redirect from './documents/redirect-schema'
+import post from './documents/post-schema'
+import postCategory from './documents/post-category-schema'
+import team from './documents/team-schema'
 
 import seo from './components/seo-schema'
 import sections from './components/page-builder-schema'
@@ -25,6 +28,8 @@ import spacerBlock from './components/spacer-block-schema'
 import dividerBlock from './components/divider-block-schema'
 import splitScrollBlock from './components/split-scroll-block-schema'
 import problemBlock from './components/problem-block-schema'
+import postsBlock from './components/posts-block-schema'
+import teamMemberBlock from './components/team-member-block-schema'
 
 import column from './objects/column-schema'
 import defaultImage from './objects/default-img-schema'
@@ -34,6 +39,7 @@ import linkWithRoute from './objects/link-annotation-schema'
 import simpleText from './objects/simple-text-schema'
 import normalText from './objects/normal-text-schema'
 import buttonPair from './objects/button-pair-schema'
+import social from './objects/social-schema'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -43,6 +49,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     event,
     navigation,
     redirect,
+    post,
+    postCategory,
+    team,
     seo,
     sections,
     heroBlock,
@@ -61,6 +70,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     dividerBlock,
     splitScrollBlock,
     problemBlock,
+    postsBlock,
+    teamMemberBlock,
     column,
     defaultImage,
     cta,
@@ -69,5 +80,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     simpleText,
     normalText,
     buttonPair,
+    social,
   ],
 }

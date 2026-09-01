@@ -118,6 +118,36 @@ export function generateWebPageJsonLd(data: {
   }
 }
 
+export function generateArticleJsonLd(data: {
+  title: string
+  description?: string | null
+  url: string
+  image?: { asset?: { url?: string | null } | null } | null
+  datePublished?: string | null
+  _updatedAt?: string | null
+  author?: { title?: string | null; primaryJobTitle?: string | null } | null
+}) {
+  const articleUrl = data.url.startsWith('http') ? data.url : buildUrl(data.url)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: data.title,
+    ...(data.description && { description: data.description }),
+    url: articleUrl,
+    mainEntityOfPage: articleUrl,
+    ...(data.image?.asset?.url && { image: data.image.asset.url }),
+    ...(data.datePublished && { datePublished: data.datePublished }),
+    ...(data._updatedAt && { dateModified: new Date(data._updatedAt).toISOString() }),
+    ...(data.author?.title && {
+      author: {
+        '@type': 'Person',
+        name: data.author.title,
+        ...(data.author.primaryJobTitle && { jobTitle: data.author.primaryJobTitle }),
+      },
+    }),
+  }
+}
+
 export function generateEventJsonLd(data: {
   title: string
   description?: string | null

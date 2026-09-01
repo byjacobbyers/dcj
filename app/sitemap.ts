@@ -4,6 +4,7 @@ import {
   EXCLUDED_PAGE_SLUGS,
   eventsSitemapQuery,
   pagesSitemapQuery,
+  postsSitemapQuery,
 } from '@/sanity/queries/documents/sitemap-queries'
 import { getPublicSiteUrl } from '@/lib/site-url'
 
@@ -70,9 +71,10 @@ function pushUnique(
 }
 
 async function generateSitemap(): Promise<MetadataRoute.Sitemap> {
-  const [pageRows, eventRows] = await Promise.all([
+  const [pageRows, eventRows, postRows] = await Promise.all([
     fetchRows(pagesSitemapQuery),
     fetchRows(eventsSitemapQuery),
+    fetchRows(postsSitemapQuery),
   ])
 
   const sitemap: MetadataRoute.Sitemap = []
@@ -106,6 +108,17 @@ async function generateSitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: safeDate(event._updatedAt),
       changeFrequency: 'weekly',
       priority: 0.7,
+    })
+  }
+
+  for (const post of postRows) {
+    const slug = normalizeSlug(post.slug)
+    if (!slug || isJunkSlug(slug) || post.noIndex) continue
+    pushUnique(sitemap, seen, {
+      url: `${baseUrl}/posts/${slug}`,
+      lastModified: safeDate(post._updatedAt),
+      changeFrequency: 'monthly',
+      priority: 0.6,
     })
   }
 

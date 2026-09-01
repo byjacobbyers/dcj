@@ -266,6 +266,72 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Post article chrome. Section shells reuse the page-builder pattern and ALL
+   typography stays on the shared .content contract; only the reading measure
+   and a few article-specific affordances live here.
+   --------------------------------------------------------------------------- */
+
+/* The one thing long-form genuinely needs: a readable measure. */
+.post-body .content-measure {
+  width: 100%;
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
+.post-eyebrow {
+  color: var(--primary);
+  font-size: var(--type-small-size);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.post-byline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.post-avatar {
+  position: relative;
+  display: block;
+  height: 3rem;
+  width: 3rem;
+  flex: none;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--muted);
+}
+
+/* Card that lifts into the masthead above. The negative margin creates the overlap. */
+.post-banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+  margin-top: -4rem;
+}
+
+@media (min-width: 768px) {
+  .post-banner {
+    margin-top: -6rem;
+  }
+}
+
+.post-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A lone bold paragraph is a deliberate beat in the writing, so give it air. */
+.post-body p > strong:only-child {
+  display: block;
+}
+
 /* Banner block pattern overlay - uses theme colors */
 .futuristic-pattern {
   width: 100%;
