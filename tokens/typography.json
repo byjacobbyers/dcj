@@ -1,0 +1,49 @@
+{
+  "type": {
+    "display": {
+      "size": { "$value": "6rem", "$type": "dimension" },
+      "line-height": { "$value": "1.06", "$type": "number" },
+      "letter-spacing": { "$value": "-0.03em", "$type": "dimension" },
+      "font-weight": { "$value": "700", "$type": "fontWeight" }
+    },
+    "h1": {
+      "size": { "$value": "4rem", "$type": "dimension" },
+      "line-height": { "$value": "1.08", "$type": "number" },
+      "letter-spacing": { "$value": "-0.025em", "$type": "dimension" },
+      "font-weight": { "$value": "700", "$type": "fontWeight" }
+    },
+    "h2": {
+      "size": { "$value": "3.25rem", "$type": "dimension" },
+      "line-height": { "$value": "1.12", "$type": "number" },
+      "letter-spacing": { "$value": "-0.02em", "$type": "dimension" },
+      "font-weight": { "$value": "700", "$type": "fontWeight" }
+    },
+    "h3": {
+      "size": { "$value": "2.25rem", "$type": "dimension" },
+      "line-height": { "$value": "1.18", "$type": "number" },
+      "letter-spacing": { "$value": "-0.015em", "$type": "dimension" },
+      "font-weight": { "$value": "600", "$type": "fontWeight" }
+    },
+    "h4": {
+      "size": { "$value": "2rem", "$type": "dimension" },
+      "line-height": { "$value": "1.2", "$type": "number" },
+      "letter-spacing": { "$value": "-0.015em", "$type": "dimension" },
+      "font-weight": { "$value": "700", "$type": "fontWeight" }
+    },
+    "body-lg": {
+      "size": { "$value": "2rem", "$type": "dimension" },
+      "line-height": { "$value": "1.5", "$type": "number" },
+      "font-weight": { "$value": "400", "$type": "fontWeight" }
+    },
+    "body": {
+      "size": { "$value": "1.5rem", "$type": "dimension" },
+      "line-height": { "$value": "1.6", "$type": "number" },
+      "font-weight": { "$value": "400", "$type": "fontWeight" }
+    },
+    "small": {
+      "size": { "$value": "1rem", "$type": "dimension" },
+      "line-height": { "$value": "1.6", "$type": "number" },
+      "font-weight": { "$value": "400", "$type": "fontWeight" }
+    }
+  }
+}
