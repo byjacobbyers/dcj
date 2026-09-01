@@ -17,4 +17,4 @@ Project instructions are split under [`.claude/rules/`](.claude/rules/). Claude 
 
 **Adding a rule:** create `.claude/rules/<topic>.md`.
 
-**Verification floor:** `pnpm lint && pnpm test && pnpm build`, plus `pnpm typegen` after schema/query changes (CI diffs the committed `schema.json` / `sanity.types.ts`).
+**Verification floor:** run `pnpm lint && pnpm test && pnpm build` locally before pushing (deploys go through Vercel; there is no separate CI), plus `pnpm typegen` after schema/query changes and commit the regenerated `schema.json` / `sanity.types.ts`.
