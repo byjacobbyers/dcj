@@ -1,5 +1,6 @@
 import { Metadata } from "next"
-import { QueryParams, SanityDocument } from "next-sanity"
+import { QueryParams } from "next-sanity"
+import type { EventQueryResult, EventsQueryResult, SiteQueryResult } from "@/sanity.types"
 import { sanityFetch } from "@/sanity/lib/live"
 import { notFound } from "next/navigation"
 import { eventsQuery, eventQuery } from "@/sanity/queries/documents/event-query"
@@ -8,16 +9,18 @@ import EventSingle from "@/components/event-single"
 import Script from "next/script"
 import {
   generateEventJsonLd,
-  generateFAQJsonLd,
+  faqJsonLdFromSections,
   generateMetadata as generateSeoMetadata,
+  type SeoType,
 } from "@/lib/seo"
+import type { EventSingleData } from "@/types/components/event-single-type"
 
 export async function generateStaticParams() {
   try {
     const { data: events } = await sanityFetch({ query: eventsQuery })
-    return (events || [])
-      .filter((e: SanityDocument) => e?.slug?.current && typeof e.slug.current === 'string')
-      .map((e: SanityDocument) => ({ slug: e.slug.current }))
+    return ((events ?? []) as EventsQueryResult)
+      .filter((e) => typeof e?.slug === 'string' && e.slug)
+      .map((e) => ({ slug: e.slug as string }))
   } catch {
     return []
   }
@@ -28,16 +31,18 @@ type Props = { params: Promise<{ slug: string }> }
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   try {
     const resolved = await params
-    const [{ data: event }, { data: global }] = await Promise.all([
+    const [{ data: eventData }, { data: globalData }] = await Promise.all([
       sanityFetch({ query: eventQuery, params: { slug: resolved.slug } }),
       sanityFetch({ query: SiteQuery }),
     ])
+    const event = eventData as EventQueryResult
+    const global = globalData as SiteQueryResult
 
     if (!event) return generateSeoMetadata(undefined, undefined, undefined, 'Event at Denver Contact Jam.')
 
     return generateSeoMetadata(
-      event?.seo,
-      global?.seo,
+      (event?.seo ?? undefined) as SeoType | undefined,
+      (global?.seo ?? undefined) as SeoType | undefined,
       event?.title,
       'Join us for this event.',
       {
@@ -57,15 +62,16 @@ export default async function EventPage({ params }: { params: Promise<QueryParam
     const slug = resolved?.slug
     if (!slug || typeof slug !== 'string') return notFound()
 
-    const { data: event } = await sanityFetch({
+    const { data } = await sanityFetch({
       query: eventQuery,
       params: { slug },
     })
+    const event = data as EventQueryResult
 
     if (!event) return notFound()
 
     const schemas = []
-    const eventSlug = typeof event.slug === 'string' ? event.slug : event.slug?.current
+    const eventSlug = event.slug?.current
     const eventUrl = `/events/${eventSlug || slug}`
 
     const parseSanityDate = (dateStr: string) => {
@@ -88,9 +94,7 @@ export default async function EventPage({ params }: { params: Promise<QueryParam
       }))
     }
 
-    const faqBlocks = event.sections?.filter((s: { _type?: string; active?: boolean }) => s._type === 'faqBlock' && s.active !== false) || []
-    const allFaqs = faqBlocks.flatMap((b: { faqs?: Array<{ question: string; answer: unknown }> }) => b.faqs || [])
-    const faqSchema = generateFAQJsonLd(allFaqs)
+    const faqSchema = faqJsonLdFromSections(event.sections)
     if (faqSchema) schemas.push(faqSchema)
 
     return (
@@ -98,7 +102,7 @@ export default async function EventPage({ params }: { params: Promise<QueryParam
         {schemas.length > 0 && (
           <Script id="event-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }} />
         )}
-        <EventSingle event={event} key={event._id} />
+        <EventSingle event={event as EventSingleData} key={event._id} />
       </>
     )
   } catch {

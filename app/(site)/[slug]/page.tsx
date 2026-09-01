@@ -1,5 +1,6 @@
 import { Metadata } from "next"
-import { QueryParams, SanityDocument } from "next-sanity"
+import { QueryParams } from "next-sanity"
+import type { PageQueryResult, PagesQueryResult, SiteQueryResult } from "@/sanity.types"
 import { sanityFetch } from "@/sanity/lib/live"
 import { notFound } from "next/navigation"
 import { pagesQuery, pageQuery } from "@/sanity/queries/documents/page-query"
@@ -9,19 +10,20 @@ import Page from "@/components/page-single"
 import Script from "next/script"
 import {
   generateWebPageJsonLd,
-  generateFAQJsonLd,
+  faqJsonLdFromSections,
   generateMetadata as generateSeoMetadata,
+  type SeoType,
 } from "@/lib/seo"
 
 export async function generateStaticParams() {
   try {
     const { data: posts } = await sanityFetch({ query: pagesQuery })
-    return (posts || [])
-      .filter((p: SanityDocument) => {
+    return ((posts ?? []) as PagesQueryResult)
+      .filter((p) => {
         const slug = p?.slug
-        return slug && typeof slug === 'string' && !EXCLUDED_PAGE_SLUGS.includes(slug)
+        return !!slug && typeof slug === 'string' && !EXCLUDED_PAGE_SLUGS.includes(slug)
       })
-      .map((p: SanityDocument) => ({ slug: p.slug }))
+      .map((p) => ({ slug: p.slug }))
   } catch {
     return []
   }
@@ -34,22 +36,30 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
     const resolved = await params
     if (resolved?.slug?.toString().startsWith('__') || !resolved?.slug) return generateSeoMetadata()
 
-    const [{ data: page }, { data: global }] = await Promise.all([
+    const [{ data: pageData }, { data: globalData }] = await Promise.all([
       sanityFetch({ query: pageQuery, params: { slug: resolved.slug } }),
       sanityFetch({ query: SiteQuery }),
     ])
+    const page = pageData as PageQueryResult
+    const global = globalData as SiteQueryResult
 
     if (!page) return generateSeoMetadata()
 
     const slug = String(resolved.slug)
     const isHome = slug === 'home'
 
-    return generateSeoMetadata(page?.seo, global?.seo, isHome ? undefined : page?.title, undefined, {
-      url: isHome ? '/' : `/${slug}`,
-      titleSuffix: isHome ? undefined : ' :: Denver Contact Jam',
-      ogDocument: isHome ? undefined : { slug, type: 'page' },
-      siteTitle: global?.title,
-    })
+    return generateSeoMetadata(
+      (page?.seo ?? undefined) as SeoType | undefined,
+      (global?.seo ?? undefined) as SeoType | undefined,
+      isHome ? undefined : page?.title,
+      undefined,
+      {
+        url: isHome ? '/' : `/${slug}`,
+        titleSuffix: isHome ? undefined : ' :: Denver Contact Jam',
+        ogDocument: isHome ? undefined : { slug, type: 'page' },
+        siteTitle: global?.title ?? undefined,
+      }
+    )
   } catch {
     return generateSeoMetadata()
   }
@@ -60,26 +70,25 @@ export default async function SinglePage({ params }: { params: Promise<QueryPara
     const resolved = await params
     if (resolved?.slug?.toString().startsWith('__') || !resolved?.slug) return notFound()
 
-    const { data: page } = await sanityFetch({
+    const { data } = await sanityFetch({
       query: pageQuery,
       params: { slug: resolved.slug },
     })
+    const page = data as PageQueryResult
 
     if (!page) return notFound()
 
     const schemas = []
-    const pageSeo = page?.seo || {}
+    const pageSeo = (page.seo ?? undefined) as SeoType | undefined
     schemas.push(generateWebPageJsonLd({
       title: page.title,
-      description: pageSeo.metaDesc,
+      description: pageSeo?.metaDesc,
       url: `/${resolved.slug}`,
       seo: pageSeo,
       _updatedAt: page._updatedAt,
     }))
 
-    const faqBlocks = page.sections?.filter((s: { _type?: string; active?: boolean }) => s._type === 'faqBlock' && s.active !== false) || []
-    const allFaqs = faqBlocks.flatMap((b: { faqs?: Array<{ question: string; answer: unknown }> }) => b.faqs || [])
-    const faqSchema = generateFAQJsonLd(allFaqs)
+    const faqSchema = faqJsonLdFromSections(page.sections)
     if (faqSchema) schemas.push(faqSchema)
 
     return (

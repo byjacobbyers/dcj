@@ -7,20 +7,30 @@ import Page from "@/components/page-single"
 import Script from "next/script"
 import {
   generateWebPageJsonLd,
-  generateFAQJsonLd,
+  faqJsonLdFromSections,
   generateMetadata as generateSeoMetadata,
+  type SeoType,
 } from "@/lib/seo"
+import type { PageQueryResult, SiteQueryResult } from "@/sanity.types"
 
 export const generateMetadata = async (): Promise<Metadata> => {
   try {
-    const [{ data: global }, { data: page }] = await Promise.all([
+    const [{ data: globalData }, { data: pageData }] = await Promise.all([
       sanityFetch({ query: SiteQuery }),
       sanityFetch({ query: pageQuery, params: { slug: 'home' } }),
     ])
-    return generateSeoMetadata(page?.seo, global?.seo, undefined, undefined, {
-      url: '/',
-      siteTitle: global?.title,
-    })
+    const global = globalData as SiteQueryResult
+    const page = pageData as PageQueryResult
+    return generateSeoMetadata(
+      (page?.seo ?? undefined) as SeoType | undefined,
+      (global?.seo ?? undefined) as SeoType | undefined,
+      undefined,
+      undefined,
+      {
+        url: '/',
+        siteTitle: global?.title ?? undefined,
+      }
+    )
   } catch {
     return generateSeoMetadata()
   }
@@ -28,26 +38,25 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 export default async function Home() {
   try {
-    const { data: page } = await sanityFetch({
+    const { data } = await sanityFetch({
       query: pageQuery,
       params: { slug: "home" },
     })
+    const page = data as PageQueryResult
 
     if (!page) return notFound()
 
     const schemas = []
-    const pageSeo = page?.seo || {}
+    const pageSeo = (page.seo ?? undefined) as SeoType | undefined
     schemas.push(generateWebPageJsonLd({
       title: page.title,
-      description: pageSeo.metaDesc,
+      description: pageSeo?.metaDesc,
       url: '/',
       seo: pageSeo,
       _updatedAt: page._updatedAt,
     }))
 
-    const faqBlocks = page.sections?.filter((s: { _type?: string; active?: boolean }) => s._type === 'faqBlock' && s.active !== false) || []
-    const allFaqs = faqBlocks.flatMap((b: { faqs?: Array<{ question: string; answer: unknown }> }) => b.faqs || [])
-    const faqSchema = generateFAQJsonLd(allFaqs)
+    const faqSchema = faqJsonLdFromSections(page.sections)
     if (faqSchema) schemas.push(faqSchema)
 
     return (

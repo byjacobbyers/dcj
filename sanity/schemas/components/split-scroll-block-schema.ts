@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { InlineElementIcon } from '@sanity/icons'
+import { InlineElementIcon } from '@sanity/icons/InlineElement'
 
 export default defineType({
   title: 'Split Scroll Block',

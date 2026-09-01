@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { InsertBelowIcon } from '@sanity/icons'
+import { InsertBelowIcon } from '@sanity/icons/InsertBelow'
 
 export default defineType({
   title: 'Spacer Block',

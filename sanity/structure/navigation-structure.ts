@@ -1,5 +1,5 @@
 import type { StructureBuilder } from 'sanity/structure'
-import { LinkIcon } from '@sanity/icons'
+import { LinkIcon } from '@sanity/icons/Link'
 
 export default function Navigation(S: StructureBuilder) {
   return S.listItem()

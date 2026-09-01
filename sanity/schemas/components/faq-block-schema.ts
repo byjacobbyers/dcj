@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { ErrorOutlineIcon } from '@sanity/icons'
+import { ErrorOutlineIcon } from '@sanity/icons/ErrorOutline'
 import { sectionPaddingField } from '../fields/section-padding-field'
 import { sectionBackgroundColorField } from '../fields/section-background-color-field'
 

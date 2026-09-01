@@ -1,5 +1,5 @@
 import type { StructureBuilder } from 'sanity/structure'
-import { BoltIcon } from '@sanity/icons'
+import { BoltIcon } from '@sanity/icons/Bolt'
 
 export default function Announcement(S: StructureBuilder) {
   return S.listItem()

@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { RemoveIcon } from '@sanity/icons'
+import { RemoveIcon } from '@sanity/icons/Remove'
 
 export default defineType({
   title: 'Divider Block',

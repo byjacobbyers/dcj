@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { PresentationIcon } from '@sanity/icons'
+import { PresentationIcon } from '@sanity/icons/Presentation'
 import { sectionPaddingField } from '../fields/section-padding-field'
 import { sectionBackgroundColorField } from '../fields/section-background-color-field'
 import { sectionContentLayoutField } from '../fields/section-content-layout-field'

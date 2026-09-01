@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { InlineElementIcon } from '@sanity/icons'
+import { InlineElementIcon } from '@sanity/icons/InlineElement'
 import ImagesPerRowInput from '../inputs/images-per-row-input'
 import { sectionPaddingField } from '../fields/section-padding-field'
 import { sectionBackgroundColorField } from '../fields/section-background-color-field'

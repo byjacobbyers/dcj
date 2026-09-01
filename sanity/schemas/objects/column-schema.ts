@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { InlineIcon } from '@sanity/icons'
+import { InlineIcon } from '@sanity/icons/Inline'
 
 const column = defineType({
   title: 'Column',

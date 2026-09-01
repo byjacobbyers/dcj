@@ -1,5 +1,5 @@
-import type { SanityDocument } from 'next-sanity'
+import type { PageQueryResult } from '@/sanity.types'
 
 export type PageSingleProps = {
-  page: SanityDocument | null | undefined
+  page: PageQueryResult
 }

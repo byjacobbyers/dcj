@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { LinkIcon } from '@sanity/icons'
+import { LinkIcon } from '@sanity/icons/Link'
 
 export default defineType({
   name: 'linkWithRoute',

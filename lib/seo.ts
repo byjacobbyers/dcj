@@ -102,10 +102,10 @@ export function generateMetadata(
 
 export function generateWebPageJsonLd(data: {
   title: string
-  description?: string
+  description?: string | null
   url: string
-  seo?: { shareGraphic?: { asset?: { url: string } } }
-  _updatedAt?: string
+  seo?: SeoType | null
+  _updatedAt?: string | null
 }) {
   const pageUrl = data.url.startsWith('http') ? data.url : buildUrl(data.url)
   return {
@@ -120,13 +120,13 @@ export function generateWebPageJsonLd(data: {
 
 export function generateEventJsonLd(data: {
   title: string
-  description?: string
+  description?: string | null
   url: string
   startDate: string
-  endDate?: string
-  location?: string
-  image?: { asset?: { url?: string } }
-  _updatedAt?: string
+  endDate?: string | null
+  location?: string | null
+  image?: { asset?: { url?: string | null } | null } | null
+  _updatedAt?: string | null
 }) {
   const eventUrl = data.url.startsWith('http') ? data.url : buildUrl(data.url)
   return {
@@ -247,6 +247,24 @@ export function generateWebSiteJsonLd(site: SiteType | null) {
     url: baseUrl,
     publisher: { '@type': 'Organization', name },
   }
+}
+
+/** Loose section shape shared by page/event sections; generated query types are wider. */
+export type SectionLike = {
+  _type?: string | null
+  active?: boolean | null
+  faqs?: Array<{ question?: string | null; answer?: unknown }> | null
+}
+
+/** Collect FAQ JSON-LD from active faqBlock sections on a page/event. */
+export function faqJsonLdFromSections(sections?: SectionLike[] | null) {
+  const faqBlocks = sections?.filter((s) => s._type === 'faqBlock' && s.active !== false) || []
+  const allFaqs = faqBlocks.flatMap((b) =>
+    (b.faqs || [])
+      .filter((f): f is { question: string; answer: unknown } => Boolean(f?.question))
+      .map((f) => ({ question: f.question as string, answer: f.answer }))
+  )
+  return generateFAQJsonLd(allFaqs)
 }
 
 export function generateFAQJsonLd(faqs: Array<{ question: string; answer: unknown }>) {

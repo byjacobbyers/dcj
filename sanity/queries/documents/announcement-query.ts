@@ -1,6 +1,7 @@
-import { groq } from 'next-sanity'
+import { defineQuery, groq } from 'next-sanity'
 
 /** Same route shape as `objects/route-query` — inlined so nested projection is explicit. */
+// @sanity-typegen-ignore
 const announcementRouteProjection = groq`
   _type,
   title,
@@ -32,7 +33,7 @@ const announcementRouteProjection = groq`
   }
 `
 
-export const AnnouncementQuery = groq`
+export const AnnouncementQuery = defineQuery(`
   *[_type == "announcement" && active == true && startDate <= $today && endDate >= $today][0] {
     _id,
     message,
@@ -40,4 +41,4 @@ export const AnnouncementQuery = groq`
       ${announcementRouteProjection}
     }
   }
-`
+`)

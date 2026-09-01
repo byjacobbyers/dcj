@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { ShareIcon } from '@sanity/icons'
+import { ShareIcon } from '@sanity/icons/Share'
 
 export default defineType({
   title: 'Call To Action',

@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { BlockContentIcon } from '@sanity/icons'
+import { BlockContentIcon } from '@sanity/icons/BlockContent'
 import { sectionPaddingField } from '../fields/section-padding-field'
 import { sectionContentLayoutField } from '../fields/section-content-layout-field'
 

@@ -19,6 +19,8 @@ import SmoothScrollProvider from "@/components/providers/smooth-scroll-provider"
 import { Providers } from "@/components/providers"
 import OrganizationJsonLd from "@/components/organization-jsonld"
 import type { AnnouncementType } from "@/types/documents/announcement-type"
+import type { RouteNavigationItems } from "@/types/components/route-navigation-type"
+import type { SiteType } from "@/lib/seo"
 
 export const revalidate = 60
 
@@ -43,9 +45,11 @@ export default async function SiteLayout({
         sanityFetch({ query: footerQuery }),
       ])
       return {
-        site: siteRes.data,
-        headerNav: headerRes.data,
-        footerNav: footerRes.data,
+        // Generated query shapes are wider (null-able) than the hand-written
+        // component contracts; bridge at the boundary like ohmni does.
+        site: siteRes.data as SiteType | null,
+        headerNav: headerRes.data as RouteNavigationItems,
+        footerNav: footerRes.data as RouteNavigationItems,
       }
     } catch {
       return { site: null, headerNav: null, footerNav: null }
@@ -58,7 +62,7 @@ export default async function SiteLayout({
       query: AnnouncementQuery,
       params: { today: todayLocal },
     })
-    announcement = announcementRes.data
+    announcement = announcementRes.data as AnnouncementType | null
   } catch {
     announcement = null
   }

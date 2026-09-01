@@ -1,5 +1,5 @@
 import type { StructureBuilder } from 'sanity/structure'
-import { EarthAmericasIcon } from '@sanity/icons'
+import { EarthAmericasIcon } from '@sanity/icons/EarthAmericas'
 
 export default function SiteSettings(S: StructureBuilder) {
   return S.listItem()

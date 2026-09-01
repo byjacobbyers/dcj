@@ -1,6 +1,7 @@
 import React from 'react'
 import { defineType } from 'sanity'
-import { HighlightIcon, TextIcon } from '@sanity/icons'
+import { HighlightIcon } from '@sanity/icons/Highlight'
+import { TextIcon } from '@sanity/icons/Text'
 import { LargeBlockStyle } from './large-block-style'
 
 const HighlightDecorator = (props: { children?: React.ReactNode }) =>

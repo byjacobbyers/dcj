@@ -1,5 +1,5 @@
 import type { StructureBuilder } from 'sanity/structure'
-import { CalendarIcon } from '@sanity/icons'
+import { CalendarIcon } from '@sanity/icons/Calendar'
 
 export default function Event(S: StructureBuilder) {
   return S.listItem()

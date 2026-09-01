@@ -5,7 +5,7 @@ import type { PageSingleProps } from '@/types/components/page-single-type'
 
 export default function Page({ page }: PageSingleProps) {
   if (!page) return null
-  const { sections = [], backgroundColor = 'primary' } = page
+  const { sections, backgroundColor = 'primary' } = page
   const isSilk = backgroundColor === 'silk'
   const surfaceProps =
     backgroundColor === 'primary' || backgroundColor === 'secondary'
@@ -28,7 +28,7 @@ export default function Page({ page }: PageSingleProps) {
           isSilk ? 'bg-transparent' : 'bg-background',
         )}
       >
-        <Sections body={sections} />
+        <Sections body={sections ?? []} />
       </main>
     </div>
   )

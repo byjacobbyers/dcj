@@ -1,6 +1,7 @@
-import { groq } from 'next-sanity'
+import { defineQuery, groq } from 'next-sanity'
 import { imageQuery } from '../objects/image-query'
 
+// @sanity-typegen-ignore
 const seoOgProjection = groq`{
   metaTitle,
   "ogImageHeading": coalesce(autoShareImage.heading, ogImageHeading),
@@ -10,7 +11,7 @@ const seoOgProjection = groq`{
 }`
 
 /** Minimal fetch for `/api/og`: one document by slug + site settings. */
-export const ogRouteDataQuery = groq`{
+export const ogRouteDataQuery = defineQuery(`{
   "doc": *[_type == $docType && slug.current == $slug][0] {
     title,
     seo ${seoOgProjection}
@@ -20,4 +21,4 @@ export const ogRouteDataQuery = groq`{
     organizationJsonLd { name },
     seo ${seoOgProjection}
   }
-}`
+}`)

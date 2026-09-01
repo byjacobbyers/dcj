@@ -1,5 +1,5 @@
 import type { StructureBuilder } from 'sanity/structure'
-import { PresentationIcon } from '@sanity/icons'
+import { PresentationIcon } from '@sanity/icons/Presentation'
 
 const Page = (S: StructureBuilder) =>
   S.listItem()

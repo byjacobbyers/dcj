@@ -27,6 +27,7 @@ const portableTextWithLinks = `content[] {
   }
 }`
 
+// @sanity-typegen-ignore
 export const sectionsQuery = groq`
   sections[] {
     ...,

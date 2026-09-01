@@ -1,5 +1,6 @@
 import { groq } from 'next-sanity'
 
+// @sanity-typegen-ignore
 export const imageQuery = groq`
   alt,
   crop { ... },

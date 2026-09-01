@@ -1,5 +1,9 @@
-import { PageType } from '../documents/page-type'
-import { EventType } from '../documents/event-type'
+/** Minimal document refs as projected by route queries. */
+type DocRef = {
+  _id: string
+  title?: string
+  slug?: { current?: string }
+}
 
 export type UtmParametersType = {
   source?: string
@@ -19,8 +23,8 @@ export type BaseRouteType = {
   _type: string
   title?: string
   linkType: 'page' | 'event' | 'path' | 'anchor' | 'file' | 'external' | 'email' | 'telephone'
-  pageRoute?: PageType & { _type: 'page' }
-  eventRoute?: EventType & { _type: 'event' }
+  pageRoute?: DocRef & { _type: 'page' }
+  eventRoute?: DocRef & { _type: 'event' }
   fileRoute?: {
     asset?: {
       url?: string

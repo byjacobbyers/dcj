@@ -3,15 +3,17 @@
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { disableDraftMode } from "@/app/actions"
-import { useDraftModeEnvironment } from "next-sanity/hooks"
+import { useVisualEditingEnvironment } from "next-sanity/hooks"
 import { Button } from "@/components/ui/button"
 
 export function PreviewBar() {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
-  const environment = useDraftModeEnvironment()
+  const environment = useVisualEditingEnvironment()
 
-  if (environment !== "live" && environment !== "unknown") {
+  // Hide inside the Presentation tool (it has its own preview controls);
+  // show in a standalone tab (or before VisualEditing connects, when null).
+  if (environment === "presentation-iframe" || environment === "presentation-window") {
     return null
   }
 
