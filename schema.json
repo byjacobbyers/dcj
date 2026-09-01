@@ -1455,112 +1455,6 @@
     }
   },
   {
-    "name": "problemBlock",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "problemBlock"
-          }
-        },
-        "active": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "boolean"
-          },
-          "optional": true
-        },
-        "anchor": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "content": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "simpleText"
-          },
-          "optional": true
-        },
-        "columns": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "array",
-            "of": {
-              "type": "object",
-              "attributes": {
-                "image": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "inline",
-                    "name": "defaultImage"
-                  },
-                  "optional": true
-                },
-                "icon": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "union",
-                    "of": [
-                      {
-                        "type": "string",
-                        "value": "LuClock"
-                      },
-                      {
-                        "type": "string",
-                        "value": "LuCode"
-                      },
-                      {
-                        "type": "string",
-                        "value": "LuLayers"
-                      }
-                    ]
-                  },
-                  "optional": true
-                },
-                "content": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "inline",
-                    "name": "simpleText"
-                  },
-                  "optional": false
-                }
-              },
-              "rest": {
-                "type": "object",
-                "attributes": {
-                  "_key": {
-                    "type": "objectAttribute",
-                    "value": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "optional": true
-        },
-        "excerpt": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "simpleText"
-          },
-          "optional": true
-        }
-      }
-    }
-  },
-  {
     "name": "splitScrollBlock",
     "type": "type",
     "value": {
@@ -3774,21 +3668,6 @@
             "rest": {
               "type": "inline",
               "name": "splitScrollBlock"
-            }
-          },
-          {
-            "type": "object",
-            "attributes": {
-              "_key": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                }
-              }
-            },
-            "rest": {
-              "type": "inline",
-              "name": "problemBlock"
             }
           },
           {

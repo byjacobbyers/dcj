@@ -11,7 +11,6 @@ import {
   HeroPlayground,
   ImagePlayground,
   PostsPlayground,
-  ProblemPlayground,
   SpacerPlayground,
   SplitScrollPlayground,
   TeamPlayground,
@@ -30,7 +29,6 @@ const NAV = [
   { href: '#gallery', label: 'Gallery' },
   { href: '#faq', label: 'FAQ' },
   { href: '#split-scroll', label: 'Split scroll' },
-  { href: '#problem', label: 'Problem' },
   { href: '#cards', label: 'Columns' },
   { href: '#form', label: 'Form' },
   { href: '#embed', label: 'Embed' },
@@ -72,7 +70,6 @@ export default function DesignSectionsPage() {
       <GalleryPlayground />
       <FaqPlayground />
       <SplitScrollPlayground />
-      <ProblemPlayground />
       <ColumnPlayground />
       <FormPlayground />
       <EmbedPlayground />

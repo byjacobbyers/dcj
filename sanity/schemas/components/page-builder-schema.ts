@@ -15,7 +15,6 @@ export default defineField({
     { type: 'galleryBlock' },
     { type: 'faqBlock' },
     { type: 'splitScrollBlock' },
-    { type: 'problemBlock' },
     { type: 'postsBlock' },
     { type: 'teamMemberBlock' },
     { type: 'columnBlock' },

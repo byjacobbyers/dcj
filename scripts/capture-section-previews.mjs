@@ -23,7 +23,6 @@ const SECTIONS = [
   ['gallery', 'galleryBlock'],
   ['faq', 'faqBlock'],
   ['split-scroll', 'splitScrollBlock'],
-  ['problem', 'problemBlock'],
   ['cards', 'columnBlock'],
   ['form', 'formBlock'],
   ['embed', 'embedBlock'],

@@ -13,7 +13,6 @@ import GalleryBlock from '@/components/gallery-block'
 import HeroBlock from '@/components/hero-block'
 import ImageBlock from '@/components/image-block'
 import PostsBlock from '@/components/posts-block/index'
-import ProblemBlock from '@/components/problem-block'
 import SpacerBlock from '@/components/spacer-block'
 import SplitScrollBlock from '@/components/split-scroll-block'
 import TeamMemberBlock from '@/components/team-member-block'
@@ -189,7 +188,7 @@ export function HeroPlayground() {
           image={null}
           content={ptBlocks([
             { text: 'Hero section', style: 'h1' },
-            { text: 'Split layout with round media slot. Fixture renders the image placeholder.' },
+            { text: 'Split layout with square media slot. Fixture renders the image placeholder.' },
           ])}
           cta={fixtureCta}
         />
@@ -498,46 +497,6 @@ export function SplitScrollPlayground() {
               ]),
             },
           ]}
-        />
-      </CtaLocationProvider>
-    </SectionChrome>
-  )
-}
-
-export function ProblemPlayground() {
-  return (
-    <SectionChrome id="problem" title="Problem" type="problemBlock" note="icon columns">
-      <CtaLocationProvider value="problemBlock">
-        <ProblemBlock
-          componentIndex={10}
-          content={pt('Why a weekly jam?', 'h2')}
-          columns={[
-            {
-              _key: 'p1',
-              icon: 'LuClock',
-              content: ptBlocks([
-                { text: 'Time', style: 'h3' },
-                { text: 'Hard to find a regular, reliable place to practice.' },
-              ]),
-            },
-            {
-              _key: 'p2',
-              icon: 'LuCode',
-              content: ptBlocks([
-                { text: 'Access', style: 'h3' },
-                { text: 'Classes are great, but open floors are rare.' },
-              ]),
-            },
-            {
-              _key: 'p3',
-              icon: 'LuLayers',
-              content: ptBlocks([
-                { text: 'Community', style: 'h3' },
-                { text: 'Dancing needs people who show up week after week.' },
-              ]),
-            },
-          ]}
-          excerpt={pt('The jam exists so the practice has a home.')}
         />
       </CtaLocationProvider>
     </SectionChrome>

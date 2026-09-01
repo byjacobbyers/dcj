@@ -95,7 +95,7 @@ export default function ColumnBlock({
                     )}
                     {column.title?.trim() ||
                     (column.content && Array.isArray(column.content)) ? (
-                      <CardContent className="min-h-0 overflow-y-auto text-center text-balance">
+                      <CardContent className="min-h-0 overflow-y-auto py-6 text-center text-balance">
                         {column.title?.trim() ? (
                           <h3 className="text-h4 mb-4 text-balance">
                             {cleanStega(column.title)}

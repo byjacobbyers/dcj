@@ -6,7 +6,7 @@ Reuse / reconfigure when the need fits:
 
 - `coverBlock` / `coverVideo` / `heroBlock` — heroes and full-bleed openers
 - `textBlock` / `imageBlock` / `galleryBlock` / `columnBlock` / `videoBlock` — copy and media
-- `ctaBlock` / `formBlock` / `faqBlock` / `problemBlock` / `splitScrollBlock` — conversion and proof
+- `ctaBlock` / `formBlock` / `faqBlock` / `splitScrollBlock` — conversion and proof
 - `postsBlock` / `teamMemberBlock` — lists and people
 - `spacerBlock` / `dividerBlock` / `embedBlock` — spacing and special content
 

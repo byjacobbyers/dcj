@@ -36,7 +36,7 @@ const markdownSkipped = all(
 
 describe('section registry', () => {
   it('has at least the blocks this test was written against', () => {
-    expect(insertMenu.length).toBeGreaterThanOrEqual(18)
+    expect(insertMenu.length).toBeGreaterThanOrEqual(17)
   })
 
   it.each(insertMenu)('%s is fully registered', (type) => {

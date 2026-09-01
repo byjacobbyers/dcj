@@ -84,7 +84,7 @@ export default function HeroBlock({
             </>
           )}
         </div>
-        <div className="relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-full border border-border shadow-lg md:w-1/2">
+        <div className="relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-lg border border-border shadow-lg md:w-1/2">
           <SanityImage
             image={image}
             fill

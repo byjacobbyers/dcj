@@ -178,34 +178,6 @@ export const sectionsQuery = groq`
         }
       }
     },
-    _type == 'problemBlock' => {
-      ...,
-      content[] {
-        ...,
-        markDefs[] {
-          ...,
-          ${linkWithRouteMarkDef}
-        }
-      },
-      columns[] {
-        ...,
-        image { ${imageQuery} },
-        content[] {
-          ...,
-          markDefs[] {
-            ...,
-            ${linkWithRouteMarkDef}
-          }
-        }
-      },
-      excerpt[] {
-        ...,
-        markDefs[] {
-          ...,
-          ${linkWithRouteMarkDef}
-        }
-      }
-    },
     _type == 'postsBlock' => {
       ...
     },

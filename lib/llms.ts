@@ -102,11 +102,6 @@ export function sectionToMarkdown(section: Json): string {
       for (const col of arr(section.columns)) parts.push(h3(col.title), md(col.content), cta(col.cta))
       parts.push(md(section.footer), cta(section.cta))
       break
-    case 'problemBlock':
-      parts.push(md(section.content))
-      for (const col of arr(section.columns)) parts.push(md(col.content))
-      parts.push(md(section.excerpt))
-      break
     case 'faqBlock':
       parts.push(h2(section.title))
       for (const f of arr(section.faqs)) parts.push(h3(f.question), md(f.answer))
