@@ -5,6 +5,7 @@ import site from './documents/site-schema'
 import announcement from './documents/announcement-schema'
 import event from './documents/event-schema'
 import navigation from './documents/navigation-schema'
+import redirect from './documents/redirect-schema'
 
 import seo from './components/seo-schema'
 import sections from './components/page-builder-schema'
@@ -41,6 +42,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     announcement,
     event,
     navigation,
+    redirect,
     seo,
     sections,
     heroBlock,

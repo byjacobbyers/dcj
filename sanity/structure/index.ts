@@ -4,6 +4,7 @@ import Event from './event-structure'
 import Announcement from './announcement-structure'
 import SiteSettings from './site-settings-structure'
 import Navigation from './navigation-structure'
+import Redirect from './redirect-structure'
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -14,4 +15,5 @@ export const structure: StructureResolver = (S) =>
       Announcement(S),
       SiteSettings(S),
       Navigation(S),
+      Redirect(S),
     ])

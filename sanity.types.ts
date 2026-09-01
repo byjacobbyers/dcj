@@ -520,6 +520,17 @@ export type Seo = {
   shareGraphic?: DefaultImage;
 };
 
+export type Redirect = {
+  _id: string;
+  _type: "redirect";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  source: string;
+  destination: string;
+  permanent?: boolean;
+};
+
 export type Navigation = {
   _id: string;
   _type: "navigation";
@@ -891,6 +902,7 @@ export type AllSanitySchemaTypes =
   | HeroBlock
   | Sections
   | Seo
+  | Redirect
   | Navigation
   | Event
   | Slug
