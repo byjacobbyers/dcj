@@ -1,7 +1,7 @@
 'use client'
 
 import SanityImage from '@/components/sanity-image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
   normalizeSectionBackground,
@@ -22,10 +22,9 @@ export default function GalleryBlock({
   imagesPerRow = 3,
   enableLightbox = true,
 }: GalleryBlockProps) {
+  // No mounted gate needed: lightboxImage can only become non-null via a
+  // client-side click, so the portal never renders during SSR/hydration.
   const [lightboxImage, setLightboxImage] = useState<number | null>(null)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => setMounted(true), [])
 
   if (!active) return null
 
@@ -92,8 +91,7 @@ export default function GalleryBlock({
       </section>
 
       {/* Lightbox: portal + z-[100] so fixed positioning is viewport-relative (Framer transform ancestors break fixed hits) and above header z-50 */}
-      {mounted &&
-        lightboxImage !== null &&
+      {lightboxImage !== null &&
         enableLightbox !== false &&
         createPortal(
           <div
