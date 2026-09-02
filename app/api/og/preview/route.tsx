@@ -23,13 +23,10 @@ type PreviewBody = {
 
 /**
  * Studio-only: renders OG from the **current form** heading/background + Sanity for doc/site shell.
- * Avoids lag where GET /api/og only sees persisted CMS state. Disabled outside development.
+ * Avoids lag where GET /api/og only sees persisted CMS state. Open in production too so the
+ * Studio preview follows unsaved edits; no more render cost than the public GET route.
  */
 export async function POST(request: Request) {
-  if (process.env.NODE_ENV !== 'development') {
-    return new Response('OG preview POST is only available in development', { status: 403 })
-  }
-
   let body: PreviewBody
   try {
     body = (await request.json()) as PreviewBody

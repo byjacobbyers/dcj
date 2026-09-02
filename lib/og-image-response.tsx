@@ -161,6 +161,11 @@ export async function createOgImageResponse({
       width: 1200,
       height: 630,
       ...(fonts ? { fonts } : {}),
+      // next/og defaults to max-age=31536000 immutable in prod, which pins stale
+      // images long after a publish. 5-min CDN cache instead, like the llms routes.
+      headers: {
+        'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400',
+      },
     }
   )
 }

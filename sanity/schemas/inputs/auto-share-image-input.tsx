@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * Live preview uses POST /api/og/preview (dev only) with the **current form** heading/background
+ * Live preview uses POST /api/og/preview with the **current form** heading/background
  * so it matches the editor without waiting for Sanity to persist. Debounced to limit work.
  * Production metadata still uses GET /api/og (CMS state only).
  */
@@ -50,7 +50,6 @@ export default function AutoShareImageInput(props: ObjectInputProps) {
   const origin = usePreviewOrigin()
   const canPreview =
     (docType === 'page' || docType === 'event' || docType === 'post') && slug.length > 0
-  const isDevPreview = process.env.NODE_ENV === 'development'
 
   useEffect(() => {
     return () => {
@@ -65,7 +64,7 @@ export default function AutoShareImageInput(props: ObjectInputProps) {
     typeof document?.title === 'string' ? document.title : ''
 
   useEffect(() => {
-    if (!canPreview || !origin || !isDevPreview) {
+    if (!canPreview || !origin) {
       setPreviewSrc((prev) => {
         if (prev) URL.revokeObjectURL(prev)
         blobUrlRef.current = null
@@ -132,7 +131,7 @@ export default function AutoShareImageInput(props: ObjectInputProps) {
       window.clearTimeout(timer)
       abort?.abort()
     }
-  }, [canPreview, origin, isDevPreview, slug, docType, docTitle, value])
+  }, [canPreview, origin, slug, docType, docTitle, value])
 
   const staticOgUrl =
     canPreview && origin
@@ -161,23 +160,18 @@ export default function AutoShareImageInput(props: ObjectInputProps) {
       ) : (
         <Box>
           <Text size={1} weight="semibold" style={{ marginBottom: 8 }}>
-            Preview{' '}
-            {isDevPreview
-              ? '(live form, debounced — dev only)'
-              : '(open graph URL — reflects saved CMS content)'}
+            Preview (live form, debounced)
           </Text>
-          {isDevPreview ? (
-            <Text size={1} muted style={{ marginBottom: 8 }}>
-              Matches the fields below before publish. Production sharing still uses{' '}
-              <a href={staticOgUrl ?? '#'} target="_blank" rel="noreferrer">
-                GET /api/og
-              </a>
-              .
-              {headingEmpty && titleFallback
-                ? ` Empty heading → document title as H2 (“${titleFallback}”).`
-                : null}
-            </Text>
-          ) : null}
+          <Text size={1} muted style={{ marginBottom: 8 }}>
+            Matches the fields below before publish. Production sharing still uses{' '}
+            <a href={staticOgUrl ?? '#'} target="_blank" rel="noreferrer">
+              GET /api/og
+            </a>
+            .
+            {headingEmpty && titleFallback
+              ? ` Empty heading → document title as H2 (“${titleFallback}”).`
+              : null}
+          </Text>
           <Box
             padding={2}
             style={{
@@ -188,44 +182,31 @@ export default function AutoShareImageInput(props: ObjectInputProps) {
               minHeight: 120,
             }}
           >
-            {isDevPreview ? (
-              <>
-                {previewLoading ? (
-                  <Box padding={4} style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Spinner />
-                  </Box>
-                ) : null}
-                {previewSrc ? (
-                  /* eslint-disable-next-line @next/next/no-img-element -- Studio preview blob URL */
-                  <img
-                    src={previewSrc}
-                    alt=""
-                    width={600}
-                    height={315}
-                    style={{
-                      width: '100%',
-                      maxWidth: 600,
-                      height: 'auto',
-                      display: 'block',
-                      borderRadius: 2,
-                      opacity: previewLoading ? 0.55 : 1,
-                    }}
-                  />
-                ) : !previewLoading ? (
-                  <Text size={1} muted>
-                    Could not load preview. Ensure pnpm dev is running and the slug exists in Sanity.
-                  </Text>
-                ) : null}
-              </>
-            ) : staticOgUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element -- Studio preview of GET /api/og */
+            {previewLoading ? (
+              <Box padding={4} style={{ display: 'flex', justifyContent: 'center' }}>
+                <Spinner />
+              </Box>
+            ) : null}
+            {previewSrc ? (
+              /* eslint-disable-next-line @next/next/no-img-element -- Studio preview blob URL */
               <img
-                src={staticOgUrl}
+                src={previewSrc}
                 alt=""
                 width={600}
                 height={315}
-                style={{ width: '100%', maxWidth: 600, height: 'auto', display: 'block', borderRadius: 2 }}
+                style={{
+                  width: '100%',
+                  maxWidth: 600,
+                  height: 'auto',
+                  display: 'block',
+                  borderRadius: 2,
+                  opacity: previewLoading ? 0.55 : 1,
+                }}
               />
+            ) : !previewLoading ? (
+              <Text size={1} muted>
+                Could not load preview. Ensure the site is running and the slug exists in Sanity.
+              </Text>
             ) : null}
           </Box>
         </Box>
