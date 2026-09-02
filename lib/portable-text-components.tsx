@@ -1,6 +1,7 @@
 'use client'
 
 import type { MouseEvent, ReactNode } from 'react'
+import type { PortableTextBlock, PortableTextComponentProps } from '@portabletext/react'
 import { buildRouteProps } from '@/lib/route-resolver'
 import type { BaseRouteType } from '@/types/objects/route-type'
 import SanityImage from '@/components/sanity-image'
@@ -76,8 +77,10 @@ function LinkWithRouteMark({
 }
 
 /** Slugified heading id so in-page anchor links (`linkType: 'anchor'`) can target sections. */
-function headingId(value?: { children?: Array<{ text?: string }> }): string | undefined {
-  const text = (value?.children ?? []).map((c) => c.text ?? '').join('')
+function headingId(value?: PortableTextBlock): string | undefined {
+  const text = (value?.children ?? [])
+    .map((c) => (typeof (c as { text?: unknown }).text === 'string' ? (c as { text: string }).text : ''))
+    .join('')
   const slug = text
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
@@ -86,15 +89,14 @@ function headingId(value?: { children?: Array<{ text?: string }> }): string | un
   return slug || undefined
 }
 
-type HeadingProps = {
-  children?: ReactNode
-  value?: { children?: Array<{ text?: string }> }
-}
-
 export const portableTextComponents = {
   block: {
-    h2: ({ children, value }: HeadingProps) => <h2 id={headingId(value)}>{children}</h2>,
-    h3: ({ children, value }: HeadingProps) => <h3 id={headingId(value)}>{children}</h3>,
+    h2: ({ children, value }: PortableTextComponentProps<PortableTextBlock>) => (
+      <h2 id={headingId(value)}>{children}</h2>
+    ),
+    h3: ({ children, value }: PortableTextComponentProps<PortableTextBlock>) => (
+      <h3 id={headingId(value)}>{children}</h3>
+    ),
     large: ({ children }: { children?: ReactNode }) => (
       <p className="text-body-lg">{children}</p>
     ),
