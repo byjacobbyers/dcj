@@ -88,6 +88,276 @@
     }
   },
   {
+    "type": "type",
+    "name": "autoShareImage",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "heading": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "simpleText"
+          },
+          "optional": true
+        },
+        "background": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "primary"
+              },
+              {
+                "type": "string",
+                "value": "secondary"
+              }
+            ]
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "eventJsonLd",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "eventJsonLd"
+          }
+        },
+        "description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "eventStatus": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "EventScheduled"
+              },
+              {
+                "type": "string",
+                "value": "EventCancelled"
+              },
+              {
+                "type": "string",
+                "value": "EventPostponed"
+              },
+              {
+                "type": "string",
+                "value": "EventRescheduled"
+              },
+              {
+                "type": "string",
+                "value": "EventMovedOnline"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "eventAttendanceMode": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "OfflineEventAttendanceMode"
+              },
+              {
+                "type": "string",
+                "value": "OnlineEventAttendanceMode"
+              },
+              {
+                "type": "string",
+                "value": "MixedEventAttendanceMode"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "organizerName": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "organizerUrl": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "offersUrl": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "offersPrice": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "offersPriceCurrency": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "offersAvailability": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "InStock"
+              },
+              {
+                "type": "string",
+                "value": "SoldOut"
+              },
+              {
+                "type": "string",
+                "value": "PreOrder"
+              }
+            ]
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "articleJsonLd",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "articleJsonLd"
+          }
+        },
+        "headline": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "authorName": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "articleSection": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "pageJsonLd",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "pageJsonLd"
+          }
+        },
+        "pageType": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "WebPage"
+              },
+              {
+                "type": "string",
+                "value": "AboutPage"
+              },
+              {
+                "type": "string",
+                "value": "ContactPage"
+              },
+              {
+                "type": "string",
+                "value": "CollectionPage"
+              },
+              {
+                "type": "string",
+                "value": "FAQPage"
+              },
+              {
+                "type": "string",
+                "value": "Service"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "name": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "subNav",
     "type": "type",
     "value": {
@@ -3906,6 +4176,14 @@
           },
           "optional": true
         },
+        "autoShareImage": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "autoShareImage"
+          },
+          "optional": true
+        },
         "shareGraphic": {
           "type": "objectAttribute",
           "value": {
@@ -4056,6 +4334,14 @@
         "value": {
           "type": "inline",
           "name": "seo"
+        },
+        "optional": true
+      },
+      "jsonLd": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "articleJsonLd"
         },
         "optional": true
       }
@@ -4527,6 +4813,14 @@
           "name": "seo"
         },
         "optional": true
+      },
+      "jsonLd": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "eventJsonLd"
+        },
+        "optional": true
       }
     }
   },
@@ -4899,6 +5193,14 @@
         "value": {
           "type": "inline",
           "name": "seo"
+        },
+        "optional": true
+      },
+      "jsonLd": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "pageJsonLd"
         },
         "optional": true
       }

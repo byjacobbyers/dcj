@@ -91,6 +91,7 @@ export default async function EventPage({ params }: { params: Promise<QueryParam
         location: event.location,
         image: event.image,
         _updatedAt: event._updatedAt,
+        jsonLd: event.jsonLd,
       }))
     }
 

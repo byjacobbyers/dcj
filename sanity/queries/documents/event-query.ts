@@ -16,6 +16,7 @@ export const eventQuery = defineQuery(`*[_type == "event" && slug.current == $sl
   _id,
   _type,
   _updatedAt,
+  jsonLd,
   title,
   slug,
   image { ${imageQuery} },

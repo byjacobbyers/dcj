@@ -83,6 +83,15 @@ export default defineType({
       group: 'seo',
       options: { collapsible: true, collapsed: false },
     }),
+    defineField({
+      name: 'jsonLd',
+      title: 'Event JSON-LD',
+      type: 'eventJsonLd',
+      group: 'seo',
+      description:
+        'Optional overrides for structured data. The base schema and FAQ blocks stay automatic.',
+      options: { collapsible: true, collapsed: true },
+    }),
   ],
   preview: {
     select: { title: 'title', startDate: 'startDate' },

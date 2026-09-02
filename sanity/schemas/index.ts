@@ -41,6 +41,9 @@ import buttonPair from './objects/button-pair-schema'
 import social from './objects/social-schema'
 import navLink from './objects/nav-link-schema'
 import subNav from './objects/sub-nav-schema'
+import pageJsonLd from './objects/page-json-ld-schema'
+import articleJsonLd from './objects/article-json-ld-schema'
+import eventJsonLd from './objects/event-json-ld-schema'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -83,5 +86,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     social,
     navLink,
     subNav,
+    pageJsonLd,
+    articleJsonLd,
+    eventJsonLd,
   ],
 }

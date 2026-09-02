@@ -54,6 +54,7 @@ export default async function Home() {
       url: '/',
       seo: pageSeo,
       _updatedAt: page._updatedAt,
+      jsonLd: page.jsonLd,
     }))
 
     const faqSchema = faqJsonLdFromSections(page.sections)

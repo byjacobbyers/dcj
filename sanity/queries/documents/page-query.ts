@@ -11,6 +11,7 @@ export const pagesQuery = defineQuery(`*[_type == "page" && defined(slug.current
 export const pageQuery = defineQuery(`*[_type == "page" && slug.current == $slug][0] {
   _id,
   _updatedAt,
+  jsonLd,
   title,
   "slug": slug.current,
   backgroundColor,

@@ -7,7 +7,7 @@ import type { OgRouteDoc, OgRouteSite } from '@/lib/og-image-response'
 
 export const runtime = 'edge'
 
-const DOC_TYPES = ['page', 'event'] as const
+const DOC_TYPES = ['page', 'event', 'post'] as const
 type DocType = (typeof DOC_TYPES)[number]
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/i

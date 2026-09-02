@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import SeoInput from '../inputs/seo-input'
+import AutoShareImageInput from '../inputs/auto-share-image-input'
 
 export default defineType({
   title: 'SEO / Share Settings',
@@ -36,6 +37,38 @@ export default defineType({
         'Will default to the document description if left empty. Override here for a custom SEO description.',
       validation: (Rule) =>
         Rule.max(160).warning('Longer descriptions may be truncated by search engines'),
+    }),
+    defineField({
+      title: 'Auto share image (Facebook, Slack, etc.)',
+      name: 'autoShareImage',
+      type: 'object',
+      description:
+        'Default 1200×630 share image is generated from this heading and background, plus the site name. Upload a Share Graphic below to override it entirely.',
+      options: { collapsible: true, collapsed: false },
+      components: { input: AutoShareImageInput },
+      fields: [
+        defineField({
+          title: 'Heading',
+          name: 'heading',
+          type: 'simpleText',
+          description:
+            'Large headline on the generated image. Leave empty to use the document title.',
+        }),
+        defineField({
+          title: 'Background',
+          name: 'background',
+          type: 'string',
+          description: 'Surface for the generated image, from the site palette.',
+          initialValue: 'primary',
+          options: {
+            list: [
+              { title: 'Primary (dark)', value: 'primary' },
+              { title: 'Secondary (light)', value: 'secondary' },
+            ],
+            layout: 'radio',
+          },
+        }),
+      ],
     }),
     defineField({
       title: 'Share Graphic',

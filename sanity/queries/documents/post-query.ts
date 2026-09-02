@@ -33,6 +33,7 @@ export const postQuery = defineQuery(`*[_type == "post" && slug.current == $slug
   _id,
   _type,
   _updatedAt,
+  jsonLd,
   title,
   slug,
   image { ${imageQuery} },

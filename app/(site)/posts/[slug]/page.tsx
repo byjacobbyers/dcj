@@ -46,6 +46,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
       {
         url: `/posts/${resolved.slug}`,
         titleSuffix: ' :: Denver Contact Jam',
+        ogDocument: { slug: resolved.slug, type: 'post' },
       }
     )
   } catch {
@@ -72,6 +73,7 @@ export default async function PostPage({ params }: { params: Promise<QueryParams
       datePublished: post.publishedAt,
       _updatedAt: post._updatedAt,
       author: post.author,
+      jsonLd: post.jsonLd,
     })
 
     return (

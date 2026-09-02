@@ -86,6 +86,7 @@ export default async function SinglePage({ params }: { params: Promise<QueryPara
       url: `/${resolved.slug}`,
       seo: pageSeo,
       _updatedAt: page._updatedAt,
+      jsonLd: page.jsonLd,
     }))
 
     const faqSchema = faqJsonLdFromSections(page.sections)

@@ -28,7 +28,7 @@ export type SeoType = {
   }
 }
 
-export type OgDocumentRef = { slug: string; type: 'page' | 'event' }
+export type OgDocumentRef = { slug: string; type: 'page' | 'event' | 'post' }
 
 export function buildGeneratedOgImageUrl(ref: OgDocumentRef): string {
   const qs = new URLSearchParams({ slug: ref.slug, type: ref.type })
@@ -100,19 +100,67 @@ export function generateMetadata(
   }
 }
 
+/** CMS-editable structured-data overrides (schemas in sanity/schemas/objects/*-json-ld-schema.ts). */
+export type PageJsonLdOverrides = {
+  pageType?: string | null
+  name?: string | null
+  description?: string | null
+}
+
+export type ArticleJsonLdOverrides = {
+  headline?: string | null
+  description?: string | null
+  authorName?: string | null
+  articleSection?: string | null
+}
+
+export type EventJsonLdOverrides = {
+  description?: string | null
+  eventStatus?: string | null
+  eventAttendanceMode?: string | null
+  organizerName?: string | null
+  organizerUrl?: string | null
+  offersUrl?: string | null
+  offersPrice?: string | null
+  offersPriceCurrency?: string | null
+  offersAvailability?: string | null
+}
+
+const PAGE_JSON_LD_TYPES = new Set<string>([
+  'WebPage',
+  'AboutPage',
+  'ContactPage',
+  'CollectionPage',
+  'FAQPage',
+  'Service',
+])
+
+/** Normalize Schema.org enum values to full URLs when editors pick short codes. */
+function schemaOrgEnum(value: string | null | undefined) {
+  if (!value) return undefined
+  if (value.startsWith('http')) return value
+  return `https://schema.org/${value}`
+}
+
 export function generateWebPageJsonLd(data: {
   title: string
   description?: string | null
   url: string
   seo?: SeoType | null
   _updatedAt?: string | null
+  jsonLd?: PageJsonLdOverrides | null
 }) {
   const pageUrl = data.url.startsWith('http') ? data.url : buildUrl(data.url)
+  const overrides = data.jsonLd
+  const rawType = overrides?.pageType || 'WebPage'
+  const pageType = PAGE_JSON_LD_TYPES.has(rawType) ? rawType : 'WebPage'
+  const name = overrides?.name || data.title
+  const description = overrides?.description || data.description
   return {
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: data.title,
-    ...(data.description && { description: data.description }),
+    '@type': pageType,
+    name,
+    ...(description && { description }),
     url: pageUrl,
     ...(data._updatedAt && { dateModified: new Date(data._updatedAt).toISOString() }),
   }
@@ -126,23 +174,29 @@ export function generateArticleJsonLd(data: {
   datePublished?: string | null
   _updatedAt?: string | null
   author?: { title?: string | null; primaryJobTitle?: string | null } | null
+  jsonLd?: ArticleJsonLdOverrides | null
 }) {
   const articleUrl = data.url.startsWith('http') ? data.url : buildUrl(data.url)
+  const overrides = data.jsonLd
+  const headline = overrides?.headline || data.title
+  const description = overrides?.description || data.description
+  const authorName = overrides?.authorName || data.author?.title
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: data.title,
-    ...(data.description && { description: data.description }),
+    headline,
+    ...(description && { description }),
     url: articleUrl,
     mainEntityOfPage: articleUrl,
+    ...(overrides?.articleSection && { articleSection: overrides.articleSection }),
     ...(data.image?.asset?.url && { image: data.image.asset.url }),
     ...(data.datePublished && { datePublished: data.datePublished }),
     ...(data._updatedAt && { dateModified: new Date(data._updatedAt).toISOString() }),
-    ...(data.author?.title && {
+    ...(authorName && {
       author: {
         '@type': 'Person',
-        name: data.author.title,
-        ...(data.author.primaryJobTitle && { jobTitle: data.author.primaryJobTitle }),
+        name: authorName,
+        ...(data.author?.primaryJobTitle && { jobTitle: data.author.primaryJobTitle }),
       },
     }),
   }
@@ -157,22 +211,51 @@ export function generateEventJsonLd(data: {
   location?: string | null
   image?: { asset?: { url?: string | null } | null } | null
   _updatedAt?: string | null
+  jsonLd?: EventJsonLdOverrides | null
 }) {
   const eventUrl = data.url.startsWith('http') ? data.url : buildUrl(data.url)
-  return {
+  const overrides = data.jsonLd
+  const description = overrides?.description || data.description
+  const eventStatus = schemaOrgEnum(overrides?.eventStatus)
+  const eventAttendanceMode = schemaOrgEnum(overrides?.eventAttendanceMode)
+  const offersAvailability = schemaOrgEnum(overrides?.offersAvailability)
+
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: data.title,
-    ...(data.description && { description: data.description }),
+    ...(description && { description }),
     url: eventUrl,
     startDate: data.startDate,
     ...(data.endDate && { endDate: data.endDate }),
     ...(data.location && { location: { '@type': 'Place', name: data.location } }),
+    ...(eventStatus && { eventStatus }),
+    ...(eventAttendanceMode && { eventAttendanceMode }),
     ...(data.image?.asset?.url && {
       image: urlFor(data.image.asset as Parameters<typeof urlFor>[0]).width(1200).height(630).url(),
     }),
     ...(data._updatedAt && { dateModified: new Date(data._updatedAt).toISOString() }),
   }
+
+  if (overrides?.organizerName || overrides?.organizerUrl) {
+    schema.organizer = {
+      '@type': 'Organization',
+      ...(overrides.organizerName && { name: overrides.organizerName }),
+      ...(overrides.organizerUrl && { url: overrides.organizerUrl }),
+    }
+  }
+
+  if (overrides?.offersUrl || overrides?.offersPrice || offersAvailability) {
+    schema.offers = {
+      '@type': 'Offer',
+      ...(overrides?.offersUrl && { url: overrides.offersUrl }),
+      ...(overrides?.offersPrice && { price: overrides.offersPrice }),
+      ...(overrides?.offersPriceCurrency && { priceCurrency: overrides.offersPriceCurrency }),
+      ...(offersAvailability && { availability: offersAvailability }),
+    }
+  }
+
+  return schema
 }
 
 export function extractTextFromPortableText(content: unknown): string {
