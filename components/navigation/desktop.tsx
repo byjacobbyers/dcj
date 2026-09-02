@@ -50,7 +50,9 @@ export default function DesktopNav({ items }: DesktopNavProps) {
                 >
                   {item.title}
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="z-50 p-3">
+                {/* The nav sits at the viewport's right edge, so hang the panel
+                    from the trigger's right edge or it runs off screen. */}
+                <NavigationMenuContent className="left-auto right-0 z-50 p-3">
                   <ul
                     className={
                       item.display === 'cards'
