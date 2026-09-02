@@ -248,11 +248,11 @@
   }
 
   .content ul {
-    @apply text-body list-disc pl-6;
+    @apply text-body list-disc pl-10;
   }
 
   .content ol {
-    @apply text-body list-decimal pl-6;
+    @apply text-body list-decimal pl-10;
   }
 
   .content li {

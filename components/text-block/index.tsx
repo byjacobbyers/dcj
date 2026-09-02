@@ -37,7 +37,9 @@ export default function TextBlock({
     alignRaw === 'center' ? 'items-center' : alignRaw === 'right' ? 'items-end' : 'items-start'
 
   const body = (
-    <div className={cn('content text-balance text-sm!', isTexture && 'relative z-10 text-foreground')}>
+    // No text-balance here: it equalizes line lengths, which breaks long-form
+    // paragraphs early. Balance belongs on headings, not article copy.
+    <div className={cn('content text-sm!', isTexture && 'relative z-10 text-foreground')}>
       <NormalText content={content} />
     </div>
   )
