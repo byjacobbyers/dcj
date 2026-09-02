@@ -75,8 +75,26 @@ function LinkWithRouteMark({
   return anchor
 }
 
+/** Slugified heading id so in-page anchor links (`linkType: 'anchor'`) can target sections. */
+function headingId(value?: { children?: Array<{ text?: string }> }): string | undefined {
+  const text = (value?.children ?? []).map((c) => c.text ?? '').join('')
+  const slug = text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+  return slug || undefined
+}
+
+type HeadingProps = {
+  children?: ReactNode
+  value?: { children?: Array<{ text?: string }> }
+}
+
 export const portableTextComponents = {
   block: {
+    h2: ({ children, value }: HeadingProps) => <h2 id={headingId(value)}>{children}</h2>,
+    h3: ({ children, value }: HeadingProps) => <h3 id={headingId(value)}>{children}</h3>,
     large: ({ children }: { children?: ReactNode }) => (
       <p className="text-body-lg">{children}</p>
     ),
