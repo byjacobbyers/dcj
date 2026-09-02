@@ -90,6 +90,7 @@ export const fixtureMember: TeamMemberData = {
   _id: 'member-1',
   title: 'Alex Dancer',
   slug: 'alex-dancer',
+  image: fixtureImage,
   primaryJobTitle: 'Jam facilitator',
   secondaryJobTitle: 'Teacher',
   email: 'hello@denvercontactjam.org',

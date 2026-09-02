@@ -67,7 +67,10 @@ async function main() {
   })
 
   for (const [anchorId, schemaType] of SECTIONS) {
-    const root = page.locator(`#${anchorId}`)
+    // .first(): portable-text headings get slugified ids, which can collide
+    // with a chrome anchor id (e.g. a "Split scroll" h2 → #split-scroll).
+    // The SectionChrome wrapper renders first in DOM order.
+    const root = page.locator(`#${anchorId}`).first()
     await root.scrollIntoViewIfNeeded()
     await page.waitForTimeout(400)
 
