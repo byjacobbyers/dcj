@@ -1,5 +1,5 @@
-import type { RouteNavigationItems } from '@/types/components/route-navigation-type'
+import type { NavigationData } from '@/types/components/nav-type'
 
 export type HeaderProps = {
-  navigation?: RouteNavigationItems
+  navigation?: NavigationData
 }

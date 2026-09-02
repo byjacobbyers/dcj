@@ -20,6 +20,7 @@ import { Providers } from "@/components/providers"
 import OrganizationJsonLd from "@/components/organization-jsonld"
 import type { AnnouncementType } from "@/types/documents/announcement-type"
 import type { RouteNavigationItems } from "@/types/components/route-navigation-type"
+import type { NavigationData } from "@/types/components/nav-type"
 import type { SiteType } from "@/lib/seo"
 
 export const revalidate = 60
@@ -48,7 +49,7 @@ export default async function SiteLayout({
         // Generated query shapes are wider (null-able) than the hand-written
         // component contracts; bridge at the boundary like ohmni does.
         site: siteRes.data as SiteType | null,
-        headerNav: headerRes.data as RouteNavigationItems,
+        headerNav: headerRes.data as NavigationData,
         footerNav: footerRes.data as RouteNavigationItems,
       }
     } catch {

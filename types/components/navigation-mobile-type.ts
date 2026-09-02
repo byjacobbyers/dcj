@@ -1,6 +1,6 @@
-import type { BaseRouteType } from '@/types/objects/route-type'
+import type { NavigationData } from '@/types/components/nav-type'
 
 export type MobileNavProps = {
-  data: { items?: BaseRouteType[] }
+  data: NonNullable<NavigationData>
   closeMenu: () => void
 }

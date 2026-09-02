@@ -23,9 +23,10 @@ export async function fetchMarkdownDocument(type: MarkdownDocType, slug: string)
 }
 
 export async function fetchLlmsIndex(): Promise<string> {
+  type NavRow = { slug?: string | null; description?: string | null }
   const data = (await client.fetch(llmsIndexQuery)) as {
     site: { title?: string; summary?: string; homeDescription?: string } | null
-    nav: Array<{ slug?: string | null; description?: string | null }> | null
+    nav: Array<NavRow & { _type?: string; children?: NavRow[] | null }> | null
     pages: IndexInput['pages']
     events: IndexInput['events']
     posts: IndexInput['posts']
@@ -36,6 +37,8 @@ export async function fetchLlmsIndex(): Promise<string> {
       summary: data.site?.summary?.trim() || 'Contact improvisation jams and events in Denver.',
     },
     nav: (data.nav ?? [])
+      // Dropdown groups contribute their child links in place.
+      .flatMap((n) => (n._type === 'subNav' ? (n.children ?? []) : [n]))
       .filter((n) => n?.slug)
       .map((n) => ({ slug: n.slug as string, description: n.description ?? undefined })),
     // The home document has no SEO of its own; Site Settings carries it.

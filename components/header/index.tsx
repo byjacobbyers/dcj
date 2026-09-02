@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useCycle } from 'framer-motion'
-import Route from '@/components/route'
 import MenuButton from '@/components/header/menu-button'
 import MobileNav from '@/components/navigation/mobile'
+import DesktopNav from '@/components/navigation/desktop'
 import type { HeaderProps } from '@/types/components/header-type'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -76,17 +76,7 @@ export default function Header({ navigation }: HeaderProps) {
               </h1>
             </div>
           </Link>
-          <nav className="hidden lg:flex items-center gap-6 text-lg 2xl:text-2xl">
-            {navigation?.items?.map((item, i) => (
-              <Route
-                key={i}
-                data={item}
-                className="font-bold uppercase transition duration-200 ease-out hover:scale-110 motion-reduce:transition-none motion-reduce:hover:scale-100"
-              >
-                {item.title || 'Link'}
-              </Route>
-            ))}
-          </nav>
+          <DesktopNav items={navigation?.items} />
           <div className="flex lg:hidden">
             <MenuButton
               onClick={() => toggleDropdown()}

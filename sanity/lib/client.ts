@@ -24,6 +24,7 @@ const STEGA_LOGIC_FIELDS = new Set([
   'contentAlignment',
   'contentPosition',
   'contentLayout',
+  'display',
   'sectionPadding',
   'height',
   'imagesPerRow',

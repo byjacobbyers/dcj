@@ -5,8 +5,10 @@ import { groq } from 'next-sanity'
 export const llmsIndexQuery = groq`{
   "site": *[_type == "site"][0]{ title, "summary": coalesce(organizationJsonLd.description, seo.metaDesc), "homeDescription": seo.metaDesc },
   "nav": *[_type == "navigation" && title == "Header"][0].items[]{
+    _type,
     "slug": pageRoute->slug.current,
-    "description": titleAttr
+    "description": titleAttr,
+    "children": select(_type == 'subNav' => items[]{ "slug": route.pageRoute->slug.current, description })
   },
   "pages": *[_type == "page" && defined(slug.current) && seo.noIndex != true && !(_id in path("drafts.**"))] | order(title asc){
     "slug": slug.current, title, "description": seo.metaDesc

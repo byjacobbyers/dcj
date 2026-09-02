@@ -11,7 +11,7 @@ export default defineType({
     defineField({
       type: 'array',
       name: 'items',
-      of: [{ type: 'route' }],
+      of: [{ type: 'route' }, { type: 'subNav' }],
     }),
   ],
   preview: {

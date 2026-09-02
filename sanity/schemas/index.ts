@@ -39,6 +39,8 @@ import simpleText from './objects/simple-text-schema'
 import normalText from './objects/normal-text-schema'
 import buttonPair from './objects/button-pair-schema'
 import social from './objects/social-schema'
+import navLink from './objects/nav-link-schema'
+import subNav from './objects/sub-nav-schema'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -79,5 +81,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     normalText,
     buttonPair,
     social,
+    navLink,
+    subNav,
   ],
 }
