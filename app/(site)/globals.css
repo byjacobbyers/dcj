@@ -121,6 +121,13 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* Anchor jumps land below the sticky header with breathing room, instead of
+     the target heading disappearing behind the nav. --header-height is set by
+     the header component from its measured size. */
+  main [id] {
+    scroll-margin-top: calc(var(--header-height, 6rem) + 10rem);
+  }
   body {
     @apply bg-background text-foreground;
   }

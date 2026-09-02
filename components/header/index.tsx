@@ -21,7 +21,10 @@ export default function Header({ navigation }: HeaderProps) {
   useEffect(() => {
     const measure = () => {
       if (headerRef.current) {
-        setDimensions({ height: headerRef.current.offsetHeight })
+        const height = headerRef.current.offsetHeight
+        setDimensions({ height })
+        // Anchor targets read this to land below the sticky header.
+        document.documentElement.style.setProperty('--header-height', `${height}px`)
       }
     }
     measure()
