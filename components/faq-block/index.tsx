@@ -45,10 +45,12 @@ export default function FaqBlock({
           <Accordion type="single" collapsible defaultValue="faq-0" className="w-full">
             {faqs.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
-                <AccordionTrigger className="cursor-pointer">
+                {/* Question above answer in the type scale: h4 trigger over
+                    text-body content (via .content), like other item titles. */}
+                <AccordionTrigger className="cursor-pointer gap-4 text-left text-h4">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-left text-balance">
+                <AccordionContent className="text-left">
                   {faq.answer && Array.isArray(faq.answer) ? (
                     <div className="content">
                       <SimpleText content={faq.answer} />
