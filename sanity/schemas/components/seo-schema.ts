@@ -59,9 +59,10 @@ export default defineType({
           name: 'background',
           type: 'string',
           description: 'Surface for the generated image, from the site palette.',
-          initialValue: 'primary',
+          initialValue: 'wave',
           options: {
             list: [
+              { title: 'Wave (dark satin, default)', value: 'wave' },
               { title: 'Primary (dark)', value: 'primary' },
               { title: 'Secondary (light)', value: 'secondary' },
             ],

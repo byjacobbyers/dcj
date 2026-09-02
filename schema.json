@@ -108,6 +108,10 @@
             "of": [
               {
                 "type": "string",
+                "value": "wave"
+              },
+              {
+                "type": "string",
                 "value": "primary"
               },
               {

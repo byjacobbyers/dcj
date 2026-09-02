@@ -33,7 +33,7 @@ export type RouteUtm = {
 
 export type AutoShareImage = {
   heading?: SimpleText;
-  background?: "primary" | "secondary";
+  background?: "wave" | "primary" | "secondary";
 };
 
 export type EventJsonLd = {
@@ -3400,7 +3400,7 @@ export type OgRouteDataQueryResult = {
         seo: {
           metaTitle: string | null;
           ogImageHeading: SimpleText | null;
-          ogImageBackground: "primary" | "secondary" | null;
+          ogImageBackground: "primary" | "secondary" | "wave" | null;
           shareGraphic: {
             alt: string | null;
             crop: {
@@ -3429,7 +3429,7 @@ export type OgRouteDataQueryResult = {
           } | null;
           autoShareImage: {
             heading: SimpleText | null;
-            background: "primary" | "secondary" | null;
+            background: "primary" | "secondary" | "wave" | null;
           } | null;
         } | null;
       }
@@ -3438,7 +3438,7 @@ export type OgRouteDataQueryResult = {
         seo: {
           metaTitle: string | null;
           ogImageHeading: SimpleText | null;
-          ogImageBackground: "primary" | "secondary" | null;
+          ogImageBackground: "primary" | "secondary" | "wave" | null;
           shareGraphic: {
             alt: string | null;
             crop: {
@@ -3467,7 +3467,7 @@ export type OgRouteDataQueryResult = {
           } | null;
           autoShareImage: {
             heading: SimpleText | null;
-            background: "primary" | "secondary" | null;
+            background: "primary" | "secondary" | "wave" | null;
           } | null;
         } | null;
       }
@@ -3480,7 +3480,7 @@ export type OgRouteDataQueryResult = {
     seo: {
       metaTitle: string | null;
       ogImageHeading: SimpleText | null;
-      ogImageBackground: "primary" | "secondary" | null;
+      ogImageBackground: "primary" | "secondary" | "wave" | null;
       shareGraphic: {
         alt: string | null;
         crop: {
@@ -3509,7 +3509,7 @@ export type OgRouteDataQueryResult = {
       } | null;
       autoShareImage: {
         heading: SimpleText | null;
-        background: "primary" | "secondary" | null;
+        background: "primary" | "secondary" | "wave" | null;
       } | null;
     } | null;
   } | null;

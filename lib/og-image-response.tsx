@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og'
 import type { SanityImageSource } from '@sanity/image-url'
 import { loadOgFonts } from '@/lib/og-fonts'
 import { ogSurfaceColors, normalizeOgSurface } from '@/lib/og-palette'
+import { OG_WAVE_BG } from '@/lib/og-wave'
 import { hasPortableHeading, renderSimpleTextForOg } from '@/lib/og-simple-text'
 import { cleanStega } from '@/lib/stega'
 
@@ -77,7 +78,7 @@ export async function createOgImageResponse({
 }: CreateOgImageOptions): Promise<ImageResponse> {
   const siteLabel = resolveSiteLabel(site)
   const surface = normalizeOgSurface(
-    backgroundOverride ?? doc?.seo?.ogImageBackground ?? site?.seo?.ogImageBackground ?? 'primary'
+    backgroundOverride ?? doc?.seo?.ogImageBackground ?? site?.seo?.ogImageBackground ?? 'wave'
   )
   const colors = ogSurfaceColors(surface)
 
@@ -110,6 +111,16 @@ export async function createOgImageResponse({
           fontFamily: 'Roboto',
         }}
       >
+        {surface === 'wave' ? (
+          /* eslint-disable-next-line @next/next/no-img-element -- Satori background layer */
+          <img
+            src={OG_WAVE_BG}
+            alt=""
+            width={1200}
+            height={630}
+            style={{ position: 'absolute', top: 0, left: 0, width: 1200, height: 630 }}
+          />
+        ) : null}
         <div
           style={{
             flex: 1,
@@ -133,7 +144,17 @@ export async function createOgImageResponse({
             </div>
           )}
         </div>
-        <div style={{ fontSize: 39, fontWeight: 700, lineHeight: 1.15 }}>{siteLabel}</div>
+        {/* Wordmark line matches the site header: Major Mono Display, uppercase */}
+        <div
+          style={{
+            fontSize: 39,
+            fontWeight: 400,
+            lineHeight: 1.15,
+            fontFamily: 'Major Mono Display',
+          }}
+        >
+          {siteLabel.toUpperCase()}
+        </div>
       </div>
     ),
     {
