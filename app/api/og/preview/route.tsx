@@ -5,7 +5,9 @@ import { getOgSanityClient } from '@/sanity/lib/og-sanity-client'
 import { ogRouteDataQuery } from '@/sanity/queries/documents/og-route-query'
 import type { OgRouteDoc, OgRouteSite } from '@/lib/og-image-response'
 
-export const runtime = 'edge'
+// Node, not edge: @sanity/client's fetch layer constructs DOMException, which
+// Vercel's edge runtime doesn't expose as a constructor (every fetch threw).
+export const runtime = 'nodejs'
 
 const DOC_TYPES = ['page', 'event', 'post'] as const
 type DocType = (typeof DOC_TYPES)[number]
