@@ -10,6 +10,7 @@ export default defineType({
   groups: [
     { title: 'Page content', name: 'page', default: true },
     { title: 'SEO & Settings', name: 'seo' },
+    { title: 'JSON-LD', name: 'jsonLd' },
   ],
   fields: [
     defineField({
@@ -72,7 +73,7 @@ export default defineType({
       name: 'jsonLd',
       title: 'Page JSON-LD',
       type: 'pageJsonLd',
-      group: 'seo',
+      group: 'jsonLd',
       description:
         'Optional overrides for structured data. The base schema and FAQ blocks stay automatic.',
       options: { collapsible: true, collapsed: true },

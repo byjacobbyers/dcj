@@ -9,6 +9,7 @@ export default defineType({
   groups: [
     { title: 'Post Details', name: 'post', default: true },
     { title: 'SEO & Settings', name: 'seo' },
+    { title: 'JSON-LD', name: 'jsonLd' },
   ],
   fields: [
     defineField({
@@ -90,7 +91,7 @@ export default defineType({
       name: 'jsonLd',
       title: 'Article JSON-LD',
       type: 'articleJsonLd',
-      group: 'seo',
+      group: 'jsonLd',
       description:
         'Optional overrides for structured data. The base schema and FAQ blocks stay automatic.',
       options: { collapsible: true, collapsed: true },
