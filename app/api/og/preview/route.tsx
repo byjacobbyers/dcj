@@ -47,7 +47,8 @@ export async function POST(request: Request) {
   let data: { doc: OgRouteDoc | null; site: OgRouteSite | null }
   try {
     data = await getOgSanityClient().fetch(ogRouteDataQuery, { slug, docType })
-  } catch {
+  } catch (error) {
+    console.error('OG route: Sanity fetch failed', error)
     return new Response('Upstream error', { status: 502 })
   }
 
