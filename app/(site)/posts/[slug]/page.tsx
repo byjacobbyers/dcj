@@ -6,7 +6,6 @@ import { notFound } from "next/navigation"
 import { postsQuery, postQuery } from "@/sanity/queries/documents/post-query"
 import { SiteQuery } from "@/sanity/queries/documents/site-query"
 import PostSingle from "@/components/post-single"
-import Script from "next/script"
 import {
   generateArticleJsonLd,
   generateMetadata as generateSeoMetadata,
@@ -45,7 +44,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
       post.excerpt ?? undefined,
       {
         url: `/posts/${resolved.slug}`,
-        titleSuffix: ' :: Denver Contact Jam',
+        titleSuffix: ' | Denver Contact Jam',
         ogDocument: { slug: resolved.slug, type: 'post' },
       }
     )
@@ -78,7 +77,7 @@ export default async function PostPage({ params }: { params: Promise<QueryParams
 
     return (
       <>
-        <Script
+        <script
           id="post-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

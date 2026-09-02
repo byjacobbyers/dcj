@@ -44,9 +44,12 @@ const AccordionContent = React.forwardRef<
   React.ComponentRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
+  // forceMount + closed:hidden: collapsed answers must ship in the server HTML
+  // for SEO; Radix otherwise unmounts them until first open.
   <AccordionPrimitive.Content
     ref={ref}
-    className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    forceMount
+    className="overflow-hidden text-sm transition-all data-[state=closed]:hidden data-[state=open]:animate-accordion-down"
     {...props}
   >
     <div className={cn('pb-4 pt-0', className)}>{children}</div>

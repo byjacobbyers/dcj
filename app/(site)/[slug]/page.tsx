@@ -7,7 +7,6 @@ import { pagesQuery, pageQuery } from "@/sanity/queries/documents/page-query"
 import { EXCLUDED_PAGE_SLUGS } from "@/sanity/queries/documents/sitemap-queries"
 import { SiteQuery } from "@/sanity/queries/documents/site-query"
 import Page from "@/components/page-single"
-import Script from "next/script"
 import {
   generateWebPageJsonLd,
   faqJsonLdFromSections,
@@ -55,7 +54,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
       undefined,
       {
         url: isHome ? '/' : `/${slug}`,
-        titleSuffix: isHome ? undefined : ' :: Denver Contact Jam',
+        titleSuffix: isHome ? undefined : ' | Denver Contact Jam',
         ogDocument: isHome ? undefined : { slug, type: 'page' },
         siteTitle: global?.title ?? undefined,
       }
@@ -95,7 +94,7 @@ export default async function SinglePage({ params }: { params: Promise<QueryPara
     return (
       <>
         {schemas.length > 0 && (
-          <Script id="page-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }} />
+          <script id="page-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }} />
         )}
         <Page page={page} key={page._id} />
       </>

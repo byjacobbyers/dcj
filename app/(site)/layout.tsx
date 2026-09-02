@@ -109,7 +109,7 @@ export default async function SiteLayout({
             </Template>
           </div>
           <div className="z-50 flex shrink-0 flex-col">
-            <Footer navigation={footerNav} />
+            <Footer navigation={footerNav} site={site} />
           </div>
         </SmoothScrollProvider>
       </Providers>

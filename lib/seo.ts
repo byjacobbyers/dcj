@@ -280,6 +280,8 @@ export type SiteType = {
   addressRegion?: string
   postalCode?: string
   addressCountry?: string
+  latitude?: number
+  longitude?: number
   sameAs?: string[]
   seo?: { metaDesc?: string }
   organizationJsonLd?: {
@@ -303,6 +305,9 @@ export function generateOrganizationJsonLd(site: SiteType | null) {
       url: baseUrl,
     }
   }
+  // LocalBusiness alongside Organization: the jam has a Google Business Profile
+  // with a fixed address/hours, and priceRange is only valid on LocalBusiness.
+  // (DanceGroup would misdescribe it — that's for performing companies.)
   const org = site.organizationJsonLd
   const logoUrl = org?.logo?.asset?.url
     ? (urlFor(org.logo.asset as Parameters<typeof urlFor>[0]).width(600).height(60).url())
@@ -313,7 +318,7 @@ export function generateOrganizationJsonLd(site: SiteType | null) {
 
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': ['Organization', 'LocalBusiness'],
     name,
     ...(org?.legalName && { legalName: org.legalName }),
     ...(org?.description && { description: org.description }),
@@ -344,11 +349,91 @@ export function generateOrganizationJsonLd(site: SiteType | null) {
     }
   }
 
+  if (typeof site.latitude === 'number' && typeof site.longitude === 'number') {
+    ;(schema as Record<string, unknown>).geo = {
+      '@type': 'GeoCoordinates',
+      latitude: site.latitude,
+      longitude: site.longitude,
+    }
+  }
+
   if (Array.isArray(site.sameAs) && site.sameAs.length > 0) {
     ;(schema as Record<string, unknown>).sameAs = site.sameAs.filter(Boolean)
   }
 
   return schema
+}
+
+/**
+ * Weekly-jam facts that don't live in the CMS. The postal address and geo come
+ * from the Sanity site document (single source with the Organization schema and
+ * the footer), so only the recurrence itself is code.
+ */
+export const JAM_VENUE_NAME = 'Wiggelruhm'
+const JAM_SCHEDULE = {
+  '@type': 'Schedule',
+  byDay: 'https://schema.org/Monday',
+  startTime: '18:00',
+  endTime: '20:00',
+  scheduleTimezone: 'America/Denver',
+  repeatFrequency: 'P1W',
+}
+
+function sitePostalAddress(site: SiteType | null) {
+  if (!site?.address) return undefined
+  return {
+    '@type': 'PostalAddress',
+    streetAddress: site.address,
+    ...(site.addressLocality && { addressLocality: site.addressLocality }),
+    ...(site.addressRegion && { addressRegion: site.addressRegion }),
+    ...(site.postalCode && { postalCode: site.postalCode }),
+    ...(site.addressCountry && { addressCountry: site.addressCountry }),
+  }
+}
+
+/** Recurring-Event JSON-LD for the weekly jam (home page). */
+export function generateJamEventJsonLd(site: SiteType | null) {
+  const orgName = site?.organizationJsonLd?.name || site?.title || 'Denver Contact Jam'
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: 'Denver Contact Jam (weekly contact improvisation jam)',
+    description:
+      'A community-led contact improvisation jam in Denver, Colorado. Every Monday, 6 to 8 PM. All experience levels welcome; pay what you can, $10 to $20, and no one is turned away.',
+    url: baseUrl,
+    eventSchedule: JAM_SCHEDULE,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    isAccessibleForFree: false,
+    location: {
+      '@type': 'Place',
+      name: JAM_VENUE_NAME,
+      ...(sitePostalAddress(site) && { address: sitePostalAddress(site) }),
+      ...(typeof site?.latitude === 'number' &&
+        typeof site?.longitude === 'number' && {
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: site.latitude,
+            longitude: site.longitude,
+          },
+        }),
+    },
+    offers: {
+      '@type': 'AggregateOffer',
+      lowPrice: 10,
+      highPrice: 20,
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      url: baseUrl,
+      description: 'Pay what you can. No one is turned away.',
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: orgName,
+      url: baseUrl,
+      ...(site?.email && { email: site.email }),
+    },
+  }
 }
 
 export function generateWebSiteJsonLd(site: SiteType | null) {

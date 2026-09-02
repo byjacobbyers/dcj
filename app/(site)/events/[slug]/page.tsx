@@ -6,7 +6,6 @@ import { notFound } from "next/navigation"
 import { eventsQuery, eventQuery } from "@/sanity/queries/documents/event-query"
 import { SiteQuery } from "@/sanity/queries/documents/site-query"
 import EventSingle from "@/components/event-single"
-import Script from "next/script"
 import {
   generateEventJsonLd,
   faqJsonLdFromSections,
@@ -47,7 +46,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
       'Join us for this event.',
       {
         url: `/events/${resolved.slug}`,
-        titleSuffix: ' :: Denver Contact Jam',
+        titleSuffix: ' | Denver Contact Jam',
         ogDocument: { slug: resolved.slug, type: 'event' },
       }
     )
@@ -101,7 +100,7 @@ export default async function EventPage({ params }: { params: Promise<QueryParam
     return (
       <>
         {schemas.length > 0 && (
-          <Script id="event-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }} />
+          <script id="event-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }} />
         )}
         <EventSingle event={event as EventSingleData} key={event._id} />
       </>

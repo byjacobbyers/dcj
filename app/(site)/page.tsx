@@ -4,12 +4,13 @@ import { notFound } from "next/navigation"
 import { pageQuery } from "@/sanity/queries/documents/page-query"
 import { SiteQuery } from "@/sanity/queries/documents/site-query"
 import Page from "@/components/page-single"
-import Script from "next/script"
 import {
   generateWebPageJsonLd,
   faqJsonLdFromSections,
+  generateJamEventJsonLd,
   generateMetadata as generateSeoMetadata,
   type SeoType,
+  type SiteType,
 } from "@/lib/seo"
 import type { PageQueryResult, SiteQueryResult } from "@/sanity.types"
 
@@ -38,15 +39,17 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 export default async function Home() {
   try {
-    const { data } = await sanityFetch({
-      query: pageQuery,
-      params: { slug: "home" },
-    })
+    const [{ data }, { data: siteData }] = await Promise.all([
+      sanityFetch({ query: pageQuery, params: { slug: "home" } }),
+      sanityFetch({ query: SiteQuery }),
+    ])
     const page = data as PageQueryResult
+    const site = siteData as SiteQueryResult
 
     if (!page) return notFound()
 
     const schemas = []
+    schemas.push(generateJamEventJsonLd(site as SiteType | null))
     const pageSeo = (page.seo ?? undefined) as SeoType | undefined
     schemas.push(generateWebPageJsonLd({
       title: page.title,
@@ -63,7 +66,7 @@ export default async function Home() {
     return (
       <>
         {schemas.length > 0 && (
-          <Script id="home-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }} />
+          <script id="home-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }} />
         )}
         <Page page={page} key={page._id} />
       </>
