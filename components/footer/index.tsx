@@ -1,16 +1,19 @@
 import Route from '@/components/route'
-import { JAM_VENUE_NAME } from '@/lib/seo'
+import { GBP_PROFILE_URL, JAM_VENUE_NAME } from '@/lib/seo'
 import type { FooterProps } from '@/types/components/footer-type'
 
 export default function Footer({ navigation, site }: FooterProps) {
   const year = new Date().getFullYear()
 
-  const addressParts = [
-    site?.address,
+  // Format matches the Google Business Profile listing character for character:
+  // "125 S Sherman St, Denver, CO 80209" (no comma before the zip).
+  const cityLine = [
     [site?.addressLocality, site?.addressRegion].filter(Boolean).join(', '),
     site?.postalCode,
-  ].filter(Boolean)
-  const address = addressParts.join(', ')
+  ]
+    .filter(Boolean)
+    .join(' ')
+  const address = [site?.address, cityLine].filter(Boolean).join(', ')
 
   return (
     <footer className="px-4 py-6">
@@ -21,7 +24,14 @@ export default function Footer({ navigation, site }: FooterProps) {
           </small>
           {address ? (
             <small className="text-sm text-muted-foreground">
-              {JAM_VENUE_NAME}, {address}
+              <a
+                href={GBP_PROFILE_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:opacity-80"
+              >
+                {JAM_VENUE_NAME}, {address}
+              </a>
             </small>
           ) : null}
           {site?.email ? (

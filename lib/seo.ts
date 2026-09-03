@@ -370,6 +370,8 @@ export function generateOrganizationJsonLd(site: SiteType | null) {
  * the footer), so only the recurrence itself is code.
  */
 export const JAM_VENUE_NAME = 'Wiggelruhm'
+/** Google Business Profile share link (entity /g/11yrxrgkhf). */
+export const GBP_PROFILE_URL = 'https://share.google/9eQ78VOLIZARJFI9i'
 const JAM_SCHEDULE = {
   '@type': 'Schedule',
   byDay: 'https://schema.org/Monday',
