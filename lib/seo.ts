@@ -403,7 +403,11 @@ export function generateJamEventJsonLd(site: SiteType | null) {
     description:
       'A community-led contact improvisation jam in Denver, Colorado. Every Monday, 6 to 8 PM. All experience levels welcome; pay what you can, $10 to $20, and no one is turned away.',
     url: baseUrl,
-    eventSchedule: JAM_SCHEDULE,
+    // Google requires startDate even for schedule-based recurring events;
+    // the jam has run weekly since April 1, 2025 (no planned end).
+    startDate: '2025-04-01T18:00:00-06:00',
+    eventSchedule: { ...JAM_SCHEDULE, startDate: '2025-04-01' },
+    image: [buildUrl('/api/og?slug=home&type=page')],
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     eventStatus: 'https://schema.org/EventScheduled',
     isAccessibleForFree: false,
