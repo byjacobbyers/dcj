@@ -44,15 +44,18 @@ const AccordionContent = React.forwardRef<
   React.ComponentRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  // forceMount + closed:hidden: collapsed answers must ship in the server HTML
-  // for SEO; Radix otherwise unmounts them until first open.
-  <AccordionPrimitive.Content
-    ref={ref}
-    forceMount
-    className="overflow-hidden text-sm transition-all data-[state=closed]:hidden data-[state=open]:animate-accordion-down"
-    {...props}
-  >
-    <div className={cn('pb-4 pt-0', className)}>{children}</div>
+  // forceMount: collapsed answers must ship in the server HTML for SEO; Radix
+  // otherwise unmounts them until first open. `block` overrides the UA
+  // display:none from the `hidden` attribute Radix sets while closed. The
+  // animated grid-rows collapse lives on the inner wrapper because Radix
+  // zeroes transition durations inline on this node during measurement;
+  // `invisible` keeps closed content out of the a11y tree and focus order.
+  <AccordionPrimitive.Content ref={ref} forceMount className="group block text-sm" {...props}>
+    <div className="invisible grid grid-rows-[0fr] [transition:grid-template-rows_200ms_ease-out,visibility_200ms] group-data-[state=open]:visible group-data-[state=open]:grid-rows-[1fr] motion-reduce:[transition:none]">
+      <div className="min-h-0 overflow-hidden">
+        <div className={cn('pb-4 pt-0', className)}>{children}</div>
+      </div>
+    </div>
   </AccordionPrimitive.Content>
 ))
 AccordionContent.displayName = AccordionPrimitive.Content.displayName
