@@ -1,8 +1,9 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+// CSS animation, not framer-motion: the motion version shipped opacity:0 in
+// the server HTML, hiding the whole page until hydration and gating LCP on
+// the JS bundle. Next still remounts templates per navigation, so the fade
+// replays on client-side route changes exactly as before.
 export default function Template({
   children,
   className,
@@ -11,13 +12,8 @@ export default function Template({
   className?: string;
 }) {
   return (
-    <motion.div
-      initial={{ y: 0, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ ease: "easeInOut", duration: 0.75 }}
-      className={cn('flex min-h-0 min-w-0 flex-1 flex-col', className)}
-    >
+    <div className={cn('page-fade-in flex min-h-0 min-w-0 flex-1 flex-col', className)}>
       {children}
-    </motion.div>
+    </div>
   );
 }

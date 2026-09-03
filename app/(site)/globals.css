@@ -119,6 +119,24 @@
   }
 }
 
+/* Page-load/route-change fade (see app/(site)/template.tsx). CSS so the page
+   paints immediately instead of waiting for hydration. */
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.page-fade-in {
+  animation: page-fade-in 0.75s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade-in {
+    animation: none;
+  }
+}
+
 /* Reduced heading sizes for mobile (below md breakpoint) */
 @media (max-width: 767px) {
   :root {
