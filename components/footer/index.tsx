@@ -29,7 +29,7 @@ export default function Footer({ navigation, site }: FooterProps) {
 
   return (
     <footer className="px-4 py-6">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex items-end justify-between flex-wrap gap-4">
         <div className="flex flex-col gap-1">
           <small className="text-sm">
             © {year} Denver Contact Jam. All rights reserved.
