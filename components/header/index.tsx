@@ -107,6 +107,9 @@ export default function Header({ navigation }: HeaderProps) {
         style={{ top: dimensions.height }}
         className={`fixed inset-x-0 bottom-0 z-40 flex w-full flex-col items-center overflow-y-auto overscroll-contain bg-background px-5 text-center xl:hidden ${!isOpen ? 'pointer-events-none' : ''}`}
         aria-hidden={!isOpen}
+        // inert pairs with aria-hidden: without it the closed drawer's links
+        // stay keyboard-focusable (Lighthouse aria-hidden-focus)
+        inert={!isOpen}
       >
         {navigation && <MobileNav data={navigation} closeMenu={closeMenu} />}
       </motion.div>
