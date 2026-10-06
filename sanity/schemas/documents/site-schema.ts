@@ -9,6 +9,7 @@ export default defineType({
     { name: 'seoDefaults', title: 'SEO Defaults' },
     { name: 'socialLinks', title: 'Social Links' },
     { name: 'jsonLd', title: 'JSON-LD' },
+    { name: 'signIn', title: 'Sign-in' },
   ],
   fields: [
     defineField({ name: 'title', title: 'Site Title', type: 'string', group: 'general' }),
@@ -82,6 +83,29 @@ export default defineType({
         { title: 'Telephone', name: 'telephone', type: 'string' },
         { title: 'Price Range', name: 'priceRange', type: 'string', description: 'e.g., $$, $$$' },
       ],
+    }),
+    defineField({
+      name: 'guidelinesPage',
+      title: 'Guidelines Page',
+      type: 'reference',
+      to: [{ type: 'page' }],
+      description: 'The page people agree to when they sign in at the jam.',
+      group: 'signIn',
+    }),
+    defineField({
+      name: 'guidelinesVersion',
+      title: 'Guidelines Version Date',
+      type: 'date',
+      description:
+        'Change this when you update the guidelines in a way people should re-read. Everyone whose last agreement is older than this date has the guidelines box unchecked at their next sign-in. Editing the page alone (e.g. fixing a typo) does not.',
+      group: 'signIn',
+    }),
+    defineField({
+      name: 'guidelinesChanges',
+      title: 'What Changed',
+      type: 'simpleText',
+      description: 'A short note on what changed in this version. Used in the guidelines update email.',
+      group: 'signIn',
     }),
   ],
   preview: {

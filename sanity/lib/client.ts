@@ -25,6 +25,8 @@ const STEGA_LOGIC_FIELDS = new Set([
   'contentPosition',
   'contentLayout',
   'display',
+  // Compared against the version each sign-in agreed to.
+  'guidelinesVersion',
   'sectionPadding',
   'height',
   'imagesPerRow',

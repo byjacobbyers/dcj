@@ -1,11 +1,19 @@
 import PageBackdrop from '@/components/page-backdrop'
+import { parseVersionDate } from '@/lib/signin'
+import type { SignInSettingsQueryResult } from '@/sanity.types'
+import { sanityFetch } from '@/sanity/lib/live'
+import { SignInSettingsQuery } from '@/sanity/queries/documents/sign-in-query'
 import SignInForm from './sign-in-form'
 
 export const metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function SignInPage() {
+export default async function SignInPage() {
+  const { data } = await sanityFetch({ query: SignInSettingsQuery, stega: false })
+  const settings = data as SignInSettingsQueryResult
+  const guidelinesVersion = parseVersionDate(settings?.guidelinesVersion)
+
   return (
     <div className="relative flex w-full min-h-0 flex-1 flex-col items-center overflow-hidden text-foreground">
       <PageBackdrop />
@@ -26,7 +34,7 @@ export default function SignInPage() {
                 </p>
               </div>
 
-              <SignInForm />
+              <SignInForm guidelinesVersion={guidelinesVersion} />
             </div>
           </div>
         </section>
