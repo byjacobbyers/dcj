@@ -58,6 +58,15 @@ export default function SignInForm({ guidelinesVersion }: { guidelinesVersion: s
 
   const matchingEmails = matches.map((match) => match.email)
   const currentMatch = matches.find((match) => match.email === normalizeEmail(email))
+  // Highlights the submit button once everything required is filled in.
+  const isComplete =
+    firstName.trim() !== '' &&
+    lastName.trim() !== '' &&
+    isValidEmail(email.trim()) &&
+    agreedToGuidelines &&
+    paymentMethod !== '' &&
+    (!paymentNeedsAmount(paymentMethod) || amount !== null)
+
   const guidelinesUpdatedSinceLastVisit = Boolean(
     currentMatch?.guidelinesVersion &&
       !hasAgreedToCurrentVersion(currentMatch.guidelinesVersion, guidelinesVersion)
@@ -431,7 +440,16 @@ export default function SignInForm({ guidelinesVersion }: { guidelinesVersion: s
             </div>
           ) : null}
 
-          <Button type="submit" size="lg" className="min-h-16 w-full text-xl 2xl:text-3xl hover:cursor-pointer hover:text-background" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            size="lg"
+            variant={isComplete ? 'default' : 'outline'}
+            className={cn(
+              'min-h-16 w-full text-xl 2xl:text-3xl hover:cursor-pointer',
+              isComplete ? 'hover:text-background' : 'text-muted-foreground'
+            )}
+            disabled={isSubmitting}
+          >
             {isSubmitting ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
