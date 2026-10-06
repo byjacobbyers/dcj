@@ -762,6 +762,9 @@ export type Site = {
     telephone?: string;
     priceRange?: string;
   };
+  guidelinesPage?: PageReference;
+  guidelinesVersion?: string;
+  guidelinesChanges?: SimpleText;
 };
 
 export type Page = {
@@ -5890,6 +5893,13 @@ export type PostQueryResult = {
         markDefs: null;
       }
   > | null;
+} | null;
+
+// Source: sanity/queries/documents/sign-in-query.ts
+// Variable: SignInSettingsQuery
+// Query: *[_type == "site"][0] {  guidelinesVersion}
+export type SignInSettingsQueryResult = {
+  guidelinesVersion: string | null;
 } | null;
 
 // Source: sanity/queries/documents/site-query.ts

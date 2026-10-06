@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -130,6 +131,13 @@ export default function DesignComponentsPage() {
             <Label htmlFor="design-message">Message</Label>
             <Textarea id="design-message" placeholder="Tell us a bit about yourself…" />
           </div>
+        </div>
+      </GallerySection>
+
+      <GallerySection title="Checkbox">
+        <div className="flex items-center gap-3">
+          <Checkbox id="design-checkbox" defaultChecked />
+          <Label htmlFor="design-checkbox">I have read the jam guidelines</Label>
         </div>
       </GallerySection>
 
