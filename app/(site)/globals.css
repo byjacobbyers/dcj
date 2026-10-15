@@ -141,8 +141,11 @@
 @media (max-width: 767px) {
   :root {
     --type-display-size: 3.5rem;
-    --type-h1-size: 3rem;
-    --type-h2-size: 2.5rem;
+    /* Fluid so a single long word ("IMPROVISATION" in Major Mono Display,
+       ~0.72em per glyph) fits inside a 375px viewport with the px-5 gutters.
+       Both reach their old fixed size at ~533px; h2 keeps its 5/6 ratio to h1. */
+    --type-h1-size: clamp(1.75rem, 9vw, 3rem);
+    --type-h2-size: clamp(1.5rem, 7.5vw, 2.5rem);
     --type-h3-size: 2rem;
     --type-h4-size: 1.75rem;
     --type-body-lg-size: 1.75rem;
@@ -169,6 +172,20 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Last-resort guard against horizontal scroll. Not the fix: headings below
+     are sized to fit. `clip` rather than `hidden` so html/body don't become
+     scroll containers, which would break the sticky header. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  /* A single word too long for the line may break instead of overflowing */
+  h1,
+  h2 {
+    overflow-wrap: anywhere;
   }
 
   /* Solid site header unless the page uses the Silk full-viewport backdrop */
