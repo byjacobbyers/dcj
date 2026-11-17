@@ -55,15 +55,21 @@ export default function Footer({ navigation, site }: FooterProps) {
           ) : null}
         </div>
         <div className="flex items-center gap-6">
-          <nav className="flex items-center gap-6">
-            {navigation?.items?.map((item, i) => (
-              <Route key={i} data={item} className="text-sm hover:opacity-80">
-                {item.title || 'Link'}
-              </Route>
-            ))}
-          </nav>
+          {/* Only when there are links: an empty nav still takes the gap and
+              pushes the icons off the left edge on mobile. */}
+          {navigation?.items?.length ? (
+            <nav className="flex items-center gap-6">
+              {navigation.items.map((item, i) => (
+                <Route key={i} data={item} className="text-sm hover:opacity-80">
+                  {item.title || 'Link'}
+                </Route>
+              ))}
+            </nav>
+          ) : null}
           {socials.length > 0 ? (
-            <div className="flex items-center gap-3">
+            // Mobile: 44px tap targets around 24px icons; the negative margin
+            // lines the first glyph up with the text above. Desktop as before.
+            <div className="-mx-2.5 flex items-center gap-1 md:mx-0 md:gap-3">
               {socials.map(({ url, label, Icon }) => (
                 <a
                   key={label}
@@ -71,9 +77,9 @@ export default function Footer({ navigation, site }: FooterProps) {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={label}
-                  className="hover:opacity-80"
+                  className="inline-flex size-11 items-center justify-center hover:opacity-80 md:size-auto"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="size-6 md:size-4" />
                 </a>
               ))}
             </div>
