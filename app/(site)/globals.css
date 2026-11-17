@@ -175,11 +175,13 @@
   }
 
   /* Last-resort guard against horizontal scroll. Not the fix: headings below
-     are sized to fit. `clip` rather than `hidden` so html/body don't become
-     scroll containers, which would break the sticky header. */
-  html,
+     are sized to fit. Body only, and never on html: while html stays
+     `visible`, body's overflow is applied to the viewport instead of making
+     body a scroll container. With html set, the mobile menu's
+     `body.style.overflow = 'hidden'` made body scroll on its own and the
+     sticky header jumped off-screen when the menu opened mid-page. */
   body {
-    overflow-x: clip;
+    overflow-x: hidden;
   }
 
   /* A single word too long for the line may break instead of overflowing */
