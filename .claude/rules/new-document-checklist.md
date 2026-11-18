@@ -6,7 +6,7 @@ The block-level version of this lives in `new-section-checklist.md`. This is the
 2. **Studio structure** — `sanity/structure/*-structure.ts`, added to the list in `structure/index.ts`. Otherwise editors cannot find it.
 3. **Query** — `sanity/queries/documents/*-query.ts` using `defineQuery`. Reuse existing fragments (`sectionsQuery`, `imageQuery`, `routeQuery`) rather than re-projecting; fragments stay `groq` + `// @sanity-typegen-ignore`.
 4. **Types** — run `pnpm typegen`, commit `schema.json` + `sanity.types.ts`, and cast fetch results (`.data as XQueryResult`) the way `app/(site)/[slug]/page.tsx` does.
-5. **Revalidation** — add a `case` to the `_type` switch in `app/api/revalidate/path/route.ts`. Without it a publish falls through to the generic `/` bust and the new route never updates.
+5. **Revalidation** — add a `case` to `getRevalidateTargets` in `lib/revalidate-targets.ts` (plus a test). Without it a publish falls through to the generic `/` bust and the new route never updates. A type the site layout renders (shown on every page) goes in `LAYOUT_TYPES` instead. The Sanity webhook calls `/api/revalidate/path` on every publish.
 6. **Presentation** — a `locations` resolver entry in `sanity.config.ts` so the Studio can jump to the page.
 7. **Route** — if it needs one; `sitemap.ts` and (for readable content) the llms surfaces (`ai-readability.md`).
 
