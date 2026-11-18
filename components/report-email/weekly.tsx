@@ -5,8 +5,9 @@ import {
   REPORT_METHODS,
   type JamSummary,
   type PeriodTotals,
+  type RosterEntry,
 } from '@/lib/reports/summarize'
-import { DataTable, EmailShell, METHOD_COLORS, Note, PLEDGE_NOTE, SectionTitle, StatRow } from './shared'
+import { DataTable, EmailShell, INK, METHOD_COLORS, Note, PLEDGE_NOTE, SectionTitle, StatRow } from './shared'
 
 export type WeeklyReportData = {
   period: Period
@@ -21,6 +22,13 @@ export function weeklySubject(data: WeeklyReportData): string {
   if (jams.length === 0) return `Weekly jam report: no sign-ins (week of ${formatLongDate(data.period.start)})`
   const when = jams.length === 1 ? formatJamDate(jams[0].date) : `week of ${formatLongDate(data.period.start)}`
   return `Weekly jam report: ${totals.checkins} people, ${formatMoney(totals.pledged)} pledged (${when})`
+}
+
+const methodLabel = (entry: RosterEntry) => REPORT_METHODS.find((m) => m.key === entry.method)!.label
+
+function rosterAmount(entry: RosterEntry): string {
+  if (entry.method === 'work_trade' || entry.method === 'none') return '–'
+  return entry.amount == null ? 'not recorded' : formatMoney(entry.amount)
 }
 
 const weekRange = (p: Period) => `${formatLongDate(p.start)} – ${formatLongDate(addDays(p.end, -1))}`
@@ -45,7 +53,6 @@ export function WeeklyReportEmail(data: WeeklyReportData) {
   }
 
   const methods = REPORT_METHODS.filter((m) => m.key !== 'none' || totals.byMethod.none.checkins > 0)
-  const firstTimers = jams.flatMap((j) => j.firstTimers)
 
   return (
     <EmailShell
@@ -93,10 +100,27 @@ export function WeeklyReportEmail(data: WeeklyReportData) {
         </>
       ) : null}
 
-      <SectionTitle>First-timers</SectionTitle>
-      <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6 }}>
-        {firstTimers.length ? firstTimers.join(', ') : 'None this week.'}
-      </p>
+      {jams.map((jam) => (
+        <div key={jam.date}>
+          <SectionTitle>{jams.length === 1 ? 'Who signed in' : `Who signed in: ${formatJamDate(jam.date)}`}</SectionTitle>
+          <DataTable
+            head={['Name', 'Paid with', 'Amount']}
+            rows={jam.roster.map((entry, i) => ({
+              key: `${entry.name}-${i}`,
+              swatch: METHOD_COLORS[entry.method],
+              cells: [
+                <>
+                  {entry.name}
+                  {entry.firstTime ? <span style={{ color: INK.muted, fontSize: 12 }}> · first time</span> : null}
+                </>,
+                methodLabel(entry),
+                rosterAmount(entry),
+              ],
+            }))}
+            foot={[`${jam.roster.length} sign-in${jam.roster.length === 1 ? '' : 's'}`, '', formatMoney(jam.pledged)]}
+          />
+        </div>
+      ))}
 
       <Note>
         {PLEDGE_NOTE}
@@ -121,8 +145,13 @@ export function weeklyText(data: WeeklyReportData): string {
     ...REPORT_METHODS.filter((m) => totals.byMethod[m.key].checkins > 0).map(
       (m) => `${m.label}: ${totals.byMethod[m.key].checkins} sign-ins, ${formatMoney(totals.byMethod[m.key].pledged)}`
     ),
-    '',
-    `First-timers: ${jams.flatMap((j) => j.firstTimers).join(', ') || 'none'}`,
+    ...jams.flatMap((jam) => [
+      '',
+      `Who signed in, ${formatJamDate(jam.date)}:`,
+      ...jam.roster.map(
+        (e) => `- ${e.name}${e.firstTime ? ' (first time)' : ''}: ${methodLabel(e)}, ${rosterAmount(e)}`
+      ),
+    ]),
     '',
     PLEDGE_NOTE
   )

@@ -60,6 +60,12 @@ describe('summarizeJams', () => {
     expect(monday.pledged).toBe(15 + 10 + 15)
     expect(monday.byMethod.cash).toEqual({ checkins: 3, pledged: 40 })
     expect(monday.byMethod.work_trade).toEqual({ checkins: 1, pledged: 0 })
+    expect(monday.roster).toEqual([
+      { name: 'Ada Lovelace', method: 'cash', amount: 15, firstTime: false },
+      { name: 'Ada Lovelace', method: 'cash', amount: 10, firstTime: false },
+      { name: 'Ada Lovelace', method: 'work_trade', amount: null, firstTime: false },
+      { name: 'Bo Diddley', method: 'cash', amount: 15, firstTime: true },
+    ])
   })
 })
 

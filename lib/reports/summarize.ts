@@ -31,12 +31,21 @@ export type SigninRow = {
 
 export type MethodTotals = Record<ReportMethod, { checkins: number; pledged: number }>
 
+export type RosterEntry = {
+  name: string
+  method: ReportMethod
+  amount: number | null
+  firstTime: boolean
+}
+
 export type JamSummary = {
   date: string
   attendance: number
   firstTimers: string[]
   pledged: number
   byMethod: MethodTotals
+  /** Every sign-in that night, by name. A double sign-in appears twice, so the amounts add up. */
+  roster: RosterEntry[]
 }
 
 export type PeriodTotals = {
@@ -103,6 +112,14 @@ export function summarizeJams(rows: SigninRow[]): JamSummary[] {
       firstTimers: [...firstTimers.values()].sort((a, b) => a.localeCompare(b)),
       pledged,
       byMethod,
+      roster: dayRows
+        .map((r) => ({
+          name: fullName(r),
+          method: toMethod(r.paymentMethod),
+          amount: r.amount,
+          firstTime: r.firstDate === date,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
     }
   })
 }
