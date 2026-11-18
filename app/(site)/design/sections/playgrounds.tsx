@@ -13,6 +13,7 @@ import GalleryBlock from '@/components/gallery-block'
 import HeroBlock from '@/components/hero-block'
 import ImageBlock from '@/components/image-block'
 import PostsBlock from '@/components/posts-block/index'
+import EventsBlock from '@/components/events-block/index'
 import SpacerBlock from '@/components/spacer-block'
 import SplitScrollBlock from '@/components/split-scroll-block'
 import TeamMemberBlock from '@/components/team-member-block'
@@ -32,6 +33,7 @@ import {
   fixtureImage,
   fixtureMember,
   fixturePosts,
+  fixtureEvents,
   fixtureVimeoUrl,
   pt,
   ptBlocks,
@@ -733,6 +735,49 @@ export function PostsPlayground() {
           title="Posts"
           count={count}
           initialPosts={fixturePosts}
+        />
+      </CtaLocationProvider>
+    </SectionChrome>
+  )
+}
+
+export function EventsPlayground() {
+  const [values, onChange] = useVariantState({
+    backgroundColor: 'transparent',
+    listMode: 'upcoming',
+  })
+
+  const groups: ControlGroup[] = [
+    BG_GROUP,
+    {
+      key: 'listMode',
+      label: 'List',
+      options: [
+        { value: 'upcoming', label: 'Upcoming' },
+        { value: 'past', label: 'Past' },
+      ],
+    },
+  ]
+
+  const listMode = values.listMode === 'past' ? 'past' : 'upcoming'
+
+  return (
+    <SectionChrome
+      id="events"
+      title="Events"
+      type="eventsBlock"
+      note={`${listMode} · ${values.backgroundColor}`}
+    >
+      <SectionControls groups={groups} values={values} onChange={onChange} />
+      <CtaLocationProvider value="eventsBlock">
+        <EventsBlock
+          key={`events-${listMode}-${values.backgroundColor}`}
+          componentIndex={15}
+          backgroundColor={values.backgroundColor}
+          title={listMode === 'past' ? 'Past events' : 'Upcoming events'}
+          count={3}
+          listMode={listMode}
+          initialEvents={fixtureEvents}
         />
       </CtaLocationProvider>
     </SectionChrome>

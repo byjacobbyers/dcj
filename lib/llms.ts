@@ -69,6 +69,7 @@ export const MARKDOWN_SKIPPED_BLOCKS = [
   'videoBlock',
   'coverVideo',
   'postsBlock',
+  'eventsBlock',
 ] as const
 
 /** One section of the page builder → Markdown. Unknown or visual-only blocks render nothing. */

@@ -22,7 +22,8 @@ function getPathForDocument(body: WebhookPayload): string[] {
     case 'event': {
       const eventSlug = slug?.current
       if (eventSlug) paths.push(`/events/${eventSlug}`)
-      paths.push('/')
+      // Listings: the home page section, /events and /past-events.
+      paths.push('/', '/events', '/past-events')
       break
     }
     case 'post': {

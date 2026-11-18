@@ -181,6 +181,9 @@ export const sectionsQuery = groq`
     _type == 'postsBlock' => {
       ...
     },
+    _type == 'eventsBlock' => {
+      ...
+    },
     _type == 'teamMemberBlock' => {
       ...,
       member-> {

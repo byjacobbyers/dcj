@@ -29,6 +29,7 @@ const SECTIONS = [
   ['spacer', 'spacerBlock'],
   ['divider', 'dividerBlock'],
   ['posts', 'postsBlock'],
+  ['events', 'eventsBlock'],
   ['team', 'teamMemberBlock'],
 ]
 
