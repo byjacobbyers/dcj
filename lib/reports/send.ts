@@ -2,12 +2,12 @@ import 'server-only'
 
 import { Resend } from 'resend'
 
-/** Wiggelruhm, the parent organization: gets every report. */
+/** Wiggelruhm (the parent organization) and Denver Contact Jam get every report. */
 const WIGGELRUHM = 'hello@wiggelruhm.org'
 const DENVER_CONTACT_JAM = 'denvercontactjam@gmail.com'
 
 export const REPORT_RECIPIENTS = {
-  weekly: [WIGGELRUHM],
+  weekly: [WIGGELRUHM, DENVER_CONTACT_JAM],
   monthly: [WIGGELRUHM, DENVER_CONTACT_JAM],
 } as const
 
