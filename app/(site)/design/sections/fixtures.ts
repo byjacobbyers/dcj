@@ -1,6 +1,8 @@
 import type { PortableTextBlock } from 'next-sanity'
 import type { BaseRouteType } from '@/types/objects/route-type'
 import type { PostCard } from '@/types/components/posts-block-type'
+import type { EventCard } from '@/types/components/events-block-type'
+import { todayDateKey } from '@/lib/event-timing'
 import type { TeamMemberData } from '@/types/components/team-member-block-type'
 
 /** Minimal portable text block for design fixtures. */
@@ -102,3 +104,51 @@ export const fixtureMember: TeamMemberData = {
     'Facilitates the weekly jam and teaches the beginner-friendly warm-up that opens each session.'
   ),
 }
+
+/** Days from today's Denver date, so the playground always has upcoming and past events. */
+function daysFromToday(days: number): string {
+  const d = new Date(`${todayDateKey()}T12:00:00Z`)
+  d.setUTCDate(d.getUTCDate() + days)
+  return d.toISOString().slice(0, 10)
+}
+
+export const fixtureEvents: EventCard[] = [
+  {
+    _id: 'event-1',
+    title: 'Contact Improvisation Workshop',
+    slug: 'contact-improvisation-workshop',
+    startDate: daysFromToday(10),
+    timeString: '6:00–8:30pm',
+    eventType: 'workshop',
+    location: 'Wiggelruhm',
+    price: '$35, free to Wiggelruhm members',
+  },
+  {
+    _id: 'event-2',
+    title: 'Falling and Flying: a four-week series',
+    slug: 'falling-and-flying',
+    startDate: daysFromToday(20),
+    endDate: daysFromToday(41),
+    timeString: 'Wednesdays, 6–8pm',
+    eventType: 'series',
+    price: '$100 for the series',
+  },
+  {
+    _id: 'event-3',
+    title: 'Winter Solstice Jam',
+    slug: 'winter-solstice-jam',
+    startDate: daysFromToday(35),
+    timeString: '7–10pm',
+    eventType: 'jam',
+    soldOut: true,
+  },
+  {
+    _id: 'event-4',
+    title: 'Underscore Practice',
+    slug: 'underscore-practice',
+    startDate: daysFromToday(-30),
+    timeString: '2–5pm',
+    eventType: 'jam',
+    price: 'By donation',
+  },
+]

@@ -11,6 +11,7 @@ import {
   HeroPlayground,
   ImagePlayground,
   PostsPlayground,
+  EventsPlayground,
   SpacerPlayground,
   SplitScrollPlayground,
   TeamPlayground,
@@ -35,6 +36,7 @@ const NAV = [
   { href: '#spacer', label: 'Spacer' },
   { href: '#divider', label: 'Divider' },
   { href: '#posts', label: 'Posts' },
+  { href: '#events', label: 'Events' },
   { href: '#team', label: 'Team' },
 ] as const
 
@@ -76,6 +78,7 @@ export default function DesignSectionsPage() {
       <SpacerPlayground />
       <DividerPlayground />
       <PostsPlayground />
+      <EventsPlayground />
       <TeamPlayground />
     </div>
   )

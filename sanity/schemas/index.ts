@@ -28,6 +28,7 @@ import spacerBlock from './components/spacer-block-schema'
 import dividerBlock from './components/divider-block-schema'
 import splitScrollBlock from './components/split-scroll-block-schema'
 import postsBlock from './components/posts-block-schema'
+import eventsBlock from './components/events-block-schema'
 import teamMemberBlock from './components/team-member-block-schema'
 
 import column from './objects/column-schema'
@@ -74,6 +75,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     dividerBlock,
     splitScrollBlock,
     postsBlock,
+    eventsBlock,
     teamMemberBlock,
     column,
     defaultImage,

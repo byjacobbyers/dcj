@@ -57,6 +57,43 @@ export default defineType({
     }),
     defineField({ title: 'Location', name: 'location', type: 'string', group: 'event' }),
     defineField({
+      title: 'Price',
+      name: 'price',
+      type: 'string',
+      group: 'event',
+      description:
+        'Free text, e.g. "$35, free to Wiggelruhm members" or "By donation". Leave empty to show no price.',
+    }),
+    defineField({
+      title: 'How to register',
+      name: 'registration',
+      type: 'string',
+      group: 'event',
+      description: 'Shown with the details, e.g. "Venmo @gwen-ritchie" or "Drop in, no registration".',
+    }),
+    defineField({
+      title: 'Booking link',
+      name: 'bookingUrl',
+      type: 'url',
+      group: 'event',
+      description: 'Where the booking button sends people. Leave empty to hide the button.',
+      validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
+    }),
+    defineField({
+      title: 'Booking button label',
+      name: 'bookingLabel',
+      type: 'string',
+      group: 'event',
+      description: 'Defaults to "Reserve your spot".',
+    }),
+    defineField({
+      title: 'Questions / contact',
+      name: 'contact',
+      type: 'string',
+      group: 'event',
+      description: 'An email address or short note for questions about this event.',
+    }),
+    defineField({
       title: 'Start Date',
       name: 'startDate',
       type: 'date',
@@ -70,6 +107,7 @@ export default defineType({
       type: 'string',
       group: 'event',
       initialValue: '6:30pm - 8:30pm',
+      description: 'For a series, include the day: "Wednesdays, 6–8pm".',
     }),
     defineField({
       name: 'sections',

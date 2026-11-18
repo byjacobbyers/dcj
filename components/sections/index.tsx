@@ -14,6 +14,7 @@ import SpacerBlock from '@/components/spacer-block'
 import DividerBlock from '@/components/divider-block'
 import SplitScrollBlock from '@/components/split-scroll-block'
 import PostsBlockServer from '@/components/posts-block/server'
+import EventsBlockServer from '@/components/events-block/server'
 import TeamMemberBlock from '@/components/team-member-block'
 import { CtaLocationProvider } from '@/context'
 import type { SectionsProps } from '@/types/components/sections-type'
@@ -35,6 +36,7 @@ const blockMap: Record<string, React.FC<Record<string, unknown>>> = {
   dividerBlock: DividerBlock as React.FC<Record<string, unknown>>,
   splitScrollBlock: SplitScrollBlock as React.FC<Record<string, unknown>>,
   postsBlock: PostsBlockServer as unknown as React.FC<Record<string, unknown>>,
+  eventsBlock: EventsBlockServer as unknown as React.FC<Record<string, unknown>>,
   teamMemberBlock: TeamMemberBlock as React.FC<Record<string, unknown>>,
 }
 

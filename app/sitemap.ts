@@ -87,6 +87,13 @@ async function generateSitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 1,
   })
 
+  pushUnique(sitemap, seen, {
+    url: `${baseUrl}/events`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  })
+
   for (const page of pageRows) {
     const slug = normalizeSlug(page.slug)
     if (!slug || EXCLUDED_PAGE_SLUGS.includes(slug) || isJunkSlug(slug) || page.noIndex) {
