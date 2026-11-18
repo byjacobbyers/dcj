@@ -38,7 +38,7 @@ export default function EventSingle({ event }: EventSingleProps) {
             {typeLabel}
           </p>
         ) : null}
-        <h1 className="max-w-4xl font-heading text-h1 text-balance">{title || 'Untitled Event'}</h1>
+        <h1 className="w-full font-heading text-h1 text-balance">{title || 'Untitled Event'}</h1>
         {soldOut ? (
           <p className="mt-4 rounded-full border border-border px-4 py-1 text-small font-semibold">Sold out</p>
         ) : null}
