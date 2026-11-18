@@ -1,49 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import { type NextRequest, NextResponse } from 'next/server'
 import { parseBody } from 'next-sanity/webhook'
-
-type WebhookPayload = {
-  _type: string
-  _id?: string
-  slug?: { current?: string }
-}
-
-function getPathForDocument(body: WebhookPayload): string[] {
-  const paths: string[] = []
-  const { _type, slug } = body
-
-  switch (_type) {
-    case 'page': {
-      const pageSlug = slug?.current
-      if (pageSlug === 'home') paths.push('/')
-      else if (pageSlug) paths.push(`/${pageSlug}`)
-      break
-    }
-    case 'event': {
-      const eventSlug = slug?.current
-      if (eventSlug) paths.push(`/events/${eventSlug}`)
-      // Listings: the home page section, /events and /past-events.
-      paths.push('/', '/events', '/past-events')
-      break
-    }
-    case 'post': {
-      const postSlug = slug?.current
-      if (postSlug) paths.push(`/posts/${postSlug}`)
-      paths.push('/')
-      break
-    }
-    case 'team':
-    case 'postCategory':
-    case 'navigation':
-    case 'site':
-      paths.push('/')
-      break
-    default:
-      paths.push('/')
-  }
-
-  return paths
-}
+import { getRevalidateTargets, type RevalidatePayload } from '@/lib/revalidate-targets'
 
 export async function GET() {
   return NextResponse.json({
@@ -58,7 +16,7 @@ export async function POST(req: NextRequest) {
     return new Response('Missing SANITY_REVALIDATE_SECRET', { status: 500 })
   }
 
-  const { isValidSignature, body } = await parseBody<WebhookPayload>(req, secret)
+  const { isValidSignature, body } = await parseBody<RevalidatePayload>(req, secret)
 
   if (!isValidSignature) {
     return new Response(JSON.stringify({ message: 'Invalid signature' }), { status: 401 })
@@ -68,10 +26,10 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ message: 'Missing _type' }), { status: 400 })
   }
 
-  const paths = getPathForDocument(body)
-  for (const path of paths) {
-    revalidatePath(path)
+  const targets = getRevalidateTargets(body)
+  for (const { path, type } of targets) {
+    revalidatePath(path, type)
   }
 
-  return NextResponse.json({ body, paths })
+  return NextResponse.json({ body, targets })
 }
